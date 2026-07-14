@@ -1,0 +1,6 @@
+data/raw/
+data/validation/*.png
+data/validation/*.tif
+__pycache__/
+*.pyc
+.venv/
