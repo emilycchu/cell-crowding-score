@@ -1,0 +1,14 @@
+filename,country,slide_id,fov,density,overlap,crenated
+dpc-235-KIT-62501048.png,tanzania,KIT-62501048,235,monolayer,no rouleaux,no
+dpc-105-KIT-62500652.png,tanzania,KIT-62500652,105,slightly dense,some rouleaux,no
+dpc-051-LB-D3-2025-08-30-125645-25021889-D-thin-1.png,liberia,LB-D3-2025-08-30-125645-25021889-D-thin-1,51,monolayer,slight rouleaux,no
+dpc-035-LB-D3-2025-10-03-122127-250912792D-thin-3-4.png,liberia,LB-D3-2025-10-03-122127-250912792D-thin-3-4,35,dense,some rouleaux,yes
+dpc-015-LB-D3-2025-10-03-122127-250912792D-thin-3-4.png,liberia,LB-D3-2025-10-03-122127-250912792D-thin-3-4,15,slightly dense,slight rouleaux,yes
+dpc-174-LB-D3-2025-08-30-125645-25021889-D-thin-1.png,liberia,LB-D3-2025-08-30-125645-25021889-D-thin-1,174,dense,rouleaux,no
+dpc-145-LB-D12-2026-03-04-114809-250817119ELWA-Negative-2.png,liberia,LB-D12-2026-03-04-114809-250817119ELWA-Negative-2,145,dense,rouleaux,no
+dpc-134-LB-D3-2025-08-30-125645-25021889-D-thin-1.png,liberia,LB-D3-2025-08-30-125645-25021889-D-thin-1,134,dense,rouleaux,yes
+dpc-198-KIT-62501056.png,tanzania,KIT-62501056,198,slightly dense,some rouleaux,no
+dpc-168-KIT-62500666.png,tanzania,KIT-62500666,168,monolayer,slight rouleaux,no
+dpc-146-LB-D3-2025-08-30-125645-25021889-D-thin-1.png,liberia,LB-D3-2025-08-30-125645-25021889-D-thin-1,146,very dense,heavy rouleaux,no
+dpc-008-LB-D3-2025-08-30-130619-2412193030-D-thin-2.png,liberia,LB-D3-2025-08-30-130619-2412193030-D-thin-2,8,very dense,heavy rouleaux,no
+dpc-020-LB-D3-2025-08-30-132634-250816974-D-thin-4.png,liberia,LB-D3-2025-08-30-132634-250816974-D-thin-4,20,very dense,heavy rouleaux,no
