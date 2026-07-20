@@ -27,7 +27,7 @@ def score_image(path):
 
     features = {
         "coverage": cell_coverage(mask),
-        "edge_density": edge_density(image, mask=mask),
+        "edge_density": edge_density(image),
         "glcm_contrast": glcm_contrast(image),
         "lbp_entropy": lbp_entropy(image),
     }
