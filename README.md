@@ -79,7 +79,6 @@ data/
 
 ```bash
 pip install -r requirements.txt
-pip install Pillow   # needed by scripts/build_result_summary.py, not yet in requirements.txt
 ```
 
 ## Current validation status
