@@ -1,4 +1,5 @@
 data/raw/
+data/results/initial-dataset-071626/otsu-masks
 data/validation/*.png
 data/validation/*.tif
 __pycache__/

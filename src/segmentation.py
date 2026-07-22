@@ -9,6 +9,18 @@ def to_grayscale(image):
     return image
 
 
+def correct_illumination(gray, blur_ksize=301):
+    """Flatten a slow (out-of-focus/vignetting-scale) illumination gradient.
+
+    Estimates the background as a heavily-blurred copy of the image, then subtracts
+    it back out and re-centers around the original mean, leaving cell-scale texture
+    intact while removing large-scale brightness trends across the FOV.
+    """
+    background = cv2.GaussianBlur(gray, (blur_ksize, blur_ksize), 0)
+    corrected = gray.astype(np.float32) - background.astype(np.float32) + float(background.mean())
+    return np.clip(corrected, 0, 255).astype(np.uint8)
+
+
 def otsu_segment(image, blur_ksize=5):
     """Segment foreground (cells) from background using Otsu's method.
 
