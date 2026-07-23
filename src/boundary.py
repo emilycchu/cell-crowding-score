@@ -4,6 +4,8 @@ Blobs may be single cells or clumps of touching/overlapping cells -- these descr
 operate on whatever connected components survive mask cleanup, without ever separating
 touching cells into individual instances.
 """
+from functools import lru_cache
+
 import cv2
 import numpy as np
 
@@ -81,6 +83,13 @@ def convexity_defect_stats(contour):
     return {"count": len(depths), "depths": depths}
 
 
+@lru_cache(maxsize=8)
+def _bin_centers(n_bins):
+    """Evenly spaced angle-bin centers over (-pi, pi], cached since n_bins is constant across a run."""
+    bin_edges = np.linspace(-np.pi, np.pi, n_bins + 1)
+    return (bin_edges[:-1] + bin_edges[1:]) / 2
+
+
 def radial_profile(contour, n_bins=360):
     """Distance from centroid vs. angle, resampled onto n_bins evenly spaced angles."""
     moments = cv2.moments(contour)
@@ -98,18 +107,22 @@ def radial_profile(contour, n_bins=360):
     order = np.argsort(angles)
     angles, radii = angles[order], radii[order]
 
-    bin_edges = np.linspace(-np.pi, np.pi, n_bins + 1)
-    bin_centers = (bin_edges[:-1] + bin_edges[1:]) / 2
-    return np.interp(bin_centers, angles, radii, period=2 * np.pi)
+    return np.interp(_bin_centers(n_bins), angles, radii, period=2 * np.pi)
 
 
 def radial_fft_power(radial_signal, band=(8, 20)):
-    """FFT power spectrum of the radial signal, and the fraction of (non-DC) power in `band`."""
-    signal = radial_signal - radial_signal.mean()
-    spectrum = np.abs(np.fft.rfft(signal)) ** 2
-    total_power = spectrum[1:].sum()
-    if total_power == 0:
-        return spectrum, 0.0
+    """FFT power spectrum of the radial signal, and the fraction of (non-DC) power in `band`.
+
+    `radial_signal` may be a single 1D profile or a 2D (n_profiles, n_bins) stack -- the transform
+    runs along the last axis either way, so a whole FOV's contours can be scored in one batched call
+    instead of one Python-level call per contour.
+    """
+    radial_signal = np.asarray(radial_signal, dtype=np.float64)
+    signal = radial_signal - radial_signal.mean(axis=-1, keepdims=True)
+    spectrum = np.abs(np.fft.rfft(signal, axis=-1)) ** 2
     lo, hi = band
-    band_power = spectrum[lo : hi + 1].sum()
-    return spectrum, float(band_power / total_power)
+    total_power = spectrum[..., 1:].sum(axis=-1)
+    band_power = spectrum[..., lo : hi + 1].sum(axis=-1)
+    with np.errstate(invalid="ignore", divide="ignore"):
+        frac = np.where(total_power == 0, 0.0, band_power / total_power)
+    return spectrum, frac if frac.ndim else float(frac)

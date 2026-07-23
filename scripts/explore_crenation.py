@@ -55,25 +55,29 @@ def analyze_fov(image_path, min_hole_area=MIN_HOLE_AREA, band=CRENATION_BAND):
     cleaned = clean_mask(mask, min_area=MIN_COMPONENT_AREA)
     contours = find_blob_contours(cleaned, min_area=min_hole_area, include_holes=True)
 
-    blobs = []
-    for contour in contours:
-        # defect_stats = convexity_defect_stats(contour)  # disabled for now -- radial FFT looked more deterministic
-        radii = radial_profile(contour)
-        spectrum = band_power = None
-        if radii is not None:
-            spectrum, band_power = radial_fft_power(radii, band=band)
-        blobs.append(
-            {
-                "area": cv2.contourArea(contour),
-                "contour": contour,
-                # "defect_count": defect_stats["count"] if defect_stats else None,
-                # "defect_mean_depth": float(np.mean(defect_stats["depths"])) if defect_stats and defect_stats["depths"] else None,
-                # "defect_max_depth": float(np.max(defect_stats["depths"])) if defect_stats and defect_stats["depths"] else None,
-                "radii": radii,
-                "spectrum": spectrum,
-                "radial_band_power_frac": band_power,
-            }
-        )
+    blobs = [
+        {
+            # "defect_stats": convexity_defect_stats(contour),  # disabled for now -- radial FFT looked more deterministic
+            "area": cv2.contourArea(contour),
+            "contour": contour,
+            "radii": radial_profile(contour),
+            "spectrum": None,
+            "radial_band_power_frac": None,
+        }
+        for contour in contours
+    ]
+
+    # Batch the FFT stage across every contour with a valid profile in one call, instead of one
+    # Python-level rfft per contour -- radial_profile itself stays per-contour since points are
+    # unevenly spaced per contour and need individual interpolation.
+    valid_indices = [i for i, blob in enumerate(blobs) if blob["radii"] is not None]
+    if valid_indices:
+        radii_matrix = np.stack([blobs[i]["radii"] for i in valid_indices])
+        spectra, band_powers = radial_fft_power(radii_matrix, band=band)
+        for row, i in enumerate(valid_indices):
+            blobs[i]["spectrum"] = spectra[row]
+            blobs[i]["radial_band_power_frac"] = float(band_powers[row])
+
     return image, mask, cleaned, blobs
 
 
