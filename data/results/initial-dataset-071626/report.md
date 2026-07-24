@@ -6,35 +6,40 @@ Dataset: `data/raw/initial-dataset-071626` (13 FOVs). Each technique's raw outpu
 
 ![Otsu coverage](plots/otsu-coverage.png)
 
-- Trend: value increases with combined severity (slope=2.65, r=0.36, r�=0.13, weak correlation).
+- Trend: value increases with combined severity (slope=2.65, r=0.36, r²=0.13, weak correlation).
+- Rank correlation: Spearman's ρ=0.37 (weak correlation).
 - **Outliers** (|residual| > 1.5 sd from the linear trend): FOV 51 (dpc-051-LB-D3-2025-08-30-125645-25021889-D-thin-1.png, value=78.78, combined score=1, residual=42.54).
 
 ## Edge density (with mask)
 
 ![Edge density (with mask)](plots/edge-density-with-mask.png)
 
-- Trend: value decreases with combined severity (slope=-0.58, r=-0.21, r�=0.05, weak correlation).
+- Trend: value decreases with combined severity (slope=-0.58, r=-0.21, r²=0.05, weak correlation).
+- Rank correlation: Spearman's ρ=-0.08 (weak correlation).
 - **Outliers** (|residual| > 1.5 sd from the linear trend): FOV 235 (dpc-235-KIT-62501048.png, value=37.24, combined score=0, residual=14.16); FOV 51 (dpc-051-LB-D3-2025-08-30-125645-25021889-D-thin-1.png, value=8.29, combined score=1, residual=-14.21).
 
 ## Edge density (without mask)
 
 ![Edge density (without mask)](plots/edge-density-without-mask.png)
 
-- Trend: value increases with combined severity (slope=1.38, r=0.81, r�=0.65, strong correlation).
+- Trend: value increases with combined severity (slope=1.38, r=0.81, r²=0.65, strong correlation).
+- Rank correlation: Spearman's ρ=0.81 (strong correlation).
 - **Outliers** (|residual| > 1.5 sd from the linear trend): FOV 51 (dpc-051-LB-D3-2025-08-30-125645-25021889-D-thin-1.png, value=10.06, combined score=1, residual=-3.71); FOV 168 (dpc-168-KIT-62500666.png, value=18.68, combined score=1, residual=4.91).
 
 ## GLCM contrast
 
 ![GLCM contrast](plots/glcm-contrast.png)
 
-- Trend: value increases with combined severity (slope=8.93, r=0.70, r�=0.49, strong correlation).
+- Trend: value increases with combined severity (slope=8.93, r=0.70, r²=0.49, strong correlation).
+- Rank correlation: Spearman's ρ=0.73 (strong correlation).
 - **Outliers** (|residual| > 1.5 sd from the linear trend): FOV 15 (dpc-015-LB-D3-2025-10-03-122127-250912792D-thin-3-4.png, value=123.83, combined score=2, residual=41.15, crenated); FOV 168 (dpc-168-KIT-62500666.png, value=113.39, combined score=1, residual=39.64).
 
 ## LBP entropy
 
 ![LBP entropy](plots/lbp-entropy.png)
 
-- Trend: value increases with combined severity (slope=0.05, r=0.78, r�=0.61, strong correlation).
+- Trend: value increases with combined severity (slope=0.05, r=0.78, r²=0.61, strong correlation).
+- Rank correlation: Spearman's ρ=0.77 (strong correlation).
 - **Outliers** (|residual| > 1.5 sd from the linear trend): FOV 105 (dpc-105-KIT-62500652.png, value=4.05, combined score=3, residual=0.17); FOV 51 (dpc-051-LB-D3-2025-08-30-125645-25021889-D-thin-1.png, value=3.55, combined score=1, residual=-0.22).
 
 ## Cross-technique outliers

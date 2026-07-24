@@ -14,6 +14,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy.stats import spearmanr
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
@@ -86,10 +87,11 @@ def find_outliers(records):
         rec["residual"] = resid
         rec["is_outlier"] = std > 0 and abs(resid) > OUTLIER_Z * std
     r = np.corrcoef(x, y)[0, 1]
-    return slope, intercept, std, r
+    rho = spearmanr(x, y).statistic
+    return slope, intercept, std, r, rho
 
 
-def plot_technique(name, unit, records, slope, intercept, corr, out_path):
+def plot_technique(name, unit, records, slope, intercept, corr, rho, out_path):
     fig, ax = plt.subplots(figsize=(7, 5), dpi=150)
     fig.patch.set_facecolor(COLOR_SURFACE)
     ax.set_facecolor(COLOR_SURFACE)
@@ -118,6 +120,15 @@ def plot_technique(name, unit, records, slope, intercept, corr, out_path):
         linewidths=1.5,
         zorder=3,
     )
+    for r in normal:
+        ax.annotate(
+            f"FOV {r['fov']}",
+            (r["x"], r["value"]),
+            textcoords="offset points",
+            xytext=(8, 6),
+            fontsize=8,
+            color=COLOR_MUTED,
+        )
     for r in outliers:
         ax.annotate(
             f"FOV {r['fov']}",
@@ -130,7 +141,7 @@ def plot_technique(name, unit, records, slope, intercept, corr, out_path):
 
     fig.suptitle(name, x=0.015, y=0.995, ha="left", color=COLOR_PRIMARY, fontsize=14, fontweight="bold")
     ax.set_title(
-        f"slope = {slope:.2f}  ·  r = {corr:.2f}  ·  r² = {corr ** 2:.2f}",
+        f"slope = {slope:.2f}  ·  r = {corr:.2f}  ·  r² = {corr ** 2:.2f}  ·  ρ = {rho:.2f}",
         color=COLOR_SECONDARY,
         fontsize=10,
         loc="left",
@@ -179,11 +190,11 @@ def main():
             )
 
         jittered_x(records)
-        slope, intercept, std, r = find_outliers(records)
+        slope, intercept, std, r, rho = find_outliers(records)
 
         slug = name.lower().replace(" ", "-").replace("(", "").replace(")", "")
         plot_path = PLOTS_DIR / f"{slug}.png"
-        plot_technique(name, unit, records, slope, intercept, r, plot_path)
+        plot_technique(name, unit, records, slope, intercept, r, rho, plot_path)
 
         outliers = [r_ for r_ in records if r_["is_outlier"]]
         for o in outliers:
@@ -193,12 +204,16 @@ def main():
         strength = (
             "strong" if abs(r) >= 0.7 else "moderate" if abs(r) >= 0.4 else "weak"
         )
+        rho_strength = (
+            "strong" if abs(rho) >= 0.7 else "moderate" if abs(rho) >= 0.4 else "weak"
+        )
         lines = [
             f"## {name}",
             "",
             f"![{name}](plots/{slug}.png)",
             "",
             f"- Trend: value {direction} with combined severity (slope={slope:.2f}, r={r:.2f}, r²={r ** 2:.2f}, {strength} correlation).",
+            f"- Rank correlation: Spearman's ρ={rho:.2f} ({rho_strength} correlation).",
         ]
         if outliers:
             outlier_desc = "; ".join(
@@ -244,7 +259,7 @@ def main():
     )
 
     report_path = RESULTS_DIR / "report.md"
-    report_path.write_text(report)
+    report_path.write_text(report, encoding="utf-8")
     print(f"Wrote report to {report_path}")
     print(f"Wrote {len(TECHNIQUES)} plots to {PLOTS_DIR}")
 
