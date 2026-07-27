@@ -20,12 +20,12 @@ Separately, an exploratory **crenation filter** looks for scalloped/crenated cel
 
 | Feature | Source | Default weight | Normalization range |
 |---|---|---|---|
-| `coverage` | `src/segmentation.py::cell_coverage` — fraction of Otsu-masked foreground pixels | 0.4 | 0.0 – 1.0 |
-| `edge_density` | `src/features/edge_density.py` — fraction of pixels on a Canny edge | 0.2 | 0.0 – 1.0 |
-| `glcm_contrast` | `src/features/glcm_contrast.py` — mean GLCM contrast across 4 angles | 0.2 | 0.0 – 200.0 |
-| `lbp_entropy` | `src/features/lbp_entropy.py` — Shannon entropy of the LBP histogram | 0.2 | 0.0 – 6.0 |
+| `coverage` | `src/segmentation.py::cell_coverage` — fraction of Otsu-masked foreground pixels | 0.15 | 0.0 – 1.0 |
+| `edge_density` | `src/features/edge_density.py` — fraction of pixels on a Canny edge | 0.35 | 0.0 – 1.0 |
+| `glcm_contrast` | `src/features/glcm_contrast.py` — mean GLCM contrast across 4 angles | 0.1 | 0.0 – 200.0 |
+| `lbp_entropy` | `src/features/lbp_entropy.py` — Shannon entropy of the LBP histogram | 0.4 | 0.0 – 6.0 |
 
-Weights and ranges are overridable via `FeatureWeights` and a ranges dict passed to `composite_score()`; they are not yet tuned against labeled data (see Future directions).
+Weights and ranges are overridable via `FeatureWeights` and a ranges dict passed to `composite_score()`. These defaults are a **heuristic re-weighting**, not a fitted result — see "Current validation status" below for the pairwise analysis that motivated them, and Future directions for why a real fit is still pending.
 
 Run the full pipeline (segmentation + all four features + composite score) on a single image or a directory of images:
 
@@ -83,11 +83,13 @@ pip install -r requirements.txt
 
 ## Current validation status
 
-`scripts/generate_report.py` compares each technique's raw output against a combined ordinal severity score built from manual `density` + `overlap` labels (`data/labels/initial-dataset-071626/fovs.csv`, 13 FOVs) and flags per-technique outliers by linear-fit residual. See `data/results/initial-dataset-071626/report.md`. On this initial dataset: GLCM contrast, LBP entropy, and unmasked edge density show strong correlation with labeled severity; Otsu coverage and masked edge density show only weak correlation. This has not yet been assembled into a validated composite-score correlation — the composite weights are still defaults, not fit to this data.
+`scripts/generate_report.py` compares each technique's raw output against a combined ordinal severity score built from manual `density` + `overlap` labels (`data/labels/initial-dataset-071626/fovs.csv`, 13 FOVs) and flags per-technique outliers by linear-fit residual. See `data/results/initial-dataset-071626/report.md`. On this initial dataset: GLCM contrast, LBP entropy, and unmasked edge density show strong correlation with labeled severity; Otsu coverage and masked edge density show only weak correlation.
+
+`scripts/pairwise_analysis.py` compares the four techniques against **each other** (not the label) — see `data/results/initial-dataset-071626/pairwise-analysis/pairwise-report.md`. It found unmasked edge density and GLCM contrast are near-duplicates (r²=0.91 — they share 91% of their variance), LBP entropy overlaps with both but less (r²=0.44–0.54), and Otsu coverage is nearly orthogonal to all three (r²≤0.08). Combined with the per-technique label correlations above — Otsu coverage was both the weakest predictor *and* held the largest default weight (0.4), while edge density and GLCM contrast were both strong predictors carrying near-identical signal at full weight each — `FeatureWeights` defaults were adjusted directionally: `coverage` and `glcm_contrast` down, `edge_density` and `lbp_entropy` up (see table above). This is still a heuristic adjustment from redundancy/correlation analysis, not a fitted result — the underlying 13-FOV composite-score correlation with labels has not been computed or validated (see Future directions).
 
 ## Future directions / improvements
 
-- **Tune composite score weights against labeled data.** Current weights (`FeatureWeights`) and normalization ranges (`DEFAULT_RANGES`) are hand-picked defaults, not fit to the manual density/overlap labels. Use `generate_report.py`'s per-technique correlations (and a similar analysis on the composite score itself) to set weights that actually track labeled severity.
+- **Fit composite score weights against labeled data.** Current weights (`FeatureWeights`) have been nudged directionally from pairwise/label-correlation analysis (see "Current validation status"), but they're still hand-adjusted, not fit. 13 FOVs is too few to regress weights without overfitting to noise (FOV 51 alone is an outlier in 4 of the 5 techniques) — a real fit should wait for a larger labeled set, then use `generate_report.py`'s per-technique correlations plus a similar analysis on the composite score itself.
 - **Optimize the running crenation score.** The radial-FFT crenation descriptor (`explore_crenation.py`) is exploratory and manual today — it needs to be made efficient enough to run over a full dataset and wired into the pipeline/composite score as an actual filter rather than a one-off visualization step.
 - **Outlier testing / handling.** Some features currently score high on severity for reasons unrelated to crowding — notably, dimpled (but otherwise monolayer) cells currently inflate severity even when the slide is not actually crowded. Need a principled way to detect and either correct for or flag these outliers rather than let them skew the composite score.
 - **Run on larger datasets, ideally alongside a model.** Validate on more FOVs beyond the initial 13-image labeled set, and evaluate whether the composite score, used as an input/filter alongside a downstream model, actually improves that model's performance rather than just correlating with manual labels in isolation.

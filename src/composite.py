@@ -11,10 +11,10 @@ DEFAULT_RANGES = {
 
 @dataclass
 class FeatureWeights:
-    coverage: float = 0.4
-    edge_density: float = 0.2
-    glcm_contrast: float = 0.2
-    lbp_entropy: float = 0.2
+    coverage: float = 0.15
+    edge_density: float = 0.35
+    glcm_contrast: float = 0.1
+    lbp_entropy: float = 0.4
 
 
 def normalize(value, min_value, max_value):
