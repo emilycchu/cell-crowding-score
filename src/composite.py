@@ -11,8 +11,8 @@ DEFAULT_RANGES = {
 
 @dataclass
 class FeatureWeights:
-    coverage: float = 0.15
-    edge_density: float = 0.35
+    coverage: float = 0.2
+    edge_density: float = 0.3
     glcm_contrast: float = 0.1
     lbp_entropy: float = 0.4
 
