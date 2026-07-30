@@ -16,12 +16,12 @@ import cv2
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from src.boundary import clean_mask
-from src.pipeline import load_image
+from src.pipeline import load_image, to_dir
 from src.segmentation import correct_illumination, otsu_segment, to_grayscale
 
 
 def save_otsu_masks(input_dir, output_dir, filenames, clean=False):
-    input_dir = Path(input_dir)
+    input_dir = to_dir(input_dir)
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 

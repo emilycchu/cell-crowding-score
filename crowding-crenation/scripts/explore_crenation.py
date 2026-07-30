@@ -39,7 +39,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from src.boundary import clean_mask, find_blob_contours, radial_fft_power, radial_profile
 
 # from src.boundary import convexity_defect_stats  # disabled for now -- radial FFT looked more deterministic
-from src.pipeline import IMAGE_EXTENSIONS, load_image
+from src.pipeline import list_image_paths, load_image, to_dir
 from src.segmentation import correct_illumination, otsu_segment, to_grayscale
 
 CRENATION_BAND = (8, 20)  # cycles/perimeter -- see plan doc for rationale
@@ -176,11 +176,11 @@ def main():
     parser.add_argument("filenames", nargs="*", help="Specific filenames to analyze; defaults to every image in input_dir.")
     args = parser.parse_args()
 
-    input_dir = Path(args.input_dir)
+    input_dir = to_dir(args.input_dir)
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    filenames = args.filenames or [p.name for p in sorted(input_dir.iterdir()) if p.suffix.lower() in IMAGE_EXTENSIONS]
+    filenames = args.filenames or [p.name for p in list_image_paths(input_dir)]
 
     rows = []
     for filename in filenames:

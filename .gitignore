@@ -1,7 +1,8 @@
-data/raw/
-data/results/initial-dataset-071626/otsu-masks
-data/validation/*.png
-data/validation/*.tif
+crowding-crenation/data/raw/
+crowding-crenation/data/new/*/dpc/
+crowding-crenation/data/results/initial-dataset-071626/otsu-masks
+crowding-crenation/data/validation/*.png
+crowding-crenation/data/validation/*.tif
 __pycache__/
 *.pyc
 .venv/

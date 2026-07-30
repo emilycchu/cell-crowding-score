@@ -36,6 +36,8 @@ python -m src.pipeline data/raw/initial-dataset-071626/dpc-035-*.png
 
 Output is JSON per image: `path`, `otsu_threshold`, `features`, `score`.
 
+Any directory argument (across `src.pipeline` and the `scripts/run_*.py` batch runners) can also be a `gs://bucket/prefix` URI — images are streamed in memory via `google-cloud-storage` rather than downloaded to disk first. This uses [application default credentials](https://cloud.google.com/docs/authentication/application-default-credentials), so run `gcloud auth application-default login` (or set `GOOGLE_APPLICATION_CREDENTIALS`) once beforehand.
+
 ## Crenation filter (separate, post-quality-test)
 
 `scripts/explore_crenation.py` and `src/boundary.py` implement a **diagnostic-only** crenation descriptor, run *after* the Otsu mask has been produced and cleaned — it is a second-stage filter, not one of the four composite-score inputs:

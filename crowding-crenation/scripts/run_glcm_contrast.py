@@ -14,12 +14,11 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from src.features.glcm_contrast import glcm_contrast
-from src.pipeline import IMAGE_EXTENSIONS, load_image
+from src.pipeline import list_image_paths, load_image
 
 
 def run_glcm_contrast_on_directory(directory):
-    directory = Path(directory)
-    paths = sorted(p for p in directory.iterdir() if p.suffix.lower() in IMAGE_EXTENSIONS)
+    paths = list_image_paths(directory)
 
     rows = []
     for path in paths:
