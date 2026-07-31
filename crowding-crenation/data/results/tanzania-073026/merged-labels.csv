@@ -1,0 +1,325 @@
+fov_id,mine_density,mine_rouleaux,mine_crenated,program_density,program_rouleaux,program_crenated
+1,monolayer,no rouleaux,False,slightly dense,heavy rouleaux,True
+2,monolayer,no rouleaux,False,dense,heavy rouleaux,False
+3,monolayer,no rouleaux,False,dense,rouleaux,False
+4,monolayer,no rouleaux,False,slightly dense,rouleaux,False
+5,monolayer,no rouleaux,False,slightly dense,some rouleaux,False
+6,monolayer,no rouleaux,False,slightly dense,heavy rouleaux,False
+7,monolayer,no rouleaux,False,slightly dense,some rouleaux,False
+8,monolayer,no rouleaux,False,slightly dense,rouleaux,False
+9,monolayer,no rouleaux,False,slightly dense,slight rouleaux,False
+10,monolayer,no rouleaux,False,monolayer,rouleaux,False
+11,monolayer,no rouleaux,False,slightly dense,some rouleaux,False
+12,monolayer,slight rouleaux,False,monolayer,rouleaux,False
+13,monolayer,no rouleaux,False,monolayer,rouleaux,False
+14,monolayer,slight rouleaux,True,slightly dense,heavy rouleaux,False
+15,monolayer,slight rouleaux,True,slightly dense,heavy rouleaux,False
+16,monolayer,slight rouleaux,True,very dense,rouleaux,False
+17,slightly dense,slight rouleaux,True,dense,heavy rouleaux,False
+18,slightly dense,slight rouleaux,True,very dense,rouleaux,False
+19,monolayer,no rouleaux,False,very dense,rouleaux,True
+20,monolayer,no rouleaux,False,very dense,some rouleaux,True
+21,monolayer,no rouleaux,False,dense,some rouleaux,False
+22,monolayer,no rouleaux,False,dense,some rouleaux,True
+23,monolayer,no rouleaux,False,monolayer,some rouleaux,False
+24,monolayer,no rouleaux,False,slightly dense,slight rouleaux,False
+25,monolayer,no rouleaux,False,slightly dense,slight rouleaux,False
+26,monolayer,no rouleaux,False,monolayer,some rouleaux,True
+27,monolayer,no rouleaux,False,monolayer,no rouleaux,True
+28,monolayer,no rouleaux,False,monolayer,slight rouleaux,False
+29,monolayer,no rouleaux,False,monolayer,no rouleaux,False
+30,monolayer,no rouleaux,True,monolayer,slight rouleaux,False
+31,monolayer,no rouleaux,True,monolayer,rouleaux,False
+32,monolayer,slight rouleaux,True,dense,rouleaux,False
+33,slightly dense,slight rouleaux,True,dense,some rouleaux,False
+34,slightly dense,no rouleaux,False,very dense,some rouleaux,False
+35,slightly dense,slight rouleaux,True,very dense,heavy rouleaux,False
+36,slightly dense,slight rouleaux,True,very dense,rouleaux,False
+37,monolayer,no rouleaux,False,very dense,no rouleaux,True
+38,monolayer,no rouleaux,False,very dense,no rouleaux,False
+39,monolayer,no rouleaux,False,slightly dense,no rouleaux,False
+40,monolayer,no rouleaux,False,slightly dense,no rouleaux,False
+41,monolayer,no rouleaux,False,monolayer,slight rouleaux,False
+42,monolayer,no rouleaux,False,slightly dense,slight rouleaux,False
+43,monolayer,no rouleaux,False,monolayer,no rouleaux,False
+44,monolayer,no rouleaux,False,slightly dense,slight rouleaux,False
+45,monolayer,no rouleaux,False,slightly dense,no rouleaux,False
+46,monolayer,no rouleaux,False,monolayer,no rouleaux,True
+47,monolayer,no rouleaux,False,monolayer,slight rouleaux,False
+48,monolayer,no rouleaux,True,dense,no rouleaux,False
+49,monolayer,slight rouleaux,True,slightly dense,slight rouleaux,False
+50,monolayer,no rouleaux,True,dense,slight rouleaux,False
+51,monolayer,slight rouleaux,True,dense,some rouleaux,False
+52,monolayer,slight rouleaux,True,dense,slight rouleaux,False
+53,slightly dense,slight rouleaux,True,very dense,slight rouleaux,False
+54,slightly dense,slight rouleaux,True,very dense,slight rouleaux,False
+55,monolayer,no rouleaux,False,slightly dense,no rouleaux,True
+56,monolayer,no rouleaux,False,slightly dense,no rouleaux,False
+57,monolayer,no rouleaux,False,slightly dense,no rouleaux,False
+58,monolayer,no rouleaux,False,monolayer,slight rouleaux,False
+59,monolayer,no rouleaux,False,monolayer,some rouleaux,False
+60,monolayer,no rouleaux,False,slightly dense,no rouleaux,False
+61,monolayer,no rouleaux,False,slightly dense,no rouleaux,False
+62,monolayer,no rouleaux,False,slightly dense,slight rouleaux,False
+63,monolayer,no rouleaux,False,monolayer,no rouleaux,False
+64,monolayer,no rouleaux,False,monolayer,no rouleaux,False
+65,monolayer,no rouleaux,False,slightly dense,no rouleaux,False
+66,monolayer,no rouleaux,False,slightly dense,no rouleaux,False
+67,monolayer,no rouleaux,False,slightly dense,no rouleaux,False
+68,monolayer,no rouleaux,False,dense,no rouleaux,False
+69,monolayer,no rouleaux,False,monolayer,some rouleaux,False
+70,monolayer,slight rouleaux,True,slightly dense,slight rouleaux,False
+71,monolayer,slight rouleaux,True,dense,no rouleaux,False
+72,monolayer,no rouleaux,True,dense,slight rouleaux,False
+73,monolayer,no rouleaux,True,monolayer,heavy rouleaux,False
+74,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+75,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+76,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+77,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+78,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+79,monolayer,no rouleaux,False,monolayer,some rouleaux,False
+80,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+81,monolayer,no rouleaux,False,monolayer,some rouleaux,False
+82,monolayer,no rouleaux,False,monolayer,some rouleaux,False
+83,monolayer,no rouleaux,False,monolayer,some rouleaux,False
+84,monolayer,no rouleaux,False,monolayer,some rouleaux,False
+85,monolayer,no rouleaux,False,monolayer,rouleaux,False
+86,monolayer,no rouleaux,False,monolayer,rouleaux,False
+87,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+88,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+89,monolayer,no rouleaux,True,monolayer,rouleaux,False
+90,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+91,monolayer,no rouleaux,False,monolayer,some rouleaux,False
+92,monolayer,no rouleaux,False,monolayer,rouleaux,False
+93,monolayer,no rouleaux,False,monolayer,slight rouleaux,False
+94,monolayer,no rouleaux,False,monolayer,slight rouleaux,False
+95,monolayer,no rouleaux,False,monolayer,some rouleaux,False
+96,monolayer,no rouleaux,False,monolayer,rouleaux,False
+97,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+98,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+99,monolayer,no rouleaux,False,monolayer,heavy rouleaux,True
+100,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+101,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+102,monolayer,no rouleaux,False,monolayer,rouleaux,False
+103,monolayer,no rouleaux,False,monolayer,some rouleaux,False
+104,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+105,monolayer,no rouleaux,False,monolayer,rouleaux,False
+106,monolayer,slight rouleaux,True,monolayer,rouleaux,False
+107,monolayer,no rouleaux,False,monolayer,rouleaux,False
+108,monolayer,no rouleaux,False,monolayer,some rouleaux,False
+109,monolayer,no rouleaux,False,monolayer,rouleaux,False
+110,slightly dense,some rouleaux,False,monolayer,no rouleaux,False
+111,monolayer,no rouleaux,False,monolayer,some rouleaux,False
+112,monolayer,no rouleaux,False,monolayer,rouleaux,False
+113,monolayer,no rouleaux,False,monolayer,rouleaux,False
+114,monolayer,no rouleaux,False,monolayer,some rouleaux,False
+115,monolayer,no rouleaux,False,monolayer,some rouleaux,False
+116,monolayer,no rouleaux,False,monolayer,no rouleaux,False
+117,monolayer,no rouleaux,False,monolayer,no rouleaux,True
+118,monolayer,no rouleaux,False,monolayer,slight rouleaux,True
+119,monolayer,no rouleaux,False,monolayer,some rouleaux,False
+120,monolayer,no rouleaux,False,monolayer,some rouleaux,False
+121,monolayer,no rouleaux,False,monolayer,some rouleaux,False
+122,monolayer,no rouleaux,False,monolayer,some rouleaux,False
+123,monolayer,no rouleaux,False,monolayer,some rouleaux,False
+124,monolayer,no rouleaux,False,monolayer,slight rouleaux,False
+125,monolayer,no rouleaux,False,monolayer,rouleaux,False
+126,monolayer,no rouleaux,False,monolayer,rouleaux,False
+127,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+128,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+129,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+130,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+131,monolayer,no rouleaux,False,monolayer,rouleaux,False
+132,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+133,monolayer,some rouleaux,False,monolayer,slight rouleaux,False
+134,monolayer,no rouleaux,False,monolayer,slight rouleaux,False
+135,monolayer,no rouleaux,False,monolayer,slight rouleaux,False
+136,monolayer,no rouleaux,False,monolayer,slight rouleaux,False
+137,monolayer,no rouleaux,False,monolayer,slight rouleaux,False
+138,monolayer,no rouleaux,False,monolayer,some rouleaux,False
+139,monolayer,no rouleaux,False,monolayer,slight rouleaux,False
+140,monolayer,no rouleaux,False,monolayer,some rouleaux,False
+141,monolayer,no rouleaux,False,monolayer,some rouleaux,False
+142,monolayer,no rouleaux,False,monolayer,some rouleaux,False
+143,monolayer,no rouleaux,False,monolayer,rouleaux,False
+144,monolayer,no rouleaux,False,monolayer,rouleaux,False
+145,monolayer,no rouleaux,False,monolayer,heavy rouleaux,True
+146,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+147,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+148,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+149,monolayer,no rouleaux,False,monolayer,rouleaux,False
+150,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+151,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+152,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+153,monolayer,no rouleaux,False,monolayer,rouleaux,False
+154,monolayer,no rouleaux,False,monolayer,rouleaux,False
+155,monolayer,no rouleaux,False,monolayer,rouleaux,False
+156,slightly dense,slight rouleaux,False,monolayer,no rouleaux,False
+157,monolayer,no rouleaux,False,monolayer,no rouleaux,False
+158,monolayer,no rouleaux,False,monolayer,no rouleaux,False
+159,monolayer,no rouleaux,False,monolayer,slight rouleaux,False
+160,monolayer,no rouleaux,False,monolayer,slight rouleaux,False
+161,monolayer,no rouleaux,False,monolayer,some rouleaux,False
+162,monolayer,no rouleaux,False,monolayer,no rouleaux,False
+163,monolayer,slight rouleaux,False,dense,heavy rouleaux,False
+164,monolayer,no rouleaux,False,dense,heavy rouleaux,False
+165,monolayer,slight rouleaux,False,slightly dense,heavy rouleaux,False
+166,monolayer,slight rouleaux,False,monolayer,heavy rouleaux,False
+167,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+168,monolayer,slight rouleaux,False,slightly dense,rouleaux,False
+169,monolayer,slight rouleaux,False,slightly dense,heavy rouleaux,False
+170,monolayer,slight rouleaux,False,monolayer,rouleaux,False
+171,monolayer,no rouleaux,False,monolayer,some rouleaux,False
+172,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+173,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+174,monolayer,no rouleaux,False,monolayer,rouleaux,False
+175,monolayer,no rouleaux,False,monolayer,slight rouleaux,False
+176,monolayer,no rouleaux,True,monolayer,heavy rouleaux,False
+177,monolayer,no rouleaux,True,monolayer,rouleaux,False
+178,monolayer,no rouleaux,True,monolayer,heavy rouleaux,False
+179,monolayer,slight rouleaux,True,monolayer,heavy rouleaux,False
+180,monolayer,no rouleaux,True,monolayer,rouleaux,False
+181,dense,rouleaux,False,dense,slight rouleaux,True
+182,slightly dense,some rouleaux,False,very dense,rouleaux,False
+183,slightly dense,some rouleaux,False,very dense,slight rouleaux,False
+184,slightly dense,some rouleaux,False,dense,some rouleaux,False
+185,slightly dense,some rouleaux,False,dense,rouleaux,False
+186,slightly dense,some rouleaux,False,dense,rouleaux,False
+187,slightly dense,some rouleaux,False,very dense,slight rouleaux,False
+188,slightly dense,slight rouleaux,False,very dense,rouleaux,False
+189,slightly dense,slight rouleaux,False,dense,heavy rouleaux,False
+190,slightly dense,slight rouleaux,False,dense,rouleaux,False
+191,slightly dense,slight rouleaux,False,slightly dense,rouleaux,False
+192,slightly dense,some rouleaux,False,slightly dense,rouleaux,False
+193,monolayer,slight rouleaux,False,monolayer,heavy rouleaux,False
+194,monolayer,slight rouleaux,False,monolayer,no rouleaux,False
+195,monolayer,some rouleaux,False,monolayer,some rouleaux,False
+196,slightly dense,slight rouleaux,False,monolayer,heavy rouleaux,False
+197,monolayer,slight rouleaux,False,monolayer,rouleaux,False
+198,monolayer,slight rouleaux,False,monolayer,rouleaux,False
+199,dense,rouleaux,False,monolayer,slight rouleaux,False
+200,dense,rouleaux,False,dense,no rouleaux,False
+201,dense,rouleaux,False,dense,slight rouleaux,False
+202,dense,rouleaux,False,dense,no rouleaux,False
+203,very dense,no rouleaux,False,very dense,no rouleaux,False
+204,very dense,heavy rouleaux,False,dense,no rouleaux,False
+205,very dense,heavy rouleaux,False,slightly dense,slight rouleaux,False
+206,very dense,heavy rouleaux,False,dense,no rouleaux,False
+207,very dense,heavy rouleaux,False,very dense,no rouleaux,False
+208,dense,rouleaux,False,dense,slight rouleaux,False
+209,dense,rouleaux,False,very dense,slight rouleaux,False
+210,very dense,heavy rouleaux,False,very dense,some rouleaux,True
+211,very dense,heavy rouleaux,False,very dense,slight rouleaux,True
+212,dense,rouleaux,False,slightly dense,slight rouleaux,False
+213,very dense,heavy rouleaux,False,dense,slight rouleaux,True
+214,very dense,heavy rouleaux,False,very dense,some rouleaux,False
+215,very dense,heavy rouleaux,False,very dense,slight rouleaux,True
+216,very dense,heavy rouleaux,False,very dense,rouleaux,True
+217,monolayer,no rouleaux,False,dense,rouleaux,False
+218,monolayer,no rouleaux,False,very dense,some rouleaux,False
+219,monolayer,no rouleaux,True,dense,some rouleaux,False
+220,monolayer,no rouleaux,True,very dense,slight rouleaux,False
+221,monolayer,no rouleaux,False,very dense,some rouleaux,False
+222,monolayer,no rouleaux,True,very dense,slight rouleaux,False
+223,monolayer,no rouleaux,True,very dense,slight rouleaux,False
+224,monolayer,no rouleaux,True,very dense,some rouleaux,False
+225,monolayer,no rouleaux,True,very dense,slight rouleaux,False
+226,monolayer,slight rouleaux,True,dense,some rouleaux,False
+227,monolayer,no rouleaux,True,dense,no rouleaux,False
+228,slightly dense,slight rouleaux,True,very dense,slight rouleaux,False
+229,slightly dense,slight rouleaux,True,very dense,no rouleaux,False
+230,slightly dense,slight rouleaux,True,very dense,no rouleaux,False
+231,slightly dense,slight rouleaux,True,very dense,no rouleaux,False
+232,slightly dense,slight rouleaux,True,very dense,slight rouleaux,False
+233,dense,some rouleaux,False,dense,no rouleaux,False
+234,slightly dense,some rouleaux,True,very dense,slight rouleaux,False
+235,monolayer,no rouleaux,True,slightly dense,some rouleaux,True
+236,monolayer,no rouleaux,False,very dense,some rouleaux,False
+237,monolayer,no rouleaux,False,very dense,rouleaux,False
+238,monolayer,no rouleaux,False,very dense,some rouleaux,False
+239,monolayer,no rouleaux,False,dense,rouleaux,False
+240,monolayer,no rouleaux,True,very dense,some rouleaux,True
+241,monolayer,no rouleaux,True,dense,rouleaux,False
+242,monolayer,no rouleaux,True,dense,slight rouleaux,False
+243,monolayer,no rouleaux,True,dense,no rouleaux,False
+244,monolayer,no rouleaux,False,slightly dense,slight rouleaux,False
+245,monolayer,no rouleaux,True,slightly dense,slight rouleaux,False
+246,monolayer,no rouleaux,True,very dense,no rouleaux,False
+247,monolayer,no rouleaux,True,very dense,slight rouleaux,False
+248,monolayer,no rouleaux,True,very dense,no rouleaux,False
+249,monolayer,slight rouleaux,True,very dense,no rouleaux,False
+250,slightly dense,slight rouleaux,True,very dense,no rouleaux,False
+251,slightly dense,slight rouleaux,True,very dense,no rouleaux,False
+252,slightly dense,slight rouleaux,True,very dense,no rouleaux,False
+253,monolayer,no rouleaux,False,very dense,heavy rouleaux,False
+254,monolayer,no rouleaux,False,slightly dense,heavy rouleaux,True
+255,monolayer,no rouleaux,False,dense,rouleaux,True
+256,monolayer,no rouleaux,False,slightly dense,some rouleaux,False
+257,monolayer,no rouleaux,False,dense,some rouleaux,False
+258,monolayer,no rouleaux,False,very dense,some rouleaux,False
+259,monolayer,no rouleaux,False,dense,some rouleaux,False
+260,monolayer,no rouleaux,False,dense,slight rouleaux,False
+261,monolayer,no rouleaux,True,slightly dense,slight rouleaux,False
+262,monolayer,no rouleaux,False,slightly dense,slight rouleaux,False
+263,monolayer,no rouleaux,True,slightly dense,slight rouleaux,False
+264,monolayer,no rouleaux,True,slightly dense,slight rouleaux,False
+265,monolayer,no rouleaux,True,slightly dense,no rouleaux,False
+266,monolayer,no rouleaux,True,dense,no rouleaux,False
+267,monolayer,no rouleaux,True,dense,no rouleaux,False
+268,monolayer,slight rouleaux,True,very dense,no rouleaux,False
+269,monolayer,slight rouleaux,True,very dense,no rouleaux,False
+270,monolayer,slight rouleaux,True,very dense,no rouleaux,False
+271,monolayer,no rouleaux,False,slightly dense,heavy rouleaux,False
+272,monolayer,no rouleaux,False,dense,some rouleaux,True
+273,monolayer,no rouleaux,False,very dense,heavy rouleaux,False
+274,monolayer,no rouleaux,False,slightly dense,some rouleaux,False
+275,monolayer,no rouleaux,False,slightly dense,some rouleaux,False
+276,monolayer,no rouleaux,False,dense,heavy rouleaux,False
+277,monolayer,no rouleaux,True,dense,rouleaux,False
+278,monolayer,no rouleaux,True,dense,rouleaux,False
+279,monolayer,no rouleaux,True,slightly dense,rouleaux,False
+280,monolayer,no rouleaux,False,dense,some rouleaux,False
+281,monolayer,no rouleaux,True,slightly dense,rouleaux,False
+282,monolayer,no rouleaux,True,dense,slight rouleaux,False
+283,monolayer,no rouleaux,True,dense,slight rouleaux,False
+284,monolayer,no rouleaux,True,very dense,slight rouleaux,False
+285,monolayer,no rouleaux,True,dense,no rouleaux,False
+286,monolayer,no rouleaux,True,very dense,no rouleaux,False
+287,monolayer,no rouleaux,True,very dense,no rouleaux,False
+288,monolayer,no rouleaux,True,very dense,no rouleaux,False
+289,monolayer,no rouleaux,False,slightly dense,rouleaux,False
+290,monolayer,no rouleaux,False,slightly dense,heavy rouleaux,False
+291,monolayer,no rouleaux,False,slightly dense,heavy rouleaux,False
+292,monolayer,no rouleaux,False,dense,rouleaux,False
+293,monolayer,no rouleaux,False,slightly dense,heavy rouleaux,False
+294,monolayer,no rouleaux,False,slightly dense,heavy rouleaux,False
+295,monolayer,no rouleaux,True,slightly dense,heavy rouleaux,False
+296,monolayer,no rouleaux,True,dense,rouleaux,False
+297,monolayer,no rouleaux,True,slightly dense,heavy rouleaux,False
+298,monolayer,no rouleaux,False,dense,rouleaux,False
+299,monolayer,no rouleaux,False,dense,rouleaux,False
+300,monolayer,no rouleaux,True,dense,some rouleaux,False
+301,monolayer,no rouleaux,True,dense,some rouleaux,False
+302,monolayer,no rouleaux,True,very dense,some rouleaux,False
+303,monolayer,no rouleaux,True,dense,slight rouleaux,False
+304,monolayer,slight rouleaux,True,very dense,no rouleaux,False
+305,monolayer,slight rouleaux,True,very dense,no rouleaux,False
+306,monolayer,slight rouleaux,True,very dense,no rouleaux,False
+307,monolayer,no rouleaux,False,monolayer,heavy rouleaux,False
+308,monolayer,no rouleaux,False,slightly dense,heavy rouleaux,False
+309,monolayer,no rouleaux,False,slightly dense,some rouleaux,False
+310,monolayer,no rouleaux,False,slightly dense,heavy rouleaux,False
+311,monolayer,no rouleaux,False,slightly dense,rouleaux,False
+312,monolayer,no rouleaux,False,slightly dense,heavy rouleaux,False
+313,monolayer,no rouleaux,False,dense,rouleaux,False
+314,monolayer,no rouleaux,True,slightly dense,heavy rouleaux,False
+315,monolayer,no rouleaux,True,slightly dense,rouleaux,False
+316,monolayer,no rouleaux,False,dense,some rouleaux,False
+317,monolayer,no rouleaux,False,dense,some rouleaux,False
+318,monolayer,no rouleaux,False,dense,slight rouleaux,False
+319,monolayer,no rouleaux,False,dense,some rouleaux,False
+320,monolayer,no rouleaux,False,dense,no rouleaux,False
+321,monolayer,no rouleaux,True,very dense,no rouleaux,False
+322,monolayer,slight rouleaux,True,very dense,slight rouleaux,False
+323,monolayer,slight rouleaux,True,very dense,no rouleaux,False
+324,monolayer,no rouleaux,True,very dense,no rouleaux,False
