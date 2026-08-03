@@ -1,0 +1,38 @@
+# Fluorescent overexposure-halo detection pipeline (src/overexposure.py): take the raw FOV's
+# blue channel, heavily Gaussian-blur it as a low-pass filter (isolates large-area illumination,
+# collapses small fluorescent puncta), then compare the blurred image's bright-tail percentile to
+# its dark-baseline percentile as a ratio. result = Positive if that contrast ratio >= 3.0.
+#
+# Preview thumbnails (data/results/preview/*__preview.png), via save_preview() in
+# scripts/detect_overexposure.py:
+# 1. The detector's binary halo mask (thresholded illumination estimate, see above) is computed
+#    at the downsampled 400px working resolution.
+# 2. mask_to_full_resolution() upsamples that mask back to the original image size.
+# 3. cv2.findContours traces the outline(s) of the bright region(s) in the upsampled mask -- this
+#    is what produces the outline shape, not a hand-drawn circle.
+# 4. Color = the detector's verdict, not a separate judgment: red (0,0,255) if present=True,
+#    green (0,255,0) if present=False, drawn with cv2.drawContours.
+# 5. A text label (present=... ratio=... conf=...) is burned into the top-left corner with
+#    cv2.putText.
+slide,fov,truth,result
+RUB-72501756,91,Negative,Negative
+LB-D3-2025-10-22-131729-250917745-D-thin-2-3,134,Positive,Positive
+RUB-62501389,310,Negative,Negative
+LB-D3-2025-10-03-125352-2402169466D-thin-2-1,134,Negative,Negative
+LB-D3-2025-10-22-131729-250917745-D-thin-2-3,70,Positive,Positive
+RUB-62501389,284,Positive,Positive
+LB-D3-2025-10-25-150947-250917467-D-thin-3-2,233,Negative,Negative
+LB-D3-2025-10-25-150947-250917467-D-thin-3-2,235,Positive,Positive
+LB-D3-2025-10-03-125352-2402169466D-thin-2-1,3,Positive,Positive
+LB-D3-2025-10-22-131729-250917745-D-thin-2-3,84,Negative,Negative
+RUB-72501756,315,Positive,Positive
+LB-D3-2025-10-25-150947-250917467-D-thin-3-2,307,Negative,Negative
+RUB-72501756,46,Negative,Negative
+LB-D3-2025-10-03-125352-2402169466D-thin-2-1,9,Negative,Negative
+RUB-62501389,125,Negative,Negative
+LB-D3-2025-10-22-131729-250917745-D-thin-2-3,62,Positive,Negative
+LB-D3-2025-10-22-131729-250917745-D-thin-2-3,35,Negative,Positive
+LB-D3-2025-10-22-131729-250917745-D-thin-2-3,31,Negative,Negative
+LB-D3-2025-10-22-131729-250917745-D-thin-2-3,32,Negative,Positive
+LB-D3-2025-10-22-131729-250917745-D-thin-2-3,33,Negative,Negative
+LB-D3-2025-10-22-131729-250917745-D-thin-2-3,34,Negative,Positive
