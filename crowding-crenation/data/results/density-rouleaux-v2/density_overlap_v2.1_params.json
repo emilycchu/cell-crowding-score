@@ -1,0 +1,151 @@
+{
+  "version": "v2.1",
+  "generated_from": "C:\\Users\\owlem\\Projects\\fov-filtering-tool\\crowding-crenation\\data\\results\\density-rouleaux-v2\\features.csv",
+  "n_fovs": 337,
+  "density": {
+    "feature_names": [
+      "coverage",
+      "otsu_separability",
+      "saturation_score",
+      "lbp_entropy",
+      "glcm_contrast",
+      "edge_density_unmasked",
+      "tile_glcm_cv",
+      "tile_glcm_patchiness"
+    ],
+    "weights": {
+      "coverage": 0.14945441208722354,
+      "otsu_separability": 0.02199368049677455,
+      "saturation_score": 0.16211882419913556,
+      "lbp_entropy": 0.07722472691877114,
+      "glcm_contrast": 0.1770508208457842,
+      "edge_density_unmasked": 0.17532311956948635,
+      "tile_glcm_cv": 0.05001643891457117,
+      "tile_glcm_patchiness": 0.1868179769682536
+    },
+    "normalization": {
+      "coverage": {
+        "min": 0.06670650510204082,
+        "max": 0.49516221938775506
+      },
+      "otsu_separability": {
+        "min": 0.5116080080849331,
+        "max": 0.5941199319889987
+      },
+      "saturation_score": {
+        "min": 0.03137398854063951,
+        "max": 0.20164969274713315
+      },
+      "lbp_entropy": {
+        "min": 3.047651225347973,
+        "max": 4.048950929599242
+      },
+      "glcm_contrast": {
+        "min": 24.233324229880022,
+        "max": 94.20408781209535
+      },
+      "edge_density_unmasked": {
+        "min": 0.0542760306122449,
+        "max": 0.1812783826530612
+      },
+      "tile_glcm_cv": {
+        "min": 0.11794600392228999,
+        "max": 0.3257354560107709
+      },
+      "tile_glcm_patchiness": {
+        "min": 0.1811865338248149,
+        "max": 1.0196739111892474
+      }
+    },
+    "bucket_thresholds": [
+      0.2806524094646529,
+      0.45419932526642526,
+      0.6016125841713069,
+      0.6746768373385429
+    ],
+    "bucket_labels": [
+      "sparser",
+      "monolayer",
+      "slightly dense",
+      "dense",
+      "very dense"
+    ]
+  },
+  "overlap": {
+    "feature_names": [
+      "coverage",
+      "otsu_separability",
+      "saturation_score",
+      "glcm_contrast",
+      "edge_density_unmasked",
+      "tile_glcm_cv",
+      "tile_glcm_patchiness"
+    ],
+    "weights": {
+      "coverage": 0.1614996789809109,
+      "otsu_separability": 0.016155030621357716,
+      "saturation_score": 0.16437701249988762,
+      "glcm_contrast": 0.1781310767160593,
+      "edge_density_unmasked": 0.12373288374724473,
+      "tile_glcm_cv": 0.07731380188932784,
+      "tile_glcm_patchiness": 0.2787905155452121
+    },
+    "normalization": {
+      "coverage": {
+        "min": 0.06670650510204082,
+        "max": 0.49516221938775506
+      },
+      "otsu_separability": {
+        "min": 0.5116080080849331,
+        "max": 0.5941199319889987
+      },
+      "saturation_score": {
+        "min": 0.03137398854063951,
+        "max": 0.20164969274713315
+      },
+      "glcm_contrast": {
+        "min": 24.233324229880022,
+        "max": 94.20408781209535
+      },
+      "edge_density_unmasked": {
+        "min": 0.0542760306122449,
+        "max": 0.1812783826530612
+      },
+      "tile_glcm_cv": {
+        "min": 0.11794600392228999,
+        "max": 0.3257354560107709
+      },
+      "tile_glcm_patchiness": {
+        "min": 0.1811865338248149,
+        "max": 1.0196739111892474
+      }
+    },
+    "bucket_thresholds": [
+      0.3567413004894828,
+      0.4394454883772265,
+      0.5285608149881115,
+      0.6172479187794182
+    ],
+    "bucket_labels": [
+      "no rouleaux",
+      "slight rouleaux",
+      "some rouleaux",
+      "rouleaux",
+      "heavy rouleaux"
+    ]
+  },
+  "saturation_override": {
+    "density": {
+      "enabled": false,
+      "feature": "saturation_score",
+      "threshold": null,
+      "max_label": "very dense"
+    },
+    "overlap": {
+      "enabled": false,
+      "feature": "saturation_score",
+      "threshold": null,
+      "max_label": "heavy rouleaux"
+    }
+  }
+}
