@@ -66,6 +66,7 @@ def main():
             "peak": result.peak,
             "area_fraction": result.area_fraction,
             "solidity": result.solidity,
+            "anisotropy": result.anisotropy,
         })
         if args.preview_dir:
             save_preview(path, image, result, args.preview_dir)

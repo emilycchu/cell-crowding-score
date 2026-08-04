@@ -21,6 +21,9 @@ Approach (classical CV, chosen over a pretrained model -- see README.md for why)
 4. Threshold the illumination estimate to get a halo mask, and report its area fraction and
    convexity/solidity as supporting evidence for visualization and QC, alongside the
    ratio-based presence call.
+5. Before accepting a ratio-based candidate, rule out thin linear debris (hairs/fibers on the
+   slide or optics) that can also pull the contrast ratio above threshold -- see "Distinguishing
+   halos from linear debris" below.
 
 Why a ratio (peak / baseline) rather than a raw brightness difference: absolute background
 brightness varies a lot between FOVs (dust, staining, focus), so a fixed brightness-delta
@@ -29,6 +32,24 @@ many scattered puncta, without an actual halo (see README.md's calibration secti
 ratio is far more robust to that because a uniformly-brighter frame lifts both the baseline
 and the peak together, leaving the ratio roughly unchanged, whereas a real halo lifts the
 peak much more than the baseline.
+
+Distinguishing halos from linear debris: a thin bright hair or fiber can also survive the blur
+and pull contrast_ratio above threshold, because unlike a point punctum (whose peak collapses
+as ~1/sigma^2 under 2D blur, since it spreads over an area) a line only spreads in the direction
+perpendicular to itself, so its peak falls off as ~1/sigma -- much closer to how a real halo
+(already large relative to sigma) survives blur. Increasing the blur kernel can't separate the
+two cases: both decay at comparable rates and no kernel size opens a clean gap between them
+(tested empirically). Shape metrics on the halo mask's outline don't work either -- solidity
+and bounding-box aspect ratio are both fooled once a hair curves through the frame, which
+blob-ifies its outline about as much as a real (often corner-clipped) halo's outline.
+What does separate them is the orientation of the *pixel-intensity texture* inside the
+candidate region, via the 2D FFT power spectrum: a halo's brightness falls off smoothly in
+every direction (isotropic spectrum), while a hair concentrates energy along one orientation
+no matter how it curves (anisotropic spectrum) -- see _fft_anisotropy. Calibrated against 9
+real-halo candidates (anisotropy 0.072-0.315) vs. 3 hair-debris candidates that had passed the
+contrast_ratio gate (anisotropy 0.421-0.765) from slide LB-D3-2025-10-22-131729-250917745-D-thin-2-3
+(fovs 32/34/35 vs. 62/70 plus the original 7 calibration positives); ANISOTROPY_THRESHOLD sits
+in the gap between those groups.
 """
 from dataclasses import dataclass, field
 
@@ -49,6 +70,14 @@ RATIO_THRESHOLD = 3.0
 CONFIDENCE_LOW = 2.1
 CONFIDENCE_HIGH = 6.0
 
+# See module docstring, "Distinguishing halos from linear debris". Anisotropy is only checked
+# for candidates that already pass RATIO_THRESHOLD, so this only needs to separate real halos
+# from hair/fiber debris, not from low-signal negatives (whose mask outlines are noise, not
+# real structure, and score unreliably on this metric).
+ANISOTROPY_PAD_FRAC = 0.15   # padding added around the candidate region's bbox before the FFT
+ANISOTROPY_R_MIN = 3         # excludes the DC/near-DC bins (bulk brightness, not orientation)
+ANISOTROPY_THRESHOLD = 0.35
+
 
 @dataclass
 class OverexposureResult:
@@ -59,31 +88,96 @@ class OverexposureResult:
     peak: float
     area_fraction: float
     solidity: float
+    anisotropy: float
     mask: np.ndarray = field(repr=False)
 
 
-def _largest_component_solidity(mask):
+def _downsample_blue_channel(image_bgr):
+    blue = image_bgr[:, :, 0].astype(np.float32)
+    h, w = blue.shape
+    scale = TARGET_MAX_DIM / max(h, w)
+    return cv2.resize(blue, (max(1, int(w * scale)), max(1, int(h * scale))), interpolation=cv2.INTER_AREA)
+
+
+def _small_and_illumination(image_bgr):
+    small = _downsample_blue_channel(image_bgr)
+    sigma = BLUR_SIGMA_FRAC * max(small.shape)
+    illumination = cv2.GaussianBlur(small, (0, 0), sigmaX=sigma)
+    return small, illumination
+
+
+def compute_illumination(image_bgr):
+    """Downsample the blue channel and heavily Gaussian-blur it (see module docstring, step 2).
+    Returns the float32 illumination estimate at the downsampled size.
+    """
+    _small, illumination = _small_and_illumination(image_bgr)
+    return illumination
+
+
+def _largest_component(mask):
+    """Return (contour, bbox) of the largest connected component in a binary mask, or
+    (None, None) if the mask is empty.
+    """
     n, labels, stats, _ = cv2.connectedComponentsWithStats(mask, connectivity=8)
     if n <= 1:
-        return 0.0
-    areas = stats[1:, cv2.CC_STAT_AREA]
-    idx = int(np.argmax(areas)) + 1
+        return None, None
+    idx = int(np.argmax(stats[1:, cv2.CC_STAT_AREA])) + 1
     comp_mask = (labels == idx).astype(np.uint8)
     contours, _ = cv2.findContours(comp_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     contour = max(contours, key=cv2.contourArea)
+    x, y, w, h = stats[idx][:4]
+    return contour, (x, y, w, h)
+
+
+def _solidity(contour):
     hull_area = cv2.contourArea(cv2.convexHull(contour))
     return float(cv2.contourArea(contour) / hull_area) if hull_area > 0 else 0.0
 
 
+def _fft_anisotropy(patch):
+    """Orientation coherence of patch's 2D FFT power spectrum, in [0, 1]: ~0 for a halo's
+    isotropic falloff, -> 1 for a thin fiber/hair whose energy concentrates along one
+    orientation (see module docstring, "Distinguishing halos from linear debris").
+    """
+    h, w = patch.shape
+    if h < 8 or w < 8:
+        return 0.0
+
+    patch = patch.astype(np.float32)
+    patch -= patch.mean()
+    window = np.outer(np.hanning(h), np.hanning(w))
+    spectrum = np.fft.fftshift(np.fft.fft2(patch * window))
+    power = np.abs(spectrum) ** 2
+
+    cy, cx = h // 2, w // 2
+    yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+    yy -= cy
+    xx -= cx
+    radius = np.sqrt(xx ** 2 + yy ** 2)
+    ring = (radius >= ANISOTROPY_R_MIN) & (radius <= max(min(cy, cx) - 2, ANISOTROPY_R_MIN + 1))
+    if ring.sum() < 10:
+        return 0.0
+
+    angle = np.arctan2(yy, xx)
+    power_ring = power[ring]
+    # Doubled angle because orientation (a line and its 180-degree rotation) is the same
+    # feature, not opposite ones -- this is the standard circular-statistics trick for
+    # measuring concentration of an axial (mod pi) rather than directional (mod 2pi) quantity.
+    resultant = np.sum(power_ring * np.exp(2j * angle[ring]))
+    return float(np.abs(resultant) / np.sum(power_ring))
+
+
+def _region_anisotropy(small, bbox):
+    x, y, w, h = bbox
+    pad_x, pad_y = int(w * ANISOTROPY_PAD_FRAC), int(h * ANISOTROPY_PAD_FRAC)
+    y0, y1 = max(y - pad_y, 0), min(y + h + pad_y, small.shape[0])
+    x0, x1 = max(x - pad_x, 0), min(x + w + pad_x, small.shape[1])
+    return _fft_anisotropy(small[y0:y1, x0:x1])
+
+
 def detect_overexposure(image_bgr):
     """Detect the overexposed-halo artifact in one raw fluorescence FOV (BGR image)."""
-    blue = image_bgr[:, :, 0].astype(np.float32)
-    h, w = blue.shape
-    scale = TARGET_MAX_DIM / max(h, w)
-    small = cv2.resize(blue, (max(1, int(w * scale)), max(1, int(h * scale))), interpolation=cv2.INTER_AREA)
-
-    sigma = BLUR_SIGMA_FRAC * max(small.shape)
-    illumination = cv2.GaussianBlur(small, (0, 0), sigmaX=sigma)
+    small, illumination = _small_and_illumination(image_bgr)
 
     baseline = float(np.percentile(illumination, LOW_PERCENTILE))
     peak = float(np.percentile(illumination, HIGH_PERCENTILE))
@@ -92,10 +186,18 @@ def detect_overexposure(image_bgr):
     mask_thresh = baseline + MASK_FRAC * (peak - baseline)
     mask = (illumination > mask_thresh).astype(np.uint8)
     area_fraction = float(mask.mean())
-    solidity = _largest_component_solidity(mask)
+    contour, bbox = _largest_component(mask)
+    solidity = _solidity(contour) if contour is not None else 0.0
 
     confidence = float(np.clip((contrast_ratio - CONFIDENCE_LOW) / (CONFIDENCE_HIGH - CONFIDENCE_LOW), 0.0, 1.0))
     present = contrast_ratio >= RATIO_THRESHOLD
+
+    anisotropy = 0.0
+    if present and contour is not None:
+        anisotropy = _region_anisotropy(small, bbox)
+        if anisotropy > ANISOTROPY_THRESHOLD:
+            present = False
+            confidence = 0.0
 
     return OverexposureResult(
         present=present,
@@ -105,6 +207,7 @@ def detect_overexposure(image_bgr):
         peak=round(peak, 4),
         area_fraction=round(area_fraction, 4),
         solidity=round(solidity, 4),
+        anisotropy=round(anisotropy, 4),
         mask=mask,
     )
 
