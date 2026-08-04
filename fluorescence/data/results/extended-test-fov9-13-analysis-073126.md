@@ -90,4 +90,101 @@ Adding fov 35 (confirmed Negative) plus fovs 31-34 (confirmed Negative) brings t
 2. **Extend `src/gcs_fov.py` (or add a sibling resolver) to cover Tanzania (`RUB-*`) sample IDs** using the `tanzania_02032026` bucket convention documented above, since this data source will keep coming up as the labels CSV grows past Liberia-only rows. Worth also confirming whether Uganda (`PBC-*`, row 14, not tested here) uses the same or yet another convention before it's needed.
 3. This batch is still small (5 positives, 10 negatives, +1 flagged difficult case); it corroborates the existing `RATIO_THRESHOLD=3.0` calibration but doesn't materially change the confidence interval on it. The README's "Future directions" point about fitting the threshold on a larger, *properly* labeled negative set still stands.
 4. **Faint/diffuse halos (fov 62) are a real edge case the ratio threshold isn't tuned for.** All 5 rows-9-13 positives and both fov-70/fov-284-style strong halos score well clear of the 3.0 cutoff; fov 62 (ratio 2.41) shows the detector's margin shrinks a lot for soft, low-contrast glows. Worth deliberately sourcing more low-contrast positive examples (not just sharp-disc ones) before trusting `RATIO_THRESHOLD` near its boundary.
-5. **Bright linear contaminants (fibers/hairs) are a confirmed, non-hypothetical false-positive class.** Fovs 32/34/35 show the same physical fiber fooling the detector 3 separate times just from this one slide. Since it can span multiple adjacent FOVs, one contaminant costs multiple false triage flags. A shape check beyond solidity alone (e.g. elongation/aspect-ratio of the largest component, since solidity was ~0.99 for these too) is worth adding as a second gate specifically to rule out this failure mode, distinct from the puncta-vs-halo problem the ratio was designed to solve.
+5. **Bright linear contaminants (fibers/hairs) are a confirmed, non-hypothetical false-positive class.** Fovs 32/34/35 show the same physical fiber fooling the detector 3 separate times just from this one slide. Since it can span multiple adjacent FOVs, one contaminant costs multiple false triage flags. A shape check beyond solidity alone (e.g. elongation/aspect-ratio of the largest component, since solidity was ~0.99 for these too) is worth adding as a second gate specifically to rule out this failure mode, distinct from the puncta-vs-halo problem the ratio was designed to solve. **Addressed 2026-08-04 — see Update below.**
+
+## Update (2026-08-04): FFT-anisotropy check, tested against fovs 31-35
+
+`src/overexposure.py` now runs a second-stage check on top of the ratio gate, specifically to
+catch the fiber/hair false positives flagged in Recommendation 5 above.
+
+### How it works
+
+Recommendation 5 suggested a shape check beyond solidity, but the fiber contaminant in
+fovs 31-35 defeats shape metrics on the halo mask's *outline*: once a hair curves through the
+frame or only a segment of it dominates one tile, its outline blob-ifies enough to look about
+as convex as a real (often corner-clipped) halo (solidity ~0.99-1.00 for both, see fovs 32/34
+above). Increasing the blur kernel doesn't separate them either — a point punctum's peak
+collapses as ~1/sigma^2 under 2D blur (it spreads over an area), but a line only spreads
+perpendicular to itself, so its peak falls off as ~1/sigma, much closer to how a real halo
+survives blur. No kernel size opens a clean gap between "hair" and "halo" on outline shape or
+blur decay alone.
+
+What does separate them is the orientation of the *pixel-intensity texture inside* the
+candidate region, not its outline: a halo's brightness falls off smoothly in every direction
+(an isotropic 2D FFT power spectrum), while a hair or fiber concentrates energy along one
+orientation no matter how it curves (an anisotropic spectrum). `_fft_anisotropy()` computes
+this directly — window the candidate region (padded 15% around its bounding box) with a 2D
+Hann window, take the FFT power spectrum, and measure how concentrated that power is around
+one orientation using the circular-statistics resultant-vector trick for an axial (mod π, not
+mod 2π) quantity: sum `power * exp(2i*angle)` over an annulus that excludes the DC bin, then
+take `|sum| / sum(power)`. That ratio is ~0 for isotropic power (halo) and → 1 for power
+concentrated on one axis (fiber).
+
+This check only runs on candidates that already pass `RATIO_THRESHOLD` — it doesn't need to
+separate real halos from ordinary negatives (whose mask outlines are noise, not real
+structure, and score unreliably on this metric), only halos from fiber debris that already
+cleared the ratio gate. If `anisotropy > ANISOTROPY_THRESHOLD (0.35)`, the candidate is
+demoted back to `present=False, confidence=0.0`.
+
+### Test: fovs 31-35 re-scored with the updated detector
+
+Same 5 adjacent FOVs from `LB-D3-2025-10-22-131729-250917745-D-thin-2-3` flagged in the
+"fiber spans multiple tiles" addendum above, re-run through the current `detect_overexposure()`
+(ratio gate + anisotropy check together, not staged separately in the code — "pre-anisotropy"
+below just replays the ratio-only decision for comparison):
+
+| Slide | FOV | Truth | Result (ratio only) | Result (current) | Contrast ratio | Anisotropy |
+|---|---|---|---|---|---|---|
+| LB-D3-2025-10-22-131729-250917745-D-thin-2-3 | 31 | Negative | Negative | Negative | 2.18 | — (below ratio gate, not evaluated) |
+| LB-D3-2025-10-22-131729-250917745-D-thin-2-3 | 32 | Negative | **Positive** | Negative | 3.93 | 0.421 |
+| LB-D3-2025-10-22-131729-250917745-D-thin-2-3 | 33 | Negative | Negative | Negative | 2.28 | — (below ratio gate, not evaluated) |
+| LB-D3-2025-10-22-131729-250917745-D-thin-2-3 | 34 | Negative | **Positive** | Negative | 4.00 | 0.765 |
+| LB-D3-2025-10-22-131729-250917745-D-thin-2-3 | 35 | Negative | **Positive** | Negative | 3.75 | 0.571 |
+
+All 3 fiber-driven false positives (32, 34, 35) are now correctly demoted to `Negative`, with
+anisotropy (0.421-0.765) sitting well clear of the 0.35 threshold. Fovs 31 and 33 were already
+correctly negative on the ratio alone (the fiber only grazes their corner) — anisotropy is
+never evaluated for them since they don't clear the ratio gate.
+
+### Test: true positives (regression check)
+
+The concern with adding a second gate is demoting real halos, not just catching fake ones. Re-ran
+the current detector against the 8 original calibration positives (`data/labels/fluorescent-spot-examples.csv`
+rows 1-8) plus fov 70 from the same slide as the fiber cases (a strong, unambiguous halo,
+reclassified `Positive` earlier in this document):
+
+| Slide | FOV | Truth | Result | Contrast ratio | Anisotropy |
+|---|---|---|---|---|---|
+| LB-D10-2025-12-30-083614-0250901VFPCHC-2-1 | 210 | Positive | Positive | 17.35 | 0.141 |
+| LB-D3-2025-10-03-124025-2404175445D-thin-2-3 | 125 | Positive | Positive | 13.23 | 0.315 |
+| LB-D10-2025-12-30-083614-0250901VFPCHC-2-1 | 227 | Positive | Positive | 11.45 | 0.099 |
+| LB-D3-2025-10-22-131729-250917745-D-thin-2-3 | 70 | Positive | Positive | 8.28 | 0.140 |
+| LB-D10-2025-12-30-084453-0250071VFPCHC-2-2 | 200 | Positive | Positive | 7.95 | 0.131 |
+| LB-D3-2025-10-03-104211-250917371-D-thin-2-3 | 4 | Positive | Positive | 5.86 | 0.144 |
+| LB-D10-2025-12-29-150312-0171084-VFPCHC-2-4 | 153 | Positive | Positive | 6.36 | 0.121 |
+| LB-D3-2025-10-03-124025-2404175445D-thin-2-3 | 114 | Positive | Positive | 3.78 | 0.072 |
+| LB-D10-2025-12-29-150312-0171084-VFPCHC-2-4 | 154 | Positive | Positive | 3.65 | 0.097 |
+
+All 9 stay `Positive` — anisotropy ranges 0.072-0.315 for every real halo tested, clear of the
+0.35 threshold, none demoted. **Caveat**: this is not an independent hold-out — these are the
+same 9 real-halo examples (8 original calibration positives + fov 70) the `overexposure.py`
+module docstring already cites as the anisotropy calibration set (alongside fovs 32/34/35 as
+the hair-debris side). This confirms the check does what it was tuned to do; it isn't new
+evidence the threshold generalizes beyond this slide set.
+
+Fov 62 (the known faint-halo false negative flagged earlier in this document) is unaffected by
+this change, as expected: its contrast ratio (2.41) never clears `RATIO_THRESHOLD`, so the
+anisotropy check — which only runs on ratio-gate survivors — never executes for it. It remains
+`present=False`. That's a separate, still-open gap (see Recommendation 4 above), not something
+this update was meant to touch.
+
+Full data (incl. baseline/peak/solidity, and the ratio-only vs. current result for every row) in
+`anisotropy-update-test-080426.csv`. Previews with the updated (now green, i.e. `Negative`)
+contours for fovs 32/34/35 are in `data/results/preview_new/`.
+
+### Updated FP/FN tally
+
+Substituting these results into the running tally from the "fiber spans multiple tiles" section
+above: of the 21 FOVs tracked across this document (5 CSV positives + 9 confirmed negatives +
+fov 70 + fov 62 + fov 35 + fovs 31-34), false positives drop from **3 (fovs 32, 34, 35) to 0**;
+the one false negative (fov 62) is unchanged and still open.

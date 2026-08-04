@@ -1,0 +1,16 @@
+sample_id,fov_id,truth,tags,result_pre_anisotropy,result_post_anisotropy,contrast_ratio,anisotropy,solidity
+LB-D3-2025-10-22-131729-250917745-D-thin-2-3,31,Negative,fiber contaminant grazes corner,Negative,Negative,2.1845,0.0,0.8149
+LB-D3-2025-10-22-131729-250917745-D-thin-2-3,32,Negative,fiber contaminant,Positive,Negative,3.9315,0.421,0.9955
+LB-D3-2025-10-22-131729-250917745-D-thin-2-3,33,Negative,fiber contaminant grazes corner,Negative,Negative,2.2821,0.0,0.7679
+LB-D3-2025-10-22-131729-250917745-D-thin-2-3,34,Negative,fiber contaminant,Positive,Negative,3.9993,0.7654,0.9931
+LB-D3-2025-10-22-131729-250917745-D-thin-2-3,35,Negative,fiber contaminant + separate fleck,Positive,Negative,3.7491,0.5714,0.7935
+LB-D10-2025-12-29-150312-0171084-VFPCHC-2-4,153,Positive,Overexposed,Positive,Positive,6.3644,0.1213,0.9974
+LB-D10-2025-12-29-150312-0171084-VFPCHC-2-4,154,Positive,"Slightly Dense, Rouleaux, Overexposed",Positive,Positive,3.6485,0.0969,0.9945
+LB-D10-2025-12-30-083614-0250901VFPCHC-2-1,210,Positive,Overexposed,Positive,Positive,17.3467,0.1408,0.9973
+LB-D10-2025-12-30-083614-0250901VFPCHC-2-1,227,Positive,Overexposed,Positive,Positive,11.4525,0.0989,0.9953
+LB-D10-2025-12-30-084453-0250071VFPCHC-2-2,200,Positive,"Rouleaux, Overexposed",Positive,Positive,7.9515,0.1314,0.9936
+LB-D3-2025-10-03-104211-250917371-D-thin-2-3,4,Positive,"Overexposed, Unfocused",Positive,Positive,5.8572,0.1444,0.9973
+LB-D3-2025-10-03-124025-2404175445D-thin-2-3,114,Positive,Overexposed,Positive,Positive,3.7815,0.0724,0.9929
+LB-D3-2025-10-03-124025-2404175445D-thin-2-3,125,Positive,"Crenated, Overexposed",Positive,Positive,13.2307,0.3149,0.9938
+LB-D3-2025-10-22-131729-250917745-D-thin-2-3,70,Positive,reclassified genuine halo see 073126 analysis,Positive,Positive,8.2841,0.1403,0.9978
+LB-D3-2025-10-22-131729-250917745-D-thin-2-3,62,Positive,difficult case faint halo known false negative,Negative,Negative,2.4139,0.0,0.9801
