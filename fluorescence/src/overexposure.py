@@ -50,6 +50,26 @@ real-halo candidates (anisotropy 0.072-0.315) vs. 3 hair-debris candidates that 
 contrast_ratio gate (anisotropy 0.421-0.765) from slide LB-D3-2025-10-22-131729-250917745-D-thin-2-3
 (fovs 32/34/35 vs. 62/70 plus the original 7 calibration positives); ANISOTROPY_THRESHOLD sits
 in the gap between those groups.
+
+Diffuse/dim halo candidates below the ratio gate: a faint halo (e.g. fov62 on the same slide as
+above, contrast_ratio=2.41) can fall under RATIO_THRESHOLD entirely, and none of anisotropy,
+area_fraction, solidity, or interior texture (checked directly against fov62 and the 8 informal
+negative-control FOVs) separates it from an ordinary sub-threshold negative -- all four overlap.
+One thing that does show a gap: thresholding the illumination estimate at a fixed *absolute*
+brightness delta above baseline (DIFFUSE_ABS_DELTA), rather than a fraction of this frame's own
+peak, and measuring the surviving region's size -- see _sustained_footprint. Rationale: a
+physical illumination artifact has a roughly fixed absolute brightness/size footprint regardless
+of how bright it happens to be, whereas ordinary background elevation (puncta clusters, mild
+vignetting) doesn't sustain that far above its own baseline. At baseline+40, real halos (the 8
+original calibration positives plus fov70) keep a connected region with equivalent radius
+67-169px, while 8 of the 10 informal negatives have no pixels that far above baseline at all;
+fov62 keeps radius 151px, inside the real-halo range. But one negative (a slide with genuine
+large-scale vignetting, confirmed by inspecting the raw image) still keeps radius 79px, and
+that same raw-image check couldn't visually rule out similar large-scale unevenness in fov62
+either -- so this is reported as an informational field only (diffuse_radius/diffuse_circularity),
+never used to change `present` or `confidence`. It's calibrated against exactly one confirmed
+diffuse-positive example; treat it as something for a human to look at on borderline low-ratio
+FOVs, not a decision rule, until there's real labeled data for faint halos.
 """
 from dataclasses import dataclass, field
 
@@ -78,6 +98,10 @@ ANISOTROPY_PAD_FRAC = 0.15   # padding added around the candidate region's bbox 
 ANISOTROPY_R_MIN = 3         # excludes the DC/near-DC bins (bulk brightness, not orientation)
 ANISOTROPY_THRESHOLD = 0.35
 
+# See module docstring, "Diffuse/dim halo candidates below the ratio gate". Reported only --
+# not used as a decision threshold, since it's calibrated against a single confirmed example.
+DIFFUSE_ABS_DELTA = 40
+
 
 @dataclass
 class OverexposureResult:
@@ -89,6 +113,8 @@ class OverexposureResult:
     area_fraction: float
     solidity: float
     anisotropy: float
+    diffuse_radius: float
+    diffuse_circularity: float
     mask: np.ndarray = field(repr=False)
 
 
@@ -167,6 +193,23 @@ def _fft_anisotropy(patch):
     return float(np.abs(resultant) / np.sum(power_ring))
 
 
+def _sustained_footprint(illumination, baseline):
+    """Size/shape of the region that stays elevated by a fixed absolute amount above baseline,
+    as opposed to a fraction of this frame's own peak (see module docstring, "Diffuse/dim halo
+    candidates below the ratio gate"). Returns (radius, circularity), both 0.0 if no pixels
+    clear the delta. Reported only -- not used to change `present` or `confidence`.
+    """
+    mask = (illumination > baseline + DIFFUSE_ABS_DELTA).astype(np.uint8)
+    contour, _ = _largest_component(mask)
+    if contour is None:
+        return 0.0, 0.0
+    area = cv2.contourArea(contour)
+    perimeter = cv2.arcLength(contour, True)
+    radius = float(np.sqrt(area / np.pi))
+    circularity = float(4 * np.pi * area / (perimeter ** 2)) if perimeter > 0 else 0.0
+    return radius, circularity
+
+
 def _region_anisotropy(small, bbox):
     x, y, w, h = bbox
     pad_x, pad_y = int(w * ANISOTROPY_PAD_FRAC), int(h * ANISOTROPY_PAD_FRAC)
@@ -199,6 +242,8 @@ def detect_overexposure(image_bgr):
             present = False
             confidence = 0.0
 
+    diffuse_radius, diffuse_circularity = _sustained_footprint(illumination, baseline)
+
     return OverexposureResult(
         present=present,
         confidence=round(confidence, 4),
@@ -208,6 +253,8 @@ def detect_overexposure(image_bgr):
         area_fraction=round(area_fraction, 4),
         solidity=round(solidity, 4),
         anisotropy=round(anisotropy, 4),
+        diffuse_radius=round(diffuse_radius, 2),
+        diffuse_circularity=round(diffuse_circularity, 4),
         mask=mask,
     )
 

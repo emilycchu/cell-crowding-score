@@ -22,7 +22,8 @@ from src.overexposure import detect_overexposure
 RAW_DIR = Path(__file__).resolve().parent.parent / "data" / "raw"
 FIELDNAMES = [
     "sample_id", "fov_id", "tags", "labeled_overexposed", "predicted_present",
-    "confidence", "contrast_ratio", "baseline", "peak", "area_fraction", "solidity",
+    "confidence", "contrast_ratio", "baseline", "peak", "area_fraction", "solidity", "anisotropy",
+    "diffuse_radius", "diffuse_circularity",
 ]
 
 
@@ -71,6 +72,9 @@ def main():
             "peak": result.peak,
             "area_fraction": result.area_fraction,
             "solidity": result.solidity,
+            "anisotropy": result.anisotropy,
+            "diffuse_radius": result.diffuse_radius,
+            "diffuse_circularity": result.diffuse_circularity,
         })
         print(f"{sample_id} fov={fov_id}: labeled={labeled_overexposed} predicted={result.present} "
               f"(ratio={result.contrast_ratio}, conf={result.confidence})")
