@@ -89,11 +89,17 @@ false negative and the informal negative controls.
 One signal did show a real gap: thresholding the illumination estimate at a fixed
 **absolute** brightness delta above baseline (`DIFFUSE_ABS_DELTA=40`, vs. `MASK_FRAC`'s
 threshold that's relative to that frame's own peak) and measuring the surviving region's
-radius and circularity (`_sustained_footprint` in `src/overexposure.py`). Real halos kept a
-radius of 67-169px; most negatives had zero pixels that far above baseline. `OverexposureResult`
-reports this unconditionally as `diffuse_radius`/`diffuse_circularity`, surfaced in
-`detect_overexposure.py` and `score_labels.py` output -- but it does **not** affect
-`present`/`confidence`.
+*size* (`_sustained_footprint` in `src/overexposure.py`). Real halos kept a radius of
+67-169px; most negatives had zero pixels that far above baseline at all, so there was no
+region to measure. This works where the relative-mask shape metrics didn't because
+`MASK_FRAC` always carves out *some* blob of comparable relative size regardless of whether
+a real halo is present, so its shape reflects whatever happened to be locally bright rather
+than "is this a halo"; the absolute threshold instead asks whether anything clears a fixed
+physical brightness bar at all, which most negatives simply don't. `OverexposureResult`
+reports both `diffuse_radius` and `diffuse_circularity` (the latter alongside, for
+visualization -- not validated as a discriminator itself, since most negatives have no
+contour to measure), surfaced in `detect_overexposure.py` and `score_labels.py` output --
+but neither field affects `present`/`confidence`.
 
 It's reported-only, not a gate, because it's calibrated against a single confirmed
 diffuse-positive example and one near-miss negative (large-scale vignetting, not a halo,
