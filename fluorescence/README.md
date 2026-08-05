@@ -78,6 +78,29 @@ Since the negative controls are informal (not part of the labeled reference set,
 sanity check), and 8+8 examples is still a small calibration set, treat `RATIO_THRESHOLD`
 as a reasonable starting point, not a rigorously fit cutoff -- see Future directions.
 
+## Diffuse-halo signal (reported only, not a decision gate)
+
+`RATIO_THRESHOLD=3.0` misses genuinely faint/diffuse halos -- e.g. one known false negative
+with `contrast_ratio=2.41`. Anisotropy, mask area fraction/solidity, interior texture
+(coefficient of variation), and mask circularity were all investigated as ways to separate
+these faint cases from ordinary negatives and all failed: every one overlapped between the
+false negative and the informal negative controls.
+
+One signal did show a real gap: thresholding the illumination estimate at a fixed
+**absolute** brightness delta above baseline (`DIFFUSE_ABS_DELTA=40`, vs. `MASK_FRAC`'s
+threshold that's relative to that frame's own peak) and measuring the surviving region's
+radius and circularity (`_sustained_footprint` in `src/overexposure.py`). Real halos kept a
+radius of 67-169px; most negatives had zero pixels that far above baseline. `OverexposureResult`
+reports this unconditionally as `diffuse_radius`/`diffuse_circularity`, surfaced in
+`detect_overexposure.py` and `score_labels.py` output -- but it does **not** affect
+`present`/`confidence`.
+
+It's reported-only, not a gate, because it's calibrated against a single confirmed
+diffuse-positive example and one near-miss negative (large-scale vignetting, not a halo,
+confirmed by inspecting the raw image) that isn't confidently distinguishable from the
+positive by eye either. Turning it into an auto-flip decision needs more labeled diffuse-halo
+positives and negatives before a hard cutoff is worth calibrating.
+
 ## FOV resolution
 
 `src/gcs_fov.py` resolves a `(sample_id, fov_id)` pair to its raw image in
