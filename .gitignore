@@ -5,6 +5,8 @@ crowding-crenation/data/validation/*.png
 crowding-crenation/data/validation/*.tif
 fluorescence/data/labels
 fluorescence/data/raw/
+focus/data/labels
+focus/data/raw/
 __pycache__/
 *.pyc
 .venv/

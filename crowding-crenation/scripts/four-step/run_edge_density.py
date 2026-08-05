@@ -5,14 +5,14 @@ and the unmasked variant (edges over the full raw image), so the two can be
 compared directly while Otsu's segmentation accuracy is still being validated.
 
 Usage:
-    python scripts/run_edge_density.py data/raw/initial-dataset-071626 data/results/initial-dataset-071626/edge-density.csv
+    python scripts/four-step/run_edge_density.py data/raw/initial-dataset-071626 data/results/initial-dataset-071626/edge-density.csv
 """
 import argparse
 import csv
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from src.features.edge_density import edge_density
 from src.pipeline import list_image_paths, load_image

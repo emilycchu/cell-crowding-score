@@ -1,14 +1,14 @@
 """Run Otsu segmentation over a raw FOV dataset and write per-FOV coverage results to CSV.
 
 Usage:
-    python scripts/run_otsu.py data/raw/initial-dataset-071626 data/results/initial-dataset-071626/otsu.csv
+    python scripts/four-step/run_otsu.py data/raw/initial-dataset-071626 data/results/initial-dataset-071626/otsu.csv
 """
 import argparse
 import csv
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from src.pipeline import list_image_paths, load_image
 from src.segmentation import cell_coverage, otsu_segment

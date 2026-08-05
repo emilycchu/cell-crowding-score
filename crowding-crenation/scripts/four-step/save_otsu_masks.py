@@ -1,7 +1,7 @@
 """Save Otsu segmentation mask images for specific FOVs.
 
 Usage:
-    python scripts/save_otsu_masks.py data/raw/initial-dataset-071626 \
+    python scripts/four-step/save_otsu_masks.py data/raw/initial-dataset-071626 \
         data/results/initial-dataset-071626/otsu-masks \
         dpc-035-LB-D3-2025-10-03-122127-250912792D-thin-3-4.png \
         dpc-015-LB-D3-2025-10-03-122127-250912792D-thin-3-4.png \
@@ -13,7 +13,7 @@ from pathlib import Path
 
 import cv2
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from src.boundary import clean_mask
 from src.pipeline import load_image, to_dir

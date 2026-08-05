@@ -4,14 +4,14 @@ lbp_entropy() already operates on the raw image with no Otsu mask involved,
 so there's nothing to decouple here -- this just produces the comparison CSV.
 
 Usage:
-    python scripts/run_lbp_entropy.py data/raw/initial-dataset-071626 data/results/initial-dataset-071626/lbp-entropy.csv
+    python scripts/four-step/run_lbp_entropy.py data/raw/initial-dataset-071626 data/results/initial-dataset-071626/lbp-entropy.csv
 """
 import argparse
 import csv
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from src.features.lbp_entropy import lbp_entropy
 from src.pipeline import list_image_paths, load_image

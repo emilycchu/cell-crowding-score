@@ -49,7 +49,7 @@ Any directory argument (across `src.pipeline` and the `scripts/run_*.py` batch r
 This produces a per-FOV visualization and summary CSV for manual review only:
 
 ```bash
-python scripts/explore_crenation.py data/raw/initial-dataset-071626 \
+python scripts/four-step/explore_crenation.py data/raw/initial-dataset-071626 \
     data/results/initial-dataset-071626/crenation-manual
 ```
 
@@ -65,14 +65,19 @@ src/
   composite.py       weighted composite score
   pipeline.py        end-to-end scoring (CLI: python -m src.pipeline)
 scripts/
-  run_otsu.py, run_edge_density.py, run_glcm_contrast.py, run_lbp_entropy.py
+  four-step/          the four-technique classical pipeline (src/-based)
+    run_otsu.py, run_edge_density.py, run_glcm_contrast.py, run_lbp_entropy.py
                       per-technique batch runs over a raw FOV directory -> CSV
-  save_otsu_masks.py  dump mask images for spot-checking
-  explore_crenation.py  crenation exploration (see above)
+    save_otsu_masks.py  dump mask images for spot-checking
+    explore_crenation.py  crenation exploration (see above)
+  ai-first/           from-scratch watershed pipeline for a new slide
+    score_new_slide.py   raw per-FOV metrics from pixels alone (no precomputed model output)
+    label_new_slide.py   turns those metrics into slide-relative quintile density/crowding labels
   build_result_summary.py  render a density x overlap grid image with per-technique values dropped in
   generate_report.py  compare each technique's raw output against manually-labeled severity, flag outliers
   pairwise_analysis.py  compare the four techniques against each other (redundancy check)
   joint_discriminative_analysis.py  per-pair joint regression against the label (complementary-vs-redundant check)
+  compare_tanzania_labels.py  manual vs. ai-first program label comparison for slide KTR-72502948
 data/
   raw/<dataset>/      source FOV images (gitignored)
   labels/<dataset>/   fovs.csv (density/overlap/crenated labels) + visual grid

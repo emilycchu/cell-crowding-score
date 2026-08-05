@@ -14,11 +14,11 @@ FFT looked more deterministic on the first pass) -- uncomment the marked lines t
 them back.
 
 Usage:
-    python scripts/explore_crenation.py data/raw/initial-dataset-071626 \
+    python scripts/four-step/explore_crenation.py data/raw/initial-dataset-071626 \
         data/results/initial-dataset-071626/crenation-manual
 
     # or restrict to specific FOVs:
-    python scripts/explore_crenation.py data/raw/initial-dataset-071626 \
+    python scripts/four-step/explore_crenation.py data/raw/initial-dataset-071626 \
         data/results/initial-dataset-071626/crenation-manual \
         dpc-035-LB-D3-2025-10-03-122127-250912792D-thin-3-4.png
 """
@@ -34,7 +34,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from src.boundary import clean_mask, find_blob_contours, radial_fft_power, radial_profile
 

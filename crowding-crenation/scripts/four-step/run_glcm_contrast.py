@@ -4,14 +4,14 @@ glcm_contrast() already operates on the raw image with no Otsu mask involved,
 so there's nothing to decouple here -- this just produces the comparison CSV.
 
 Usage:
-    python scripts/run_glcm_contrast.py data/raw/initial-dataset-071626 data/results/initial-dataset-071626/glcm-contrast.csv
+    python scripts/four-step/run_glcm_contrast.py data/raw/initial-dataset-071626 data/results/initial-dataset-071626/glcm-contrast.csv
 """
 import argparse
 import csv
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from src.features.glcm_contrast import glcm_contrast
 from src.pipeline import list_image_paths, load_image
