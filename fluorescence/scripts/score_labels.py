@@ -23,7 +23,7 @@ RAW_DIR = Path(__file__).resolve().parent.parent / "data" / "raw"
 FIELDNAMES = [
     "sample_id", "fov_id", "tags", "labeled_overexposed", "predicted_present",
     "confidence", "contrast_ratio", "baseline", "peak", "area_fraction", "solidity", "anisotropy",
-    "diffuse_radius", "diffuse_circularity",
+    "diffuse_radius", "diffuse_circularity", "diffuse_centroid_x", "diffuse_centroid_y",
 ]
 
 
@@ -75,6 +75,8 @@ def main():
             "anisotropy": result.anisotropy,
             "diffuse_radius": result.diffuse_radius,
             "diffuse_circularity": result.diffuse_circularity,
+            "diffuse_centroid_x": result.diffuse_centroid_x,
+            "diffuse_centroid_y": result.diffuse_centroid_y,
         })
         print(f"{sample_id} fov={fov_id}: labeled={labeled_overexposed} predicted={result.present} "
               f"(ratio={result.contrast_ratio}, conf={result.confidence})")

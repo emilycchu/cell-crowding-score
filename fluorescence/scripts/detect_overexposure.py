@@ -69,6 +69,8 @@ def main():
             "anisotropy": result.anisotropy,
             "diffuse_radius": result.diffuse_radius,
             "diffuse_circularity": result.diffuse_circularity,
+            "diffuse_centroid_x": result.diffuse_centroid_x,
+            "diffuse_centroid_y": result.diffuse_centroid_y,
         })
         if args.preview_dir:
             save_preview(path, image, result, args.preview_dir)

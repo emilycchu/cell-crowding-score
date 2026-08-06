@@ -70,7 +70,20 @@ either -- so this is reported as an informational field only (diffuse_radius/dif
 never used to change `present` or `confidence`. It's calibrated against exactly one confirmed
 diffuse-positive example; treat it as something for a human to look at on borderline low-ratio
 FOVs, not a decision rule, until there's real labeled data for faint halos.
+
+Diffuse candidate vs. neighboring-FOV illumination trend: circularity of the sustained-footprint
+region doesn't separate fov62 from the vignetted negative either (see README) -- but comparing a
+candidate against its immediately-preceding FOVs (already computed for free in a pipeline that
+walks a scan's FOVs in order) does. Vignetting/slide-edge effects are tied to a fixed physical
+location, so they vary gradually across neighboring stage positions: on the one vignetted negative
+checked, its true neighbors landed a nearly identical diffuse_radius (83, 83px vs. its own 79px) at
+nearly the same centroid (within 0.03-0.06 of the frame's normalized size). fov62, by contrast, is
+roughly double either true neighbor's radius (72, 97px vs. its own 151px) at a centroid 0.18-0.37
+away -- a spike, not a continuation of a trend. See diffuse_candidate/matches_neighbor_trend/
+diffuse_halo_flag and scripts/scan_diffuse_candidates.py. Same caveat as above: exactly one
+confirmed example of each case, so this is advisory only, never gating `present`/`confidence`.
 """
+import math
 from dataclasses import dataclass, field
 
 import cv2
@@ -102,6 +115,21 @@ ANISOTROPY_THRESHOLD = 0.35
 # not used as a decision threshold, since it's calibrated against a single confirmed example.
 DIFFUSE_ABS_DELTA = 40
 
+# See module docstring, "Diffuse candidate vs. neighboring-FOV illumination trend". Gates which
+# sub-ratio diffuse_radius readings are even worth comparing to neighbors -- chosen well below
+# the two confirmed examples (fov62=151px, the vignetted negative=79px) but above the small
+# incidental blips seen in unrelated neighboring tiles (9-31px). Advisory only.
+DIFFUSE_RADIUS_MIN = 50
+
+# A candidate's own diffuse blob counts as matching a neighbor's -- i.e. part of the same
+# illumination trend, not an isolated event -- if the neighbor's blob sits within this
+# normalized-frame distance of the candidate's centroid and its radius is within this factor.
+# Calibrated against the one worked example: the vignetted negative's true neighbors matched at
+# distance 0.03-0.06 and radius ratio ~1.0; fov62's true neighbors were 0.18-0.37 away at ratio
+# ~1.5-2x. Advisory only -- see module docstring.
+NEIGHBOR_CENTROID_MATCH_DIST = 0.12
+NEIGHBOR_RADIUS_MATCH_FACTOR = 1.3
+
 
 @dataclass
 class OverexposureResult:
@@ -115,6 +143,8 @@ class OverexposureResult:
     anisotropy: float
     diffuse_radius: float
     diffuse_circularity: float
+    diffuse_centroid_x: float
+    diffuse_centroid_y: float
     mask: np.ndarray = field(repr=False)
 
 
@@ -194,20 +224,26 @@ def _fft_anisotropy(patch):
 
 
 def _sustained_footprint(illumination, baseline):
-    """Size/shape of the region that stays elevated by a fixed absolute amount above baseline,
-    as opposed to a fraction of this frame's own peak (see module docstring, "Diffuse/dim halo
-    candidates below the ratio gate"). Returns (radius, circularity), both 0.0 if no pixels
-    clear the delta. Reported only -- not used to change `present` or `confidence`.
+    """Size/shape/location of the region that stays elevated by a fixed absolute amount above
+    baseline, as opposed to a fraction of this frame's own peak (see module docstring, "Diffuse/dim
+    halo candidates below the ratio gate"). Returns (radius, circularity, centroid_x, centroid_y),
+    all 0.0 if no pixels clear the delta -- centroid is normalized to [0, 1] within the frame, for
+    comparing against a neighboring FOV's own footprint (see matches_neighbor_trend). Reported
+    only -- not used to change `present` or `confidence`.
     """
     mask = (illumination > baseline + DIFFUSE_ABS_DELTA).astype(np.uint8)
     contour, _ = _largest_component(mask)
     if contour is None:
-        return 0.0, 0.0
+        return 0.0, 0.0, 0.0, 0.0
     area = cv2.contourArea(contour)
     perimeter = cv2.arcLength(contour, True)
     radius = float(np.sqrt(area / np.pi))
     circularity = float(4 * np.pi * area / (perimeter ** 2)) if perimeter > 0 else 0.0
-    return radius, circularity
+    moments = cv2.moments(contour)
+    h, w = illumination.shape
+    cx = moments["m10"] / moments["m00"] / w
+    cy = moments["m01"] / moments["m00"] / h
+    return radius, circularity, cx, cy
 
 
 def _region_anisotropy(small, bbox):
@@ -242,7 +278,7 @@ def detect_overexposure(image_bgr):
             present = False
             confidence = 0.0
 
-    diffuse_radius, diffuse_circularity = _sustained_footprint(illumination, baseline)
+    diffuse_radius, diffuse_circularity, diffuse_cx, diffuse_cy = _sustained_footprint(illumination, baseline)
 
     return OverexposureResult(
         present=present,
@@ -255,8 +291,47 @@ def detect_overexposure(image_bgr):
         anisotropy=round(anisotropy, 4),
         diffuse_radius=round(diffuse_radius, 2),
         diffuse_circularity=round(diffuse_circularity, 4),
+        diffuse_centroid_x=round(diffuse_cx, 4),
+        diffuse_centroid_y=round(diffuse_cy, 4),
         mask=mask,
     )
+
+
+def diffuse_candidate(result):
+    """Whether a ratio-failing FOV's sustained footprint is even large enough to be worth
+    comparing against its neighbors (see DIFFUSE_RADIUS_MIN). Most sub-ratio negatives never
+    reach here at all -- their diffuse_radius is 0. Advisory only.
+    """
+    return (not result.present) and result.diffuse_radius >= DIFFUSE_RADIUS_MIN
+
+
+def matches_neighbor_trend(result, neighbor_results):
+    """True if an already-processed, adjacent FOV's own diffuse footprint sits at close to the
+    same location and size as this one -- i.e. this candidate looks like part of a smooth,
+    spatially-continuous illumination trend (vignetting, a slide/mounting edge effect) rather
+    than a one-off event. See module docstring, "Diffuse candidate vs. neighboring-FOV
+    illumination trend". Advisory only -- never gates `present`/`confidence`.
+    """
+    for neighbor in neighbor_results:
+        if neighbor.diffuse_radius <= 0:
+            continue
+        dist = math.hypot(
+            result.diffuse_centroid_x - neighbor.diffuse_centroid_x,
+            result.diffuse_centroid_y - neighbor.diffuse_centroid_y,
+        )
+        if dist <= NEIGHBOR_CENTROID_MATCH_DIST and result.diffuse_radius <= neighbor.diffuse_radius * NEIGHBOR_RADIUS_MATCH_FACTOR:
+            return True
+    return False
+
+
+def diffuse_halo_flag(result, neighbor_results):
+    """Advisory flag for a human reviewing borderline low-ratio FOVs: True if this FOV clears
+    DIFFUSE_RADIUS_MIN and does not match a neighboring FOV's illumination trend -- i.e. looks
+    like an isolated diffuse halo rather than vignetting/an edge effect. Calibrated against
+    exactly one confirmed example of each case (see module docstring) -- never used to change
+    `present`/`confidence`.
+    """
+    return diffuse_candidate(result) and not matches_neighbor_trend(result, neighbor_results)
 
 
 def mask_to_full_resolution(mask, image_shape):

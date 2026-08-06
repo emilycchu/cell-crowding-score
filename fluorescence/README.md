@@ -107,6 +107,28 @@ confirmed by inspecting the raw image) that isn't confidently distinguishable fr
 positive by eye either. Turning it into an auto-flip decision needs more labeled diffuse-halo
 positives and negatives before a hard cutoff is worth calibrating.
 
+### Neighbor-trend check
+
+`diffuse_radius`/`diffuse_circularity` alone can't rule out the vignetted negative above --
+its radius (79px) falls inside the real-halo range (67-169px), and its circularity is actually
+*higher* than fov62's. But vignetting and slide/mounting edge effects are tied to a fixed
+physical location, so they vary gradually across neighboring stage positions, while a real
+halo is a one-off event specific to its own FOV. Checked against the vignetted negative's true
+(fov_id-adjacent) neighbors: they land a nearly identical `diffuse_radius` (83, 83px vs. its
+own 79px) at nearly the same centroid (within 0.03-0.06 of the frame's normalized size) --
+part of a smooth trend, not a spike. fov62's true neighbors, by contrast, sit at roughly half
+its radius (72, 97px vs. its own 151px) and 0.18-0.37 away in centroid -- a spike, not a
+continuation.
+
+`diffuse_candidate`, `matches_neighbor_trend`, and `diffuse_halo_flag` in
+`src/overexposure.py` implement this, and `scripts/scan_diffuse_candidates.py` runs it as a
+sequential walk over one scan's FOVs (comparing each ratio-failing candidate against the
+`NEIGHBOR_WINDOW=2` FOVs immediately before it -- already computed for free in a pipeline that
+processes a scan's FOVs in order). Same caveat as `diffuse_radius`: exactly one confirmed
+example of each case, so `diffuse_halo_flag` is advisory only, never gating
+`present`/`confidence`, until there's more labeled data to calibrate
+`NEIGHBOR_CENTROID_MATCH_DIST`/`NEIGHBOR_RADIUS_MATCH_FACTOR` against.
+
 ## FOV resolution
 
 `src/gcs_fov.py` resolves a `(sample_id, fov_id)` pair to its raw image in
@@ -132,6 +154,11 @@ python scripts/score_labels.py data/labels/fluorescent-spot-examples.csv --limit
 
 # Run the detector directly on any local image or directory of images
 python scripts/detect_overexposure.py data/raw --preview-dir data/results/preview
+
+# Walk one scan's FOVs in order, flagging diffuse-halo candidates against their neighbors'
+# illumination trend (see "Neighbor-trend check" above; fetches from GCS as needed)
+python scripts/scan_diffuse_candidates.py LB-D3-2025-10-22-131729-250917745-D-thin-2-3 \
+    --start 55 --end 70
 ```
 
 ## Repository layout
@@ -144,6 +171,7 @@ scripts/
   fetch_reference_images.py   download labeled FOVs from GCS into data/raw/ (gitignored)
   detect_overexposure.py      run the detector on a local image/directory
   score_labels.py             run the detector against a labels CSV + report agreement
+  scan_diffuse_candidates.py  sequential per-scan walk, flags diffuse candidates vs. neighbors
 data/
   labels/   fluorescent-spot-examples.csv (gitignored -- contains real patient sample IDs)
   raw/      downloaded raw FOV images (gitignored)
