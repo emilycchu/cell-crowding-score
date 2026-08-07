@@ -374,6 +374,81 @@ the weakest baseline subset (FN 80.0%) precisely because it's defined as the fai
 population the diffuse-fov step targets -- which is exactly why folding it in helps there so
 much.
 
+## FN/FP examples
+
+Annotated previews for all 21 rows that are a false negative or false positive in either variant, grouped into the same 4 buckets as the Discussion above. Red outline = `present` (this variant's detector call fired); green = did not fire. Caption lines show truth/notes, both variants' `present`, contrast ratio, and diffuse radius.
+
+### A -- rescued by folding in (spot_truth=yes, missed at baseline, caught after fold-in) (n=7)
+
+![LB-D11-2025-12-19-111309-0211715-VFPCHC-3-1 fov=277 (Liberia) -- truth=yes, notes=background, ratio=2.75](previews/LB-D11-2025-12-19-111309-0211715-VFPCHC-3-1__fov277__preview.png)
+*LB-D11-2025-12-19-111309-0211715-VFPCHC-3-1 fov=277 (Liberia) -- truth=yes, notes=background, ratio=2.75*
+
+![LB-D11-2025-12-19-131014-0241591-VFPCHC-3-2 fov=278 (Liberia) -- truth=yes, notes=background, ratio=2.43](previews/LB-D11-2025-12-19-131014-0241591-VFPCHC-3-2__fov278__preview.png)
+*LB-D11-2025-12-19-131014-0241591-VFPCHC-3-2 fov=278 (Liberia) -- truth=yes, notes=background, ratio=2.43*
+
+![LB-D3-2025-10-22-132316-2411189646-D-thin-1-4 fov=135 (Liberia) -- truth=yes, notes=diffuse, ratio=2.59](previews/LB-D3-2025-10-22-132316-2411189646-D-thin-1-4__fov135__preview.png)
+*LB-D3-2025-10-22-132316-2411189646-D-thin-1-4 fov=135 (Liberia) -- truth=yes, notes=diffuse, ratio=2.59*
+
+![LB-D3-2025-10-22-140622-250917738-D-thin-1-1 fov=122 (Liberia) -- truth=yes, notes=double, ratio=2.75](previews/LB-D3-2025-10-22-140622-250917738-D-thin-1-1__fov122__preview.png)
+*LB-D3-2025-10-22-140622-250917738-D-thin-1-1 fov=122 (Liberia) -- truth=yes, notes=double, ratio=2.75*
+
+![LB-D3-2025-10-24-132012-25046898-D-thin-1-4 fov=3 (Liberia) -- truth=yes, notes=diffuse, ratio=2.45](previews/LB-D3-2025-10-24-132012-25046898-D-thin-1-4__fov3__preview.png)
+*LB-D3-2025-10-24-132012-25046898-D-thin-1-4 fov=3 (Liberia) -- truth=yes, notes=diffuse, ratio=2.45*
+
+![LB-D3-2025-10-27-154305-250917412-D-thin-1-4 fov=119 (Liberia) -- truth=yes, notes=diffuse, ratio=2.91](previews/LB-D3-2025-10-27-154305-250917412-D-thin-1-4__fov119__preview.png)
+*LB-D3-2025-10-27-154305-250917412-D-thin-1-4 fov=119 (Liberia) -- truth=yes, notes=diffuse, ratio=2.91*
+
+![KIT-62501087 fov=271 (Tanzania) -- truth=yes, notes=(none), ratio=14.27](previews/KIT-62501087__fov271__preview.png)
+*KIT-62501087 fov=271 (Tanzania) -- truth=yes, notes=(none), ratio=14.27*
+
+### B -- still missed after folding in (spot_truth=yes, missed by both variants) (n=2)
+
+![LB-D3-2025-10-24-113736-250918214-D-thin-2-3 fov=96 (Liberia) -- truth=yes, notes=(none), ratio=2.46](previews/LB-D3-2025-10-24-113736-250918214-D-thin-2-3__fov96__preview.png)
+*LB-D3-2025-10-24-113736-250918214-D-thin-2-3 fov=96 (Liberia) -- truth=yes, notes=(none), ratio=2.46*
+
+![LB-D3-2025-10-24-162727-230918080-D-thin-1-4 fov=8 (Liberia) -- truth=yes, notes=diffuse, ratio=1.98](previews/LB-D3-2025-10-24-162727-230918080-D-thin-1-4__fov8__preview.png)
+*LB-D3-2025-10-24-162727-230918080-D-thin-1-4 fov=8 (Liberia) -- truth=yes, notes=diffuse, ratio=1.98*
+
+### C -- false positive already at baseline (spot_truth=no, present_base=True; folding in can't fix these, since it only ever turns present False->True) (n=5)
+
+![LB-D3-2025-08-30-103102-250876706-D-thin-4 fov=257 (Liberia) -- truth=no, notes=background, ratio=3.56](previews/LB-D3-2025-08-30-103102-250876706-D-thin-4__fov257__preview.png)
+*LB-D3-2025-08-30-103102-250876706-D-thin-4 fov=257 (Liberia) -- truth=no, notes=background, ratio=3.56*
+
+![LB-D3-2025-08-30-103102-250876706-D-thin-4 fov=274 (Liberia) -- truth=no, notes=background, ratio=6.49](previews/LB-D3-2025-08-30-103102-250876706-D-thin-4__fov274__preview.png)
+*LB-D3-2025-08-30-103102-250876706-D-thin-4 fov=274 (Liberia) -- truth=no, notes=background, ratio=6.49*
+
+![LB-D3-2025-08-30-103102-250876706-D-thin-4 fov=289 (Liberia) -- truth=no, notes=background, ratio=5.12](previews/LB-D3-2025-08-30-103102-250876706-D-thin-4__fov289__preview.png)
+*LB-D3-2025-08-30-103102-250876706-D-thin-4 fov=289 (Liberia) -- truth=no, notes=background, ratio=5.12*
+
+![PAT-072-1 fov=14 (Uganda) -- truth=no, notes=artifact, ratio=3.15](previews/PAT-072-1__fov14__preview.png)
+*PAT-072-1 fov=14 (Uganda) -- truth=no, notes=artifact, ratio=3.15*
+
+![PAT-072-1 fov=94 (Uganda) -- truth=no, notes=artifact, ratio=5.91](previews/PAT-072-1__fov94__preview.png)
+*PAT-072-1 fov=94 (Uganda) -- truth=no, notes=artifact, ratio=5.91*
+
+### D -- new false positive introduced by folding in (spot_truth=no, only present_folded=True) (n=7)
+
+![LB-D11-2025-12-19-134126-025073-VFPCHC-3-1 fov=1 (Liberia) -- truth=no, notes=background, ratio=1.36](previews/LB-D11-2025-12-19-134126-025073-VFPCHC-3-1__fov1__preview.png)
+*LB-D11-2025-12-19-134126-025073-VFPCHC-3-1 fov=1 (Liberia) -- truth=no, notes=background, ratio=1.36*
+
+![LB-D3-2025-08-30-103102-250876706-D-thin-4 fov=269 (Liberia) -- truth=no, notes=background, ratio=2.15](previews/LB-D3-2025-08-30-103102-250876706-D-thin-4__fov269__preview.png)
+*LB-D3-2025-08-30-103102-250876706-D-thin-4 fov=269 (Liberia) -- truth=no, notes=background, ratio=2.15*
+
+![LB-D3-2025-10-03-124025-2404175445D-thin-2-3 fov=1 (Liberia) -- truth=no, notes=background, ratio=1.92](previews/LB-D3-2025-10-03-124025-2404175445D-thin-2-3__fov1__preview.png)
+*LB-D3-2025-10-03-124025-2404175445D-thin-2-3 fov=1 (Liberia) -- truth=no, notes=background, ratio=1.92*
+
+![LB-D3-2025-10-03-124025-2404175445D-thin-2-3 fov=19 (Liberia) -- truth=no, notes=background, ratio=2.21](previews/LB-D3-2025-10-03-124025-2404175445D-thin-2-3__fov19__preview.png)
+*LB-D3-2025-10-03-124025-2404175445D-thin-2-3 fov=19 (Liberia) -- truth=no, notes=background, ratio=2.21*
+
+![LB-D3-2025-10-03-124025-2404175445D-thin-2-3 fov=53 (Liberia) -- truth=no, notes=background, ratio=2.05](previews/LB-D3-2025-10-03-124025-2404175445D-thin-2-3__fov53__preview.png)
+*LB-D3-2025-10-03-124025-2404175445D-thin-2-3 fov=53 (Liberia) -- truth=no, notes=background, ratio=2.05*
+
+![LB-D3-2025-10-03-124025-2404175445D-thin-2-3 fov=126 (Liberia) -- truth=no, notes=artifact, ratio=13.39](previews/LB-D3-2025-10-03-124025-2404175445D-thin-2-3__fov126__preview.png)
+*LB-D3-2025-10-03-124025-2404175445D-thin-2-3 fov=126 (Liberia) -- truth=no, notes=artifact, ratio=13.39*
+
+![PBC-800-1 fov=732 (Uganda) -- truth=no, notes=background, ratio=2.13](previews/PBC-800-1__fov732__preview.png)
+*PBC-800-1 fov=732 (Uganda) -- truth=no, notes=background, ratio=2.13*
+
 ## Caveats
 
 - **Subset sizes are small.** `diffuse` and `double` are 5 rows each; a single-row flip shifts
@@ -397,9 +472,12 @@ much.
 - `results.csv` -- full per-row output: detection fields (`present_base`/`present_folded`/
   `diffuse_halo_flag`/`contrast_ratio`/`anisotropy`/`diffuse_radius`/etc.), both predicted-spot
   variants, and all runtime columns
+- `previews/` -- annotated preview thumbnails for all 21 FN/FP rows (see "FN/FP examples"),
+  plus `previews/manifest.csv` mapping each file back to its full result row and bucket
 - `../../src/gcs_fov_multi.py` -- new LB/TZ/UG FOV resolver (streams, no disk cache)
 - `../../scripts/run_overexposed_diverse_test.py` -- pipeline runner used for this test
 - `../../scripts/analyze_overexposed_diverse.py` -- confusion-matrix/FN-FP tally generator
+- `../../scripts/render_fn_fp_previews.py` -- renders the `previews/` thumbnails
 
 ## Recommendations
 
