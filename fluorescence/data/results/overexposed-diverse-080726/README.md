@@ -128,8 +128,9 @@ flag *were* wired into the decision, which it currently is not (see
 ## Per-FOV runtime
 
 Streamed live from GCS, one FOV at a time, no disk cache. `neighbor_fetch_s` is only nonzero
-for the 17 rows that were ratio-failing with a large-enough diffuse footprint to trigger a
-neighbor-trend check (`diffuse_candidate`); it covers fetching + detecting on up to 2
+for the 17 rows with `present_base=False` (whether from the ratio gate failing outright or an
+anisotropy-based fiber/debris demotion -- see "Which FOVs flip" below) and a large-enough
+diffuse footprint to trigger a neighbor-trend check (`diffuse_candidate`); it covers fetching + detecting on up to 2
 preceding fov_ids for that check alone.
 
 | sample_id | fov_id | country | gcs_fetch_s | initial_test_s | anisotropy_s | diffuse_fov_s | neighbor_fetch_s |
@@ -333,7 +334,8 @@ FN rate: 0/5 (0.0%) -- FP rate: n/a (no spot-negative rows in this subset)
 
 **Folding in the diffuse-fov step is a real recall/specificity tradeoff: it rescues most of
 the faint halos the ratio gate misses, at the cost of new false positives on ordinary
-elevated-background FOVs.** 17 of 76 rows were ratio-failing candidates with a large enough
+elevated-background FOVs (and, in one case, on a correctly-demoted debris artifact -- see
+"Which FOVs flip" below).** 17 of 76 rows had `present_base=False` with a large enough
 diffuse footprint to trigger the neighbor-trend check; 14 were flagged as isolated diffuse
 halos (didn't match a neighbor's trend) and flipped from `present=False` to `present=True`
 under fold-in:
@@ -373,6 +375,51 @@ detector whose ratio/anisotropy design predates this specific labeled test set. 
 the weakest baseline subset (FN 80.0%) precisely because it's defined as the faint/sub-ratio
 population the diffuse-fov step targets -- which is exactly why folding it in helps there so
 much.
+
+## Which FOVs flip if diffuse-fov is folded in
+
+All 14 rows where `present_base != present_folded` -- i.e. every FOV the diffuse-fov step's
+flag would actually change if it were wired into the decision (`present` only ever moves
+False->True here; folding in never turns an already-True `present` back off). These are
+exactly buckets A and D from the Discussion/FN-FP-examples sections above, just listed flat
+and sorted so every affected FOV is visible at a glance. 7 of 14 are correct rescues, 7 of 14
+are new false positives.
+
+| sample_id | fov_id | country | spot_truth | notes | contrast_ratio | diffuse_radius | outcome | preview |
+|---|---|---|---|---|---|---|---|---|
+| LB-D11-2025-12-19-134126-025073-VFPCHC-3-1 | 1 | Liberia | no | background | 1.36 | 162.6 | new FP (was TN) | [link](previews/LB-D11-2025-12-19-134126-025073-VFPCHC-3-1__fov1__preview.png) |
+| LB-D3-2025-08-30-103102-250876706-D-thin-4 | 269 | Liberia | no | background | 2.15 | 82.3 | new FP (was TN) | [link](previews/LB-D3-2025-08-30-103102-250876706-D-thin-4__fov269__preview.png) |
+| LB-D3-2025-10-03-124025-2404175445D-thin-2-3 | 1 | Liberia | no | background | 1.92 | 67.8 | new FP (was TN) | [link](previews/LB-D3-2025-10-03-124025-2404175445D-thin-2-3__fov1__preview.png) |
+| LB-D3-2025-10-03-124025-2404175445D-thin-2-3 | 19 | Liberia | no | background | 2.21 | 98.0 | new FP (was TN) | [link](previews/LB-D3-2025-10-03-124025-2404175445D-thin-2-3__fov19__preview.png) |
+| LB-D3-2025-10-03-124025-2404175445D-thin-2-3 | 53 | Liberia | no | background | 2.05 | 78.3 | new FP (was TN) | [link](previews/LB-D3-2025-10-03-124025-2404175445D-thin-2-3__fov53__preview.png) |
+| LB-D3-2025-10-03-124025-2404175445D-thin-2-3 | 126 | Liberia | no | artifact | 13.39 | 103.5 | new FP (was TN) | [link](previews/LB-D3-2025-10-03-124025-2404175445D-thin-2-3__fov126__preview.png) |
+| PBC-800-1 | 732 | Uganda | no | background | 2.13 | 94.0 | new FP (was TN) | [link](previews/PBC-800-1__fov732__preview.png) |
+| KIT-62501087 | 271 | Tanzania | yes | (none) | 14.27 | 152.8 | rescued (was FN) | [link](previews/KIT-62501087__fov271__preview.png) |
+| LB-D11-2025-12-19-111309-0211715-VFPCHC-3-1 | 277 | Liberia | yes | background | 2.75 | 176.2 | rescued (was FN) | [link](previews/LB-D11-2025-12-19-111309-0211715-VFPCHC-3-1__fov277__preview.png) |
+| LB-D11-2025-12-19-131014-0241591-VFPCHC-3-2 | 278 | Liberia | yes | background | 2.43 | 161.9 | rescued (was FN) | [link](previews/LB-D11-2025-12-19-131014-0241591-VFPCHC-3-2__fov278__preview.png) |
+| LB-D3-2025-10-22-132316-2411189646-D-thin-1-4 | 135 | Liberia | yes | diffuse | 2.59 | 155.7 | rescued (was FN) | [link](previews/LB-D3-2025-10-22-132316-2411189646-D-thin-1-4__fov135__preview.png) |
+| LB-D3-2025-10-22-140622-250917738-D-thin-1-1 | 122 | Liberia | yes | double | 2.75 | 205.7 | rescued (was FN) | [link](previews/LB-D3-2025-10-22-140622-250917738-D-thin-1-1__fov122__preview.png) |
+| LB-D3-2025-10-24-132012-25046898-D-thin-1-4 | 3 | Liberia | yes | diffuse | 2.45 | 129.4 | rescued (was FN) | [link](previews/LB-D3-2025-10-24-132012-25046898-D-thin-1-4__fov3__preview.png) |
+| LB-D3-2025-10-27-154305-250917412-D-thin-1-4 | 119 | Liberia | yes | diffuse | 2.91 | 84.9 | rescued (was FN) | [link](previews/LB-D3-2025-10-27-154305-250917412-D-thin-1-4__fov119__preview.png) |
+
+Notice the "rescued" cases skew toward `diffuse`/`double`-tagged real halos and higher
+`diffuse_radius` (85-206px), while every "new FP" case is `background`/`artifact`-tagged. The
+6 `background`-tagged rescues/new-FPs together span `diffuse_radius` 67.8-176.2px with no
+clean separation by `spot_truth`, which is the same "one gap, both classes fall in it" problem
+the diffuse-halo investigation flagged from the start.
+
+**`fov126` is flipping for a different reason than the other 13 rows -- worth flagging
+separately.** Its `contrast_ratio=13.39` clears `RATIO_THRESHOLD=3.0` easily, so it isn't a
+ratio-gate miss at all; `results.csv` shows `anisotropy=0.5588`, above
+`ANISOTROPY_THRESHOLD=0.35`, so this candidate was correctly demoted to `present=False` by the
+fiber/hair-debris check (consistent with its `artifact` note) -- and *that's* what made it
+eligible for `diffuse_candidate()` (which only requires `present=False`, for any reason, not
+specifically a ratio-gate miss). Folding in the diffuse-fov step then flipped it back to
+`present=True`, undoing a demotion that looks correct. So the diffuse-fov step doesn't only
+compete with the ratio gate on faint halos -- it can also override the anisotropy-based
+fiber/debris filter, and here it did so incorrectly. This is a distinct failure mode from the
+"background elevation" false positives above and worth calling out in any future recalibration
+of `DIFFUSE_ABS_DELTA`/`DIFFUSE_RADIUS_MIN`.
 
 ## FN/FP examples
 
