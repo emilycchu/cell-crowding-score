@@ -47,7 +47,7 @@ Liberia-only `src/gcs_fov.py` to Tanzania (`gs://tanzania_02032026`) and Uganda
 | LB-D3-2025-10-22-132316-2411189646-D-thin-1-4 | 135 | A. Chen | Liberia | Overexposed | yes | diffuse |
 | LB-D3-2025-10-22-140622-250917738-D-thin-1-1 | 122 | A. Chen | Liberia | Overexposed | yes | double |
 | LB-D3-2025-10-22-140622-250917738-D-thin-1-1 | 238 | A. Chen | Liberia | Overexposed | yes |  |
-| LB-D3-2025-10-24-113736-250918214-D-thin-2-3 | 96 | A. Chen | Liberia | Overexposed | yes |  |
+| LB-D3-2025-10-24-113736-250918214-D-thin-2-3 | 96 | A. Chen | Liberia | Overexposed | no* | relabeled by Emily 2026-08-07 (was yes) |
 | LB-D3-2025-10-24-132012-25046898-D-thin-1-4 | 3 | A. Chen | Liberia | Overexposed | yes | diffuse |
 | LB-D3-2025-10-24-132012-25046898-D-thin-1-4 | 305 | A. Chen | Liberia | Overexposed | yes |  |
 | LB-D3-2025-10-24-162727-230918080-D-thin-1-4 | 8 | A. Chen | Liberia | Overexposed | yes | diffuse |
@@ -94,6 +94,13 @@ Liberia-only `src/gcs_fov.py` to Tanzania (`gs://tanzania_02032026`) and Uganda
 blank on the rest) -- per Emily, the remaining rows still need categorizing. The subset
 breakdowns below use only the rows currently tagged `background`/`diffuse`/`double`, so they
 under-cover each category and will change as `notes` gets filled in further.
+
+`*` fov=96 (`LB-D3-2025-10-24-113736-250918214-D-thin-2-3`) was originally labeled
+`spot=yes`; Emily flagged it as mislabeled on 2026-08-07 after reviewing its preview (see
+"FN/FP examples" -- it had shown up there as a false negative missed by both variants, but
+looking at the actual image the ground truth itself was wrong, not the detector). Corrected to
+`spot=no` in both `data/labels/overexposure-diverse-080726.csv` and `results.csv`; all
+confusion matrices, rates, and the FN/FP example set below reflect the corrected label.
 
 ## Method and what "predicted" means here
 
@@ -260,10 +267,10 @@ directly (see "Method" above). All 4 matrices below are repeated for both varian
 
 | | Predicted: spot | Predicted: no spot |
 |---|---|---|
-| Truth: spot | TP=36 | FN=9 |
-| Truth: no spot | FP=5 | TN=26 |
+| Truth: spot | TP=36 | FN=8 |
+| Truth: no spot | FP=5 | TN=27 |
 
-FN rate: 9/45 (20.0%) -- FP rate: 5/31 (16.1%)
+FN rate: 8/44 (18.2%) -- FP rate: 5/32 (15.6%)
 
 **background** (n=28)
 
@@ -298,10 +305,10 @@ FN rate: 1/5 (20.0%) -- FP rate: n/a (no spot-negative rows in this subset)
 
 | | Predicted: spot | Predicted: no spot |
 |---|---|---|
-| Truth: spot | TP=43 | FN=2 |
-| Truth: no spot | FP=12 | TN=19 |
+| Truth: spot | TP=43 | FN=1 |
+| Truth: no spot | FP=12 | TN=20 |
 
-FN rate: 2/45 (4.4%) -- FP rate: 12/31 (38.7%)
+FN rate: 1/44 (2.3%) -- FP rate: 12/32 (37.5%)
 
 **background** (n=28)
 
@@ -334,8 +341,10 @@ FN rate: 0/5 (0.0%) -- FP rate: n/a (no spot-negative rows in this subset)
 
 **Folding in the diffuse-fov step is a real recall/specificity tradeoff: it rescues most of
 the faint halos the ratio gate misses, at the cost of new false positives on ordinary
-elevated-background FOVs (and, in one case, on a correctly-demoted debris artifact -- see
-"Which FOVs flip" below).** 17 of 76 rows had `present_base=False` with a large enough
+elevated-background FOVs (and, in one case, on a correctly-demoted debris artifact; in
+another, it accidentally corrects an unrelated anisotropy-filter misfire on a genuine
+high-ratio halo -- see "Which FOVs flip" below for both).** 17 of 76 rows had
+`present_base=False` with a large enough
 diffuse footprint to trigger the neighbor-trend check; 14 were flagged as isolated diffuse
 halos (didn't match a neighbor's trend) and flipped from `present=False` to `present=True`
 under fold-in:
@@ -349,8 +358,8 @@ under fold-in:
 | (blank) | 1 | 0 |
 | **total** | **7** | **7** |
 
-Overall: FN rate drops from 20.0% to 4.4% (missing 9 real halos -> missing 2), while FP rate
-more than doubles, 16.1% to 38.7% (5 false positives -> 12). The gains land almost entirely on
+Overall: FN rate drops from 18.2% to 2.3% (missing 8 real halos -> missing 1), while FP rate
+more than doubles, 15.6% to 37.5% (5 false positives -> 12). The gains land almost entirely on
 the cases the step was built for -- **all 3 ratio-failing `diffuse`-tagged real halos and the
 1 `double`-tagged one get correctly rescued** (`diffuse` subset recall 1/5 -> 4/5, `double`
 5/5 -> 5/5 with the pre-existing FN also caught). The cost lands almost entirely on
@@ -368,9 +377,11 @@ time (`KIT-62501087` fov=271, `PBC-800-1` fov=732) -- the diffuse-fov constants
 (`DIFFUSE_RADIUS_MIN`, `NEIGHBOR_CENTROID_MATCH_DIST`, `NEIGHBOR_RADIUS_MATCH_FACTOR`) were
 calibrated only on Liberia FOVs, so these two flips are a first (informal) look at whether
 that calibration transfers, not a validation of it. (`KIT-62501087` was a `spot_truth=yes`
-rescue; `PBC-800-1` fov=732 was a `background`-tagged false positive.)
+rescue; `PBC-800-1` fov=732 was a `background`-tagged false positive.) `KIT-62501087`'s rescue
+is also the one case in the "helps" column that isn't really the diffuse-fov step doing its
+intended job -- see "Which FOVs flip" below for why.
 
-**Baseline performance is already reasonably good** (FN 20.0%, FP 16.1% overall) for a
+**Baseline performance is already reasonably good** (FN 18.2%, FP 15.6% overall) for a
 detector whose ratio/anisotropy design predates this specific labeled test set. `diffuse` is
 the weakest baseline subset (FN 80.0%) precisely because it's defined as the faint/sub-ratio
 population the diffuse-fov step targets -- which is exactly why folding it in helps there so
@@ -421,9 +432,25 @@ fiber/debris filter, and here it did so incorrectly. This is a distinct failure 
 "background elevation" false positives above and worth calling out in any future recalibration
 of `DIFFUSE_ABS_DELTA`/`DIFFUSE_RADIUS_MIN`.
 
+**`KIT-62501087` fov=271 is the mirror-image case: a real halo mis-demoted by the anisotropy
+filter, not a faint halo missed by the ratio gate.** Its `contrast_ratio=14.27` clears
+`RATIO_THRESHOLD=3.0` easily -- this was never a sub-threshold candidate. `results.csv` shows
+`anisotropy=0.4602`, above `ANISOTROPY_THRESHOLD=0.35`, so the ratio gate's initial "yes, halo
+present" call got overturned by the fiber/hair-debris check, which mistook this halo's texture
+for debris. Looking at its preview (`previews/KIT-62501087__fov271__preview.png`), it's a
+clean, sharply-defined, corner-clipped circular halo -- plausibly the corner-clipping itself
+biased the FFT-based anisotropy measurement toward the two frame-edge axes, mimicking the
+directional-energy signature the check is designed to catch in actual fibers. It's also the
+first Tanzania FOV in this test where the anisotropy value crossed `ANISOTROPY_THRESHOLD` at
+all, and that threshold was calibrated exclusively on one Liberia slide's real-halo-vs-hair
+examples (see `src/overexposure.py`'s docstring) -- so this could equally be a genuine
+cross-country calibration gap rather than specifically a corner-clipping artifact. Either way,
+the diffuse-fov step's fold-in flip here isn't rescuing a faint halo (its intended job); it's
+incidentally undoing an unrelated anisotropy misfire.
+
 ## FN/FP examples
 
-Annotated previews for all 21 rows that are a false negative or false positive in either variant, grouped into the same 4 buckets as the Discussion above. Red outline = `present` (this variant's detector call fired); green = did not fire. Caption lines show truth/notes, both variants' `present`, contrast ratio, and diffuse radius.
+Annotated previews for all 20 rows that are a false negative or false positive in either variant, grouped into the same 4 buckets as the Discussion above. Red outline = `present` (this variant's detector call fired); green = did not fire. Caption lines show truth/notes, both variants' `present`, contrast ratio, and diffuse radius.
 
 ### A -- rescued by folding in (spot_truth=yes, missed at baseline, caught after fold-in) (n=7)
 
@@ -448,13 +475,15 @@ Annotated previews for all 21 rows that are a false negative or false positive i
 ![KIT-62501087 fov=271 (Tanzania) -- truth=yes, notes=(none), ratio=14.27](previews/KIT-62501087__fov271__preview.png)
 *KIT-62501087 fov=271 (Tanzania) -- truth=yes, notes=(none), ratio=14.27*
 
-### B -- still missed after folding in (spot_truth=yes, missed by both variants) (n=2)
-
-![LB-D3-2025-10-24-113736-250918214-D-thin-2-3 fov=96 (Liberia) -- truth=yes, notes=(none), ratio=2.46](previews/LB-D3-2025-10-24-113736-250918214-D-thin-2-3__fov96__preview.png)
-*LB-D3-2025-10-24-113736-250918214-D-thin-2-3 fov=96 (Liberia) -- truth=yes, notes=(none), ratio=2.46*
+### B -- still missed after folding in (spot_truth=yes, missed by both variants) (n=1)
 
 ![LB-D3-2025-10-24-162727-230918080-D-thin-1-4 fov=8 (Liberia) -- truth=yes, notes=diffuse, ratio=1.98](previews/LB-D3-2025-10-24-162727-230918080-D-thin-1-4__fov8__preview.png)
 *LB-D3-2025-10-24-162727-230918080-D-thin-1-4 fov=8 (Liberia) -- truth=yes, notes=diffuse, ratio=1.98*
+
+(fov=96, `LB-D3-2025-10-24-113736-250918214-D-thin-2-3`, was originally in this bucket but has
+been removed after Emily flagged its `spot=yes` label as incorrect on 2026-08-07 -- see the
+`*` footnote under "Input labels". With the corrected `spot=no` label it's a true negative in
+both variants, not an error case.)
 
 ### C -- false positive already at baseline (spot_truth=no, present_base=True; folding in can't fix these, since it only ever turns present False->True) (n=5)
 
@@ -519,7 +548,7 @@ Annotated previews for all 21 rows that are a false negative or false positive i
 - `results.csv` -- full per-row output: detection fields (`present_base`/`present_folded`/
   `diffuse_halo_flag`/`contrast_ratio`/`anisotropy`/`diffuse_radius`/etc.), both predicted-spot
   variants, and all runtime columns
-- `previews/` -- annotated preview thumbnails for all 21 FN/FP rows (see "FN/FP examples"),
+- `previews/` -- annotated preview thumbnails for all 20 FN/FP rows (see "FN/FP examples"),
   plus `previews/manifest.csv` mapping each file back to its full result row and bucket
 - `../../src/gcs_fov_multi.py` -- new LB/TZ/UG FOV resolver (streams, no disk cache)
 - `../../scripts/run_overexposed_diverse_test.py` -- pipeline runner used for this test
