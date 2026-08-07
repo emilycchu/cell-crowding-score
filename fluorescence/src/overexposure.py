@@ -82,6 +82,40 @@ roughly double either true neighbor's radius (72, 97px vs. its own 151px) at a c
 away -- a spike, not a continuation of a trend. See diffuse_candidate/matches_neighbor_trend/
 diffuse_halo_flag and scripts/scan_diffuse_candidates.py. Same caveat as above: exactly one
 confirmed example of each case, so this is advisory only, never gating `present`/`confidence`.
+
+Ratio floor for diffuse candidates: labeling a broader, cross-country "diverse overexposed
+FOVs" set (data/labels/overexposure-diverse-080726.csv) and simulating what present would
+become if diffuse_halo_flag WERE folded into the decision surfaced two problems with
+diffuse_candidate's original "not present" gate (any reason present is False, no lower ratio
+bound). First: 6 labeled FOVs with no real halo (annotator-tagged "background" -- ordinary
+elevated illumination from dense puncta or general staining, not a halo) cleared
+DIFFUSE_ABS_DELTA and DIFFUSE_RADIUS_MIN and didn't match a neighbor's trend, so they'd become
+false positives if folded in; their contrast_ratio (1.36-2.21) sits well below the 6 real
+sub-ratio halos in the same labeled set (2.43-2.91) -- a much cleaner, wider gap than any
+shape/texture signal tried so far (a patch-grid illumination-uniformity metric was tried and
+rejected here: it correlated at Spearman rho=0.95 with contrast_ratio itself, i.e. it's a
+noisier restatement of a field already computed, not a new signal). Cross-checked against the
+earlier fov62 investigation: fov62 (2.4139, confirmed real) sits above the gap; two informal
+negatives, fov84 (2.325) and fov9 (2.518), sit inside the new candidate band by ratio alone but
+are excluded regardless since their peak-baseline gap is under DIFFUSE_ABS_DELTA (diffuse_radius
+already 0 for both). DIFFUSE_RATIO_MIN=2.30 sits in the middle of the [2.25, 2.42] plateau where
+any floor choice gives the same result on this data.
+
+Second: diffuse_candidate's original gate accepted present=False for ANY reason, including the
+anisotropy-based fiber/debris demotion, not just a ratio-gate miss. Two labeled rows reach
+present=False that way with contrast_ratio 13-14 (far above any floor): one is a fiber/debris
+artifact correctly demoted by anisotropy, which the diffuse-fov step was wrongly un-demoting
+(a false positive); the other is a real halo the anisotropy filter wrongly demoted, which the
+diffuse-fov step happened to rescue -- by accident, not because the diffuse-fov step actually
+caught a faint halo. Requiring contrast_ratio < RATIO_THRESHOLD in diffuse_candidate excludes
+both, fixing the false positive at the cost of losing that one accidental rescue -- see
+data/results/overexposed-diverse-080726/README.md for the full tradeoff and the confusion
+matrices before/after.
+
+Residual risk, not eliminated by the ratio floor: one labeled background-tagged FOV with no
+real halo (fov279, contrast_ratio=2.632) sits inside the new [DIFFUSE_RATIO_MIN, RATIO_THRESHOLD)
+candidate band and is excluded only because matches_neighbor_trend happens to catch it. The
+ratio floor narrows how often that check has to do the work; it doesn't replace it.
 """
 import math
 from dataclasses import dataclass, field
@@ -120,6 +154,13 @@ DIFFUSE_ABS_DELTA = 40
 # the two confirmed examples (fov62=151px, the vignetted negative=79px) but above the small
 # incidental blips seen in unrelated neighboring tiles (9-31px). Advisory only.
 DIFFUSE_RADIUS_MIN = 50
+
+# See module docstring, "Ratio floor for diffuse candidates". Lower bound on contrast_ratio for
+# a sub-ratio FOV to be worth treating as a diffuse candidate at all -- calibrated against 6
+# labeled no-halo "background" FOVs (ratio 1.36-2.21) vs. 6 labeled real sub-ratio halos (ratio
+# 2.43-2.91), cross-checked against fov62 (2.4139, real) and two informal negatives excluded
+# regardless by DIFFUSE_ABS_DELTA. Any value in [2.25, 2.42] gives the same result on this data.
+DIFFUSE_RATIO_MIN = 2.30
 
 # A candidate's own diffuse blob counts as matching a neighbor's -- i.e. part of the same
 # illumination trend, not an isolated event -- if the neighbor's blob sits within this
@@ -299,10 +340,17 @@ def detect_overexposure(image_bgr):
 
 def diffuse_candidate(result):
     """Whether a ratio-failing FOV's sustained footprint is even large enough to be worth
-    comparing against its neighbors (see DIFFUSE_RADIUS_MIN). Most sub-ratio negatives never
-    reach here at all -- their diffuse_radius is 0. Advisory only.
+    comparing against its neighbors (see DIFFUSE_RADIUS_MIN), and above DIFFUSE_RATIO_MIN (see
+    module docstring, "Ratio floor for diffuse candidates") -- excludes both labeled no-halo
+    background FOVs (which sit below the ratio floor) and FOVs that reached present=False via
+    the anisotropy demotion rather than a genuine ratio-gate miss (which sit above
+    RATIO_THRESHOLD entirely, a different failure mode this step isn't meant to touch). Most
+    sub-ratio negatives never reach here at all -- their diffuse_radius is 0. Advisory only.
     """
-    return (not result.present) and result.diffuse_radius >= DIFFUSE_RADIUS_MIN
+    return (
+        DIFFUSE_RATIO_MIN <= result.contrast_ratio < RATIO_THRESHOLD
+        and result.diffuse_radius >= DIFFUSE_RADIUS_MIN
+    )
 
 
 def matches_neighbor_trend(result, neighbor_results):

@@ -129,6 +129,40 @@ example of each case, so `diffuse_halo_flag` is advisory only, never gating
 `present`/`confidence`, until there's more labeled data to calibrate
 `NEIGHBOR_CENTROID_MATCH_DIST`/`NEIGHBOR_RADIUS_MATCH_FACTOR` against.
 
+### Ratio floor for diffuse candidates
+
+A broader, cross-country labeled test (`data/results/overexposed-diverse-080726/`) simulated
+folding `diffuse_halo_flag` into the actual decision and found `diffuse_candidate`'s original
+gate (`not present`, any reason, plus `diffuse_radius >= DIFFUSE_RADIUS_MIN`) let through two
+kinds of false positive: 6 ordinary elevated-background FOVs (no real halo, `contrast_ratio`
+1.36-2.21) that cleared `DIFFUSE_ABS_DELTA` without matching a neighbor's trend, and 1 fiber/
+debris artifact (`contrast_ratio=13.39`) that the anisotropy filter had already correctly
+demoted, which the diffuse-fov step then wrongly un-demoted.
+
+`diffuse_candidate` now additionally requires `DIFFUSE_RATIO_MIN (2.30) <= contrast_ratio <
+RATIO_THRESHOLD` -- a genuine ratio-gate miss above a floor, not "present=False for any
+reason." Both problems share one fix: the floor excludes the 6 fake-background rows (ratio
+1.36-2.21, below 2.30) directly, using a field the pipeline already computes, and the
+ratio-gate-miss requirement structurally excludes the debris artifact (and, as a side effect,
+one real halo separately mis-demoted by the anisotropy filter -- `contrast_ratio=14.27` --
+whose only route to being flagged was the same "any reason" gate; excluding it was an accepted
+tradeoff, not a goal). Calibrated against the 12 labeled rows in that test (6 fake-background,
+6 real sub-ratio halos, ratio 2.43-2.91) plus fov62 (2.4139, confirmed real) and two informal
+negatives (fov84=2.325, fov9=2.518, both excluded regardless since their peak-baseline gap is
+under `DIFFUSE_ABS_DELTA`) -- any floor in [2.25, 2.42] gives the same result on this data.
+
+A patch-grid illumination-uniformity metric was tried first and rejected: tested against the
+real images, it correlated with `contrast_ratio` at Spearman rho=0.95 -- a noisier restatement
+of a field already computed, not a new signal (the same wall this file's anisotropy/area-
+fraction/solidity/interior-texture attempts already hit for a similar faint-halo-vs-negative
+problem -- see "Diffuse/dim halo candidates below the ratio gate" above).
+
+Residual risk: `fov279` (background-tagged, no real halo, `contrast_ratio=2.632`) sits inside
+the new candidate band and is excluded only because `matches_neighbor_trend` happens to catch
+it. The ratio floor narrows how often that check has to do the work; it doesn't replace it.
+Calibrated on a small population (12 rows, 11 of them Liberia) -- treat as directional, same
+caveat as every other diffuse-fov constant.
+
 ## FOV resolution
 
 `src/gcs_fov.py` resolves a `(sample_id, fov_id)` pair to its raw image in
