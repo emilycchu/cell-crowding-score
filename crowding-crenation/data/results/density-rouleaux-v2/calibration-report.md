@@ -206,3 +206,90 @@ Spearman rho between the two fitted composite scores: **0.952**, vs. the true ma
 
 **Takeaway**: despite the composites becoming much more correlated with each other, the axis-separation match rate barely moves relative to v2 (~61% vs ~62% at `|delta|>=1`, both significant) -- so the extra shared signal does not appear to cost the tool its ability to separate the specific dense-but-not-Rouleauxed / Rouleauxed-but-not-dense cases it's meant to catch, even though it does trade away composite independence as a diagnostic property.
 
+
+---
+
+# v2.2 recalibration: pooling in tanzania-080526 (KTR-72502946)
+
+Same full-feature-pool fitting as v2.1, refit on 661 FOVs (the original 337 plus 324 more from a second Tanzania slide, KTR-72502946 -- streamed from GCS, never downloaded locally). This tests whether v2.1's thresholds, fit on a single slide's label distribution, generalize to a second slide once that slide's own labels are pooled in rather than held out.
+
+## Density composite (v2.2)
+
+| feature | weight | range (2nd-98th pct) |
+|---|---|---|
+| coverage | 0.236 | [0.07347, 0.4386] |
+| otsu_separability | 0.014 | [0.5166, 0.6124] |
+| saturation_score | 0.247 | [0.03368, 0.1781] |
+| lbp_entropy | 0.065 | [3.118, 4.196] |
+| glcm_contrast | 0.087 | [26.59, 87.11] |
+| edge_density_unmasked | 0.098 | [0.05926, 0.1811] |
+| tile_glcm_cv | 0.082 | [0.06242, 0.3111] |
+| tile_glcm_patchiness | 0.171 | [0.1245, 0.9339] |
+
+**Cross-validation** (5-fold): per-fold rho = [0.79, 0.794, 0.789, 0.76, 0.782], mean=0.783. Out-of-fold exact-match=69.4%, off-by-one=98.0%.
+
+Out-of-fold confusion matrix (rows=manual, cols=predicted):
+
+| manual \ predicted | Sparser | Monolayer | Slightly Dense | Dense | Very Dense |
+|---|---|---|---|---|---|
+| Sparser | 45 | 5 | 0 | 0 | 0 |
+| Monolayer | 48 | 281 | 63 | 9 | 1 |
+| Slightly Dense | 1 | 21 | 65 | 16 | 1 |
+| Dense | 0 | 0 | 13 | 30 | 12 |
+| Very Dense | 0 | 0 | 1 | 11 | 38 |
+
+Thresholds: [0.292, 0.443, 0.585, 0.711] -- **no PAVA merges** (all 5 buckets monotonically separable).
+
+## Rouleaux composite (v2.2)
+
+Dropped for sign instability: otsu_separability, lbp_entropy
+
+| feature | weight | range (2nd-98th pct) |
+|---|---|---|
+| coverage | 0.263 | [0.07347, 0.4386] |
+| saturation_score | 0.269 | [0.03368, 0.1781] |
+| glcm_contrast | 0.098 | [26.59, 87.11] |
+| edge_density_unmasked | 0.043 | [0.05926, 0.1811] |
+| tile_glcm_cv | 0.088 | [0.06242, 0.3111] |
+| tile_glcm_patchiness | 0.239 | [0.1245, 0.9339] |
+
+**Cross-validation** (5-fold): per-fold rho = [0.711, 0.72, 0.745, 0.772, 0.739], mean=0.737. Out-of-fold exact-match=67.6%, off-by-one=93.8%.
+
+Out-of-fold confusion matrix (rows=manual, cols=predicted):
+
+| manual \ predicted | No Rouleaux | Slight Rouleaux | Some Rouleaux | Rouleaux | Heavy Rouleaux |
+|---|---|---|---|---|---|
+| No Rouleaux | 341 | 59 | 14 | 5 | 1 |
+| Slight Rouleaux | 31 | 30 | 24 | 10 | 2 |
+| Some Rouleaux | 2 | 16 | 20 | 5 | 3 |
+| Rouleaux | 0 | 2 | 7 | 12 | 13 |
+| Heavy Rouleaux | 0 | 0 | 2 | 18 | 44 |
+
+Thresholds: [0.374, 0.451, 0.553, 0.667] -- **no PAVA merges** (all 5 buckets monotonically separable).
+
+## Sparser-bucket focus (v2.2)
+
+Sparser-density FOV counts by source dataset:
+
+| dataset | sparser | total |
+|---|---|---|
+| initial-071626 | 0 | 13 |
+| tanzania-073026 | 44 | 324 |
+| tanzania-080526 | 6 | 324 |
+
+Out-of-fold, v2.2 calls Sparser correctly on 45/50 (90.0%) of manually-labeled Sparser FOVs; 5/50 are mistaken for Monolayer, its only neighbor on the scale.
+
+Sparser/Monolayer raw-score threshold: **0.292** (v2.2, n=50 Sparser FOVs) vs. **0.281** (v2.1, n=44 Sparser FOVs, single-slide) -- moved by +0.011 after pooling in the second slide.
+
+No PAVA merges anywhere on the density axis at this pool size.
+
+## Composite independence (v2.2)
+
+Spearman rho between the two fitted composite scores: **0.972**, vs. the true manual density-vs-Rouleaux label correlation of **0.823**.
+
+## Axis-separation check (v2.2)
+
+| min |delta| | n | sign matches | match rate | binomial p | Spearman rho |
+|---|---|---|---|---|---|
+| 1 | 456 | 318 | 69.7% | 9.901e-18 | 0.307 |
+| 2 | 16 | 13 | 81.2% | 0.01064 | -0.076 |

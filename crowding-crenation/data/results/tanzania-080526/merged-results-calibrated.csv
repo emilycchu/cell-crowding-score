@@ -1,0 +1,325 @@
+fov_id,manual_density,manual_overlap,model_density_label,model_overlap_label,model_density_score,model_overlap_score,fluorescent_present,fluorescent_confidence,fluorescent_contrast_ratio
+1,monolayer,no rouleaux,slightly dense,slight rouleaux,0.4721532751115678,0.4047263549943987,False,0.0,1.6833
+2,monolayer,no rouleaux,monolayer,no rouleaux,0.41353001317688143,0.3388577511098406,False,0.0,1.691
+3,monolayer,no rouleaux,monolayer,no rouleaux,0.3995749371153424,0.32450921265005894,False,0.0759,2.396
+4,monolayer,no rouleaux,monolayer,no rouleaux,0.3822950417806605,0.30937719929577634,False,0.0,1.4604
+5,monolayer,no rouleaux,monolayer,no rouleaux,0.39747982068428067,0.3262802246611555,False,0.0,1.4018
+6,monolayer,no rouleaux,monolayer,no rouleaux,0.40790198699263336,0.3333693434399035,False,0.0,1.3845
+7,monolayer,no rouleaux,monolayer,no rouleaux,0.41826871194266707,0.346339254067337,False,0.0,1.2756
+8,monolayer,no rouleaux,slightly dense,no rouleaux,0.4444994778060101,0.3713005217220325,False,0.0,1.2563
+9,monolayer,no rouleaux,slightly dense,slight rouleaux,0.4487211988623135,0.374874612019518,False,0.0,1.2463
+10,monolayer,no rouleaux,slightly dense,slight rouleaux,0.45925983677093946,0.394094418009096,False,0.0,1.2758
+11,monolayer,no rouleaux,monolayer,no rouleaux,0.39957334554674845,0.32373363285266876,False,0.0,1.2301
+12,monolayer,no rouleaux,monolayer,no rouleaux,0.4376103099000988,0.36266570627158295,False,0.0,1.2937
+13,monolayer,no rouleaux,slightly dense,slight rouleaux,0.45080572436123073,0.37857180981636757,False,0.0,1.2778
+14,monolayer,no rouleaux,monolayer,no rouleaux,0.4120692029482624,0.3408000619051529,False,0.0,1.3364
+15,monolayer,no rouleaux,monolayer,no rouleaux,0.402414594457988,0.32688437832545586,False,0.0,1.8546
+16,slightly dense,no rouleaux,slightly dense,no rouleaux,0.44642480123118555,0.3708887530572092,False,0.0,1.4792
+17,slightly dense,no rouleaux,slightly dense,slight rouleaux,0.4638728269281441,0.39434773545493906,False,0.0,1.2667
+18,slightly dense,no rouleaux,slightly dense,slight rouleaux,0.44719941210938396,0.3809961567771855,False,0.0,1.4878
+19,monolayer,no rouleaux,slightly dense,slight rouleaux,0.4813631236552586,0.41748054231386245,False,0.0,1.4161
+20,monolayer,no rouleaux,monolayer,no rouleaux,0.4281772474607279,0.3572365005421155,False,0.0,1.5611
+21,monolayer,no rouleaux,monolayer,no rouleaux,0.39162857245719007,0.31748499277027764,False,0.0,1.4257
+22,monolayer,no rouleaux,monolayer,no rouleaux,0.3985026985862887,0.33003672297785025,False,0.0,1.5126
+23,monolayer,no rouleaux,monolayer,no rouleaux,0.3888488516356689,0.31704180861112113,False,0.0,1.3754
+24,monolayer,no rouleaux,slightly dense,no rouleaux,0.44394803210031525,0.3673455407399422,False,0.0,1.3948
+25,monolayer,slight rouleaux,slightly dense,slight rouleaux,0.5059897648166777,0.44134314974671357,False,0.0,1.388
+26,monolayer,slight rouleaux,slightly dense,slight rouleaux,0.4558543180301295,0.3796910758528532,False,0.0,1.4078
+27,slightly dense,slight rouleaux,slightly dense,some rouleaux,0.5318661684381985,0.46701585275108515,False,0.0,1.3399
+28,slightly dense,slight rouleaux,slightly dense,slight rouleaux,0.5060088731944833,0.4370107901534639,False,0.0,1.2375
+29,slightly dense,slight rouleaux,slightly dense,no rouleaux,0.44432004381219586,0.3728789470924394,False,0.0,1.2348
+30,slightly dense,slight rouleaux,slightly dense,slight rouleaux,0.4750373623568337,0.4086484636512046,False,0.0,1.383
+31,slightly dense,slight rouleaux,slightly dense,some rouleaux,0.5316691837808045,0.4576379539010163,False,0.1508,2.6881
+32,slightly dense,slight rouleaux,slightly dense,slight rouleaux,0.48801763503791384,0.413916389029113,False,0.0,1.364
+33,slightly dense,some rouleaux,slightly dense,slight rouleaux,0.5037767988914781,0.4348898186252956,False,0.0,1.4732
+34,slightly dense,some rouleaux,slightly dense,some rouleaux,0.5436763299299545,0.4691816508915852,False,0.0,1.2962
+35,slightly dense,some rouleaux,dense,some rouleaux,0.6060145375245553,0.5416586286171118,False,0.0,1.4989
+36,slightly dense,some rouleaux,slightly dense,some rouleaux,0.5270184185172857,0.4580527037218876,False,0.0,1.5163
+37,monolayer,no rouleaux,slightly dense,slight rouleaux,0.49328209068276857,0.43295590105309417,False,0.0,1.6611
+38,monolayer,no rouleaux,monolayer,no rouleaux,0.42824823399436257,0.35899370091733085,False,0.0,1.7934
+39,monolayer,no rouleaux,monolayer,no rouleaux,0.40256297405627367,0.3347459231830064,False,0.0,1.6854
+40,monolayer,no rouleaux,monolayer,no rouleaux,0.39554023732323246,0.32666781781898585,False,0.0,1.5245
+41,monolayer,no rouleaux,monolayer,no rouleaux,0.4023264879697549,0.33429411081558413,False,0.0,1.5096
+42,monolayer,no rouleaux,slightly dense,slight rouleaux,0.45247642898857643,0.3832981882607644,False,0.0,1.4526
+43,monolayer,no rouleaux,slightly dense,slight rouleaux,0.4551221396943475,0.3927843351026173,False,0.0,1.418
+44,monolayer,no rouleaux,slightly dense,slight rouleaux,0.45738824799050515,0.3886969718705265,False,0.0,1.2534
+45,slightly dense,no rouleaux,slightly dense,slight rouleaux,0.5030217597841847,0.43334670395792635,False,0.0,1.3996
+46,slightly dense,no rouleaux,slightly dense,slight rouleaux,0.4804439216920089,0.41042887953895585,False,0.0,1.3893
+47,slightly dense,slight rouleaux,slightly dense,slight rouleaux,0.5021606170048374,0.43864898537079544,False,0.0,1.209
+48,slightly dense,slight rouleaux,slightly dense,slight rouleaux,0.49883233652520037,0.43143003907528715,False,0.0,1.3388
+49,slightly dense,some rouleaux,slightly dense,some rouleaux,0.572776305881567,0.5115964734386369,False,0.0,1.6498
+50,slightly dense,some rouleaux,slightly dense,some rouleaux,0.5179235356285904,0.4561771798346706,False,0.0,1.3811
+51,slightly dense,some rouleaux,slightly dense,slight rouleaux,0.508724002359983,0.44463431564250505,False,0.0,1.3073
+52,slightly dense,some rouleaux,slightly dense,some rouleaux,0.5759029773457354,0.5101906280630012,False,0.0,1.3201
+53,dense,some rouleaux,dense,rouleaux,0.6458193291733781,0.5937879141095902,False,0.0,1.3713
+54,slightly dense,some rouleaux,dense,some rouleaux,0.6101569441519737,0.5459604323186789,True,0.8217,5.3045
+55,monolayer,no rouleaux,slightly dense,slight rouleaux,0.4560357032584815,0.39563110473814467,False,0.0,1.5619
+56,slightly dense,no rouleaux,monolayer,no rouleaux,0.40400259995224186,0.3411306597379743,False,0.0,1.4432
+57,slightly dense,no rouleaux,monolayer,no rouleaux,0.41010595052700766,0.3568260022504248,False,0.0,1.4663
+58,slightly dense,no rouleaux,monolayer,no rouleaux,0.38661198926462065,0.3252895379881913,False,0.0,1.4557
+59,dense,rouleaux,slightly dense,slight rouleaux,0.4879787946402517,0.4336144927190369,False,0.0,1.4871
+60,very dense,heavy rouleaux,dense,rouleaux,0.6987368783798645,0.6545384516396417,False,0.0,1.3335
+61,very dense,heavy rouleaux,very dense,heavy rouleaux,0.7354302105334755,0.69742687228767,False,0.0,1.4925
+62,very dense,heavy rouleaux,very dense,heavy rouleaux,0.8432797707701523,0.8415819341165182,False,0.0,1.7795
+63,very dense,heavy rouleaux,very dense,heavy rouleaux,0.8299497905119382,0.8120365929375147,False,0.0,1.7909
+64,very dense,heavy rouleaux,very dense,heavy rouleaux,0.8894331818760169,0.89140179986231,False,0.0,1.5866
+65,dense,rouleaux,dense,heavy rouleaux,0.7000740004352355,0.7170638580643209,False,0.0,1.4556
+66,dense,rouleaux,slightly dense,slight rouleaux,0.4781219187356273,0.4455819435557346,False,0.0,1.4436
+67,slightly dense,some rouleaux,slightly dense,some rouleaux,0.5170497848012764,0.487052870405838,False,0.0,1.5184
+68,slightly dense,some rouleaux,slightly dense,slight rouleaux,0.4718430001469154,0.4419951150948324,False,0.0,1.5233
+69,slightly dense,some rouleaux,slightly dense,slight rouleaux,0.4466047874572443,0.4035462446555804,False,0.0,1.2883
+70,slightly dense,some rouleaux,slightly dense,slight rouleaux,0.47815939811320995,0.4406125180712668,False,0.0,1.6494
+71,slightly dense,some rouleaux,slightly dense,some rouleaux,0.509540946522107,0.47546534720978284,False,0.0,1.565
+72,slightly dense,some rouleaux,slightly dense,some rouleaux,0.4984545256464926,0.4669057840080842,False,0.0,1.8138
+73,monolayer,no rouleaux,slightly dense,slight rouleaux,0.4900968049446893,0.43027437401681423,False,0.0,1.5809
+74,monolayer,no rouleaux,slightly dense,slight rouleaux,0.4474487687716922,0.38374794166401427,False,0.0,1.3851
+75,monolayer,no rouleaux,monolayer,no rouleaux,0.38618028423458767,0.3193238706715498,False,0.0,1.5016
+76,monolayer,no rouleaux,monolayer,no rouleaux,0.38730415457802475,0.323054834734569,False,0.0,1.5748
+77,monolayer,no rouleaux,monolayer,slight rouleaux,0.4220225179022079,0.378847499607014,False,0.0,1.6378
+78,dense,rouleaux,dense,rouleaux,0.5996490656807578,0.5607069148198834,False,0.0,1.5815
+79,very dense,heavy rouleaux,very dense,heavy rouleaux,0.712756069682417,0.6712577316367903,False,0.0,1.5317
+80,very dense,heavy rouleaux,very dense,heavy rouleaux,0.7369154903497873,0.6906735408896392,False,0.0,1.7857
+81,very dense,heavy rouleaux,very dense,heavy rouleaux,0.7879622434921393,0.7467281085687226,False,0.0,1.4901
+82,very dense,heavy rouleaux,very dense,heavy rouleaux,0.7865180187486626,0.734988736136444,False,0.0,3.3994
+83,dense,rouleaux,very dense,heavy rouleaux,0.7740869244748623,0.7890746283398589,False,0.0,1.7346
+84,monolayer,slight rouleaux,slightly dense,some rouleaux,0.557177237463029,0.5308623478692419,False,0.0,1.3893
+85,slightly dense,slight rouleaux,slightly dense,some rouleaux,0.4922521177059717,0.4515780324119348,False,0.0,1.3427
+86,monolayer,slight rouleaux,slightly dense,slight rouleaux,0.4536845548805708,0.4239271702287621,False,0.0,1.4241
+87,monolayer,slight rouleaux,monolayer,no rouleaux,0.39117888090642705,0.34726593837095987,False,0.0,1.4961
+88,monolayer,slight rouleaux,monolayer,no rouleaux,0.424406072459842,0.37198595133343004,False,0.0,1.2353
+89,monolayer,slight rouleaux,monolayer,slight rouleaux,0.4302132871297174,0.3904039008160407,False,0.0,1.295
+90,monolayer,no rouleaux,monolayer,no rouleaux,0.3908160329381906,0.35687021436431265,False,0.0,1.39
+91,monolayer,no rouleaux,slightly dense,slight rouleaux,0.47325173695749245,0.4092890780768708,False,0.0,1.4155
+92,monolayer,no rouleaux,slightly dense,slight rouleaux,0.4520628855034247,0.3929978219108634,False,0.0,1.2643
+93,monolayer,no rouleaux,monolayer,no rouleaux,0.39818885871146975,0.32755884661647217,False,0.0,1.4271
+94,monolayer,no rouleaux,monolayer,no rouleaux,0.3872913850282274,0.31406896772936205,False,0.0,1.3614
+95,monolayer,no rouleaux,monolayer,no rouleaux,0.40923663285116973,0.34357901503664123,False,0.0,1.3358
+96,slightly dense,slight rouleaux,slightly dense,slight rouleaux,0.5143134213930233,0.4478454293437894,False,0.0,1.2571
+97,slightly dense,slight rouleaux,slightly dense,some rouleaux,0.5559572631315184,0.48949038346251117,False,0.0,1.2748
+98,very dense,heavy rouleaux,very dense,heavy rouleaux,0.7370422872442685,0.6864412714234015,False,0.0,1.586
+99,very dense,heavy rouleaux,very dense,heavy rouleaux,0.843263602744149,0.7962625018955339,False,0.0,1.6374
+100,very dense,heavy rouleaux,very dense,heavy rouleaux,0.8503440444317626,0.811088450784695,False,0.0381,2.2487
+101,dense,rouleaux,very dense,heavy rouleaux,0.8839950410763932,0.8937461403482221,False,0.0,1.4787
+102,slightly dense,slight rouleaux,dense,rouleaux,0.6189525398383725,0.5792285118585522,False,0.0,1.3694
+103,slightly dense,slight rouleaux,dense,rouleaux,0.597525060167206,0.5594883597743787,False,0.0,1.3758
+104,slightly dense,slight rouleaux,slightly dense,some rouleaux,0.544507578774241,0.5092238573931942,False,0.0,1.5608
+105,slightly dense,slight rouleaux,slightly dense,slight rouleaux,0.4900157534383756,0.43997108918378547,False,0.0,1.9049
+106,slightly dense,slight rouleaux,slightly dense,slight rouleaux,0.5018940964842074,0.4416214165550064,False,0.0,1.2875
+107,slightly dense,no rouleaux,dense,some rouleaux,0.5892513349661559,0.5464395074328273,False,0.0,1.3381
+108,slightly dense,slight rouleaux,slightly dense,some rouleaux,0.5214660639351159,0.4724438658360443,False,0.0,1.3345
+109,monolayer,no rouleaux,monolayer,no rouleaux,0.4332420730503126,0.35581064041075233,False,0.0,1.6138
+110,monolayer,no rouleaux,monolayer,no rouleaux,0.4287392374021212,0.35332461330361553,False,0.0,1.5399
+111,monolayer,no rouleaux,monolayer,no rouleaux,0.4059543230629129,0.33470581778850694,False,0.0,1.5476
+112,monolayer,no rouleaux,monolayer,no rouleaux,0.3965890361043722,0.3212904224413113,False,0.0,1.6026
+113,monolayer,no rouleaux,monolayer,slight rouleaux,0.4421075215388627,0.38055390730852173,False,0.0,1.4301
+114,slightly dense,some rouleaux,slightly dense,slight rouleaux,0.5050364626104049,0.42917465227610885,False,0.0,1.4689
+115,slightly dense,slight rouleaux,slightly dense,some rouleaux,0.5629234330933607,0.4942138829136515,False,0.0,1.4185
+116,dense,rouleaux,dense,rouleaux,0.6869912399214846,0.6587156687730037,False,0.0,1.5456
+117,very dense,heavy rouleaux,very dense,heavy rouleaux,0.7357987448701772,0.6906541843770608,False,0.0,1.5957
+118,very dense,heavy rouleaux,very dense,heavy rouleaux,0.8049865273431017,0.7493585333569381,False,0.0272,2.2062
+119,dense,heavy rouleaux,very dense,heavy rouleaux,0.8294689203919126,0.7931813345872114,False,0.0,1.4401
+120,dense,some rouleaux,dense,rouleaux,0.6843580814209226,0.6309859544257431,False,0.0,1.2818
+121,slightly dense,slight rouleaux,dense,some rouleaux,0.5954463644862134,0.5407615493260146,False,0.0,1.3085
+122,slightly dense,some rouleaux,slightly dense,some rouleaux,0.5289686288964933,0.4658368915200103,False,0.0,1.3802
+123,slightly dense,some rouleaux,slightly dense,slight rouleaux,0.46456969682632304,0.4038905231017132,False,0.0,1.5188
+124,slightly dense,slight rouleaux,slightly dense,some rouleaux,0.5219308091788712,0.4573737677267903,False,0.0,1.3043
+125,slightly dense,slight rouleaux,slightly dense,some rouleaux,0.5598591922135479,0.4997465175375012,False,0.0,1.3659
+126,slightly dense,some rouleaux,slightly dense,some rouleaux,0.5355274048614772,0.4816248552022753,False,0.0,1.4064
+127,monolayer,no rouleaux,monolayer,no rouleaux,0.4110481199887872,0.33781415661330394,False,0.0,1.4615
+128,monolayer,no rouleaux,monolayer,no rouleaux,0.3752163190630687,0.29814132866188464,False,0.0,1.3182
+129,monolayer,no rouleaux,monolayer,no rouleaux,0.36048110084439555,0.2927050861025392,False,0.0,1.5999
+130,monolayer,no rouleaux,monolayer,no rouleaux,0.36761729918333125,0.30370477848565,False,0.0,1.4475
+131,monolayer,no rouleaux,monolayer,no rouleaux,0.3569036008506682,0.28735645648992864,False,0.0,1.5089
+132,monolayer,no rouleaux,monolayer,no rouleaux,0.4129428153941648,0.34216372703187287,False,0.0,1.7199
+133,slightly dense,rouleaux,slightly dense,some rouleaux,0.5564715219868295,0.4929239520048091,False,0.0,1.2625
+134,slightly dense,rouleaux,dense,rouleaux,0.6896563345677149,0.6450365133720001,False,0.0,1.4001
+135,dense,heavy rouleaux,very dense,heavy rouleaux,0.7673460274303296,0.7267042925093579,False,0.0,1.8567
+136,very dense,heavy rouleaux,very dense,heavy rouleaux,0.8181209485012315,0.7615587642760727,False,0.201,2.884
+137,very dense,heavy rouleaux,very dense,heavy rouleaux,0.8157935571022933,0.7634739755593318,False,0.0,2.0951
+138,dense,heavy rouleaux,very dense,heavy rouleaux,0.7263760004672083,0.6691336752421772,False,0.0,1.4165
+139,dense,rouleaux,dense,rouleaux,0.6315483268981796,0.5803774379833271,False,0.0,1.4888
+140,dense,rouleaux,dense,some rouleaux,0.590046850177838,0.5512487234989262,False,0.0,1.441
+141,dense,some rouleaux,slightly dense,some rouleaux,0.5184843716868084,0.4723319693511826,False,0.0,1.4312
+142,dense,some rouleaux,slightly dense,some rouleaux,0.5311865984303672,0.48293028498329266,False,0.0,1.5628
+143,dense,some rouleaux,slightly dense,some rouleaux,0.5702921119926745,0.5340810023168523,False,0.0,1.5916
+144,slightly dense,no rouleaux,slightly dense,slight rouleaux,0.48539352308601447,0.43587489158631876,False,0.0,1.4085
+145,monolayer,no rouleaux,slightly dense,slight rouleaux,0.44453302339961676,0.37782952488699967,False,0.0,1.3107
+146,monolayer,no rouleaux,monolayer,no rouleaux,0.4093369211226052,0.34001863512331576,False,0.0,1.3131
+147,monolayer,no rouleaux,monolayer,no rouleaux,0.39048383711789264,0.3253260917425171,False,0.0,1.3857
+148,monolayer,no rouleaux,monolayer,no rouleaux,0.35489354576071414,0.28687713247906343,False,0.0,1.677
+149,monolayer,no rouleaux,monolayer,no rouleaux,0.3850924918547563,0.32280649964163854,False,0.0,1.2654
+150,slightly dense,no rouleaux,monolayer,no rouleaux,0.4323835623224182,0.36268826181239866,False,0.0,1.2477
+151,slightly dense,slight rouleaux,slightly dense,some rouleaux,0.5374014595473386,0.49150064780661207,False,0.0,1.276
+152,slightly dense,rouleaux,dense,rouleaux,0.6193033643812257,0.5772052267564352,False,0.0,3.6843
+153,very dense,heavy rouleaux,very dense,heavy rouleaux,0.7243956456295101,0.6836715187374262,False,0.0,1.3929
+154,very dense,heavy rouleaux,very dense,heavy rouleaux,0.8446414510269499,0.809498966650176,False,0.0,1.7273
+155,very dense,heavy rouleaux,very dense,heavy rouleaux,0.8599975044725996,0.8356661193987125,False,0.0,2.038
+156,very dense,heavy rouleaux,very dense,rouleaux,0.7206080106971531,0.6645576812883554,False,0.0,1.4357
+157,dense,heavy rouleaux,dense,rouleaux,0.69429253769021,0.6381251334993104,False,0.0,1.3584
+158,dense,rouleaux,dense,rouleaux,0.6384174975936108,0.5825832311577881,False,0.0,1.3647
+159,dense,rouleaux,slightly dense,some rouleaux,0.5799794979746226,0.5302437779617825,False,0.0,1.9044
+160,dense,rouleaux,slightly dense,some rouleaux,0.5774842032325659,0.5168645937082459,False,0.0,1.4034
+161,dense,some rouleaux,slightly dense,some rouleaux,0.5831824957073904,0.5300889443941675,False,0.0,1.4698
+162,slightly dense,some rouleaux,slightly dense,some rouleaux,0.5632782411535097,0.5123306136854857,False,0.0,1.3659
+163,monolayer,no rouleaux,monolayer,no rouleaux,0.40560053895399173,0.34131991106844234,False,0.0,1.3716
+164,monolayer,no rouleaux,monolayer,no rouleaux,0.35059651022160054,0.2816346446044589,False,0.0,1.2383
+165,monolayer,no rouleaux,monolayer,no rouleaux,0.34797286851093195,0.2838768208527348,False,0.0,1.4472
+166,monolayer,no rouleaux,monolayer,no rouleaux,0.31493924338706514,0.24473987661885008,False,0.0,1.6699
+167,monolayer,no rouleaux,monolayer,no rouleaux,0.353588268118578,0.2994302494411445,False,0.0,1.3406
+168,monolayer,no rouleaux,monolayer,no rouleaux,0.37371785207551556,0.31725041736759146,False,0.0,1.2325
+169,monolayer,no rouleaux,monolayer,no rouleaux,0.4060171890553739,0.35262277186217644,False,0.0,1.241
+170,slightly dense,no rouleaux,monolayer,no rouleaux,0.40521474962237786,0.3423175691593714,False,0.0,1.3737
+171,slightly dense,slight rouleaux,slightly dense,slight rouleaux,0.45891466946348863,0.3875528382262565,False,0.0,1.3372
+172,very dense,heavy rouleaux,dense,rouleaux,0.6344881459688488,0.5844949071250661,False,0.0,1.6487
+173,very dense,heavy rouleaux,very dense,heavy rouleaux,0.7528674707644012,0.7094755676776525,False,0.0,1.8103
+174,very dense,heavy rouleaux,very dense,heavy rouleaux,0.764563022514946,0.7136706569391575,False,0.0,1.381
+175,very dense,heavy rouleaux,very dense,rouleaux,0.7252098941219368,0.6595168506399238,False,0.0,1.4165
+176,dense,heavy rouleaux,dense,rouleaux,0.7097078364747967,0.6548605948678824,False,0.0,1.3901
+177,dense,heavy rouleaux,dense,rouleaux,0.6824495279675741,0.6248716441806852,False,0.0,1.5495
+178,dense,rouleaux,dense,rouleaux,0.6733370581941075,0.6100572666070257,False,0.0,1.4486
+179,dense,heavy rouleaux,dense,rouleaux,0.6643636691540342,0.6087148518538666,False,0.0,1.3202
+180,dense,heavy rouleaux,dense,rouleaux,0.6397291807868654,0.5858631829711645,False,0.0,1.361
+181,monolayer,no rouleaux,monolayer,no rouleaux,0.4009982676896602,0.33457720857144874,False,0.0,1.4691
+182,monolayer,no rouleaux,monolayer,no rouleaux,0.3608885566935821,0.29002820125175605,False,0.0,1.5256
+183,monolayer,no rouleaux,monolayer,no rouleaux,0.3472526423955895,0.27455158402043334,False,0.0,1.3673
+184,monolayer,no rouleaux,monolayer,no rouleaux,0.3292543762418676,0.2593113372026686,False,0.0,1.2852
+185,monolayer,no rouleaux,monolayer,no rouleaux,0.3260286731770664,0.255888913766086,False,0.0,1.34
+186,monolayer,no rouleaux,monolayer,no rouleaux,0.3506808600540104,0.28053395576309004,False,0.0,1.1554
+187,monolayer,no rouleaux,monolayer,no rouleaux,0.3275674363041223,0.25580429104338676,False,0.0,1.24
+188,monolayer,no rouleaux,monolayer,no rouleaux,0.37282027274825297,0.30785056169290387,False,0.0,1.3588
+189,slightly dense,no rouleaux,monolayer,no rouleaux,0.4051920916931994,0.34235364431632603,False,0.0,1.307
+190,dense,heavy rouleaux,slightly dense,some rouleaux,0.5571822333281353,0.5064627210789023,False,0.0,1.3118
+191,very dense,heavy rouleaux,very dense,heavy rouleaux,0.7800195988368078,0.7292686292907258,False,0.0,1.7415
+192,very dense,heavy rouleaux,very dense,heavy rouleaux,0.8052836030918773,0.7556794858965631,False,0.0,1.6308
+193,very dense,heavy rouleaux,very dense,heavy rouleaux,0.7451918850763478,0.688043379070184,False,0.0,1.4751
+194,dense,heavy rouleaux,very dense,rouleaux,0.7228934440585639,0.6638963774275479,False,0.0,1.4466
+195,dense,heavy rouleaux,dense,rouleaux,0.6553788032996084,0.5946350846246596,False,0.0,1.4309
+196,dense,rouleaux,dense,rouleaux,0.6265794798961506,0.5605165784598977,False,0.0,1.3788
+197,dense,rouleaux,dense,rouleaux,0.6355436018036105,0.586846930658392,False,0.0,1.3855
+198,dense,some rouleaux,slightly dense,some rouleaux,0.5677359729972754,0.5088591447371881,True,1.0,12.8702
+199,monolayer,no rouleaux,slightly dense,some rouleaux,0.4966143608859297,0.4516244953278662,False,0.0,1.5787
+200,monolayer,no rouleaux,monolayer,no rouleaux,0.3978072454399751,0.33506486836751065,False,0.0,1.4843
+201,monolayer,no rouleaux,monolayer,no rouleaux,0.3561784623411907,0.29461067008526437,False,0.0,1.3896
+202,monolayer,no rouleaux,monolayer,no rouleaux,0.33409818154771714,0.2748417501249847,False,0.0,1.3805
+203,monolayer,no rouleaux,monolayer,no rouleaux,0.33275895619342905,0.27298269924820534,False,0.0,1.3309
+204,monolayer,no rouleaux,monolayer,no rouleaux,0.35933217712044413,0.2969835288169167,False,0.0,1.384
+205,monolayer,no rouleaux,monolayer,no rouleaux,0.3416142530856572,0.2786937991552829,False,0.0,1.2834
+206,slightly dense,slight rouleaux,monolayer,no rouleaux,0.37171145587137705,0.30930201296143556,False,0.0,1.273
+207,dense,some rouleaux,slightly dense,slight rouleaux,0.4901460947902315,0.44534852990156065,False,0.0,1.4079
+208,very dense,heavy rouleaux,very dense,heavy rouleaux,0.7932371784418888,0.7468738762679177,False,0.0,1.6643
+209,very dense,heavy rouleaux,very dense,heavy rouleaux,0.7968629287319914,0.7415191267674058,False,0.0238,2.1929
+210,very dense,heavy rouleaux,very dense,heavy rouleaux,0.79318958965459,0.7399585097695084,False,0.0,1.7399
+211,very dense,heavy rouleaux,very dense,heavy rouleaux,0.8053105498010151,0.765692837550439,False,0.0,1.6254
+212,very dense,heavy rouleaux,very dense,heavy rouleaux,0.7856856443697167,0.7586216066185896,False,0.0,1.5094
+213,very dense,heavy rouleaux,very dense,heavy rouleaux,0.7407350239567516,0.7057098250323981,False,0.0,1.3218
+214,very dense,heavy rouleaux,very dense,heavy rouleaux,0.7849381839738969,0.7538524250313006,False,0.0,1.5929
+215,very dense,heavy rouleaux,very dense,heavy rouleaux,0.788116985266778,0.7600464995209207,False,0.0,1.5278
+216,very dense,heavy rouleaux,very dense,heavy rouleaux,0.7191961445509231,0.6728269811216248,False,0.0,1.4105
+217,monolayer,no rouleaux,monolayer,no rouleaux,0.4128253928576664,0.3555275695317303,False,0.0,1.3006
+218,monolayer,no rouleaux,monolayer,no rouleaux,0.3447680722942292,0.27594058712715885,False,0.0,1.3551
+219,monolayer,no rouleaux,monolayer,no rouleaux,0.3621402115207778,0.31014047562292035,False,0.0,1.6573
+220,monolayer,no rouleaux,monolayer,no rouleaux,0.3016636029899221,0.23484589535322087,False,0.0,1.318
+221,monolayer,no rouleaux,monolayer,no rouleaux,0.3194737512077541,0.2555054300313127,False,0.0,1.4429
+222,monolayer,no rouleaux,monolayer,no rouleaux,0.33855290923226755,0.27206678967366016,False,0.0,1.3175
+223,monolayer,no rouleaux,monolayer,no rouleaux,0.3399649002847501,0.2762041328357043,False,0.0,1.3471
+224,monolayer,slight rouleaux,monolayer,no rouleaux,0.3867820536941431,0.32080516798211783,False,0.0,1.4145
+225,monolayer,no rouleaux,monolayer,no rouleaux,0.3736776571941052,0.31313913333311616,False,0.0,1.364
+226,slightly dense,rouleaux,dense,rouleaux,0.655708506138825,0.658792865525416,False,0.0,1.4417
+227,dense,heavy rouleaux,dense,rouleaux,0.6829936633217277,0.66598496640657,False,0.0,1.6832
+228,dense,heavy rouleaux,very dense,heavy rouleaux,0.7148954661253901,0.7034368925170956,False,0.0,2.0507
+229,dense,heavy rouleaux,dense,rouleaux,0.653976436777839,0.6220941024873483,False,0.0,1.3164
+230,dense,rouleaux,dense,heavy rouleaux,0.6961455204458025,0.6686215953615496,False,0.0,1.3085
+231,dense,heavy rouleaux,dense,rouleaux,0.6600110486585887,0.6189808254878194,False,0.0,1.6606
+232,dense,rouleaux,dense,rouleaux,0.7026162004421103,0.6611685544807079,False,0.0,1.5775
+233,dense,rouleaux,dense,rouleaux,0.6652705312670478,0.6266616135276633,False,0.0,1.4555
+234,dense,rouleaux,dense,rouleaux,0.6091294792958829,0.5609536205302197,False,0.0,1.5013
+235,monolayer,no rouleaux,monolayer,no rouleaux,0.4305492261732903,0.36590582134004285,False,0.0,1.3547
+236,monolayer,no rouleaux,monolayer,no rouleaux,0.38728637952180617,0.3152095572266849,False,0.0,1.6831
+237,monolayer,no rouleaux,monolayer,no rouleaux,0.36268737170672627,0.2912702136306088,False,0.0,1.2497
+238,monolayer,no rouleaux,monolayer,no rouleaux,0.3738833936943309,0.3107658022157117,False,0.0,1.2896
+239,monolayer,no rouleaux,monolayer,no rouleaux,0.3631434547801877,0.2950151022259806,False,0.0,1.3498
+240,monolayer,no rouleaux,monolayer,no rouleaux,0.3814975425561417,0.30888526441769226,False,0.0,1.2488
+241,monolayer,no rouleaux,monolayer,no rouleaux,0.3736345610452883,0.29740243933975774,False,0.0,1.2401
+242,monolayer,no rouleaux,monolayer,no rouleaux,0.41211253250855934,0.3413497305083135,False,0.0,1.245
+243,monolayer,no rouleaux,monolayer,no rouleaux,0.39253753514142453,0.3171050332466172,False,0.0,1.2463
+244,slightly dense,slight rouleaux,monolayer,no rouleaux,0.4055742705000912,0.33012490353947316,False,0.0,1.2718
+245,slightly dense,slight rouleaux,monolayer,no rouleaux,0.4063343101922108,0.3342813581068664,False,0.0,1.4364
+246,slightly dense,slight rouleaux,monolayer,no rouleaux,0.4366653814892009,0.3649242948437385,False,0.0,1.3194
+247,slightly dense,slight rouleaux,slightly dense,slight rouleaux,0.47541826545468774,0.39927889647473924,False,0.0,1.3016
+248,slightly dense,slight rouleaux,slightly dense,slight rouleaux,0.5010742345144414,0.4357141753408795,False,0.0,2.0157
+249,slightly dense,some rouleaux,slightly dense,slight rouleaux,0.45398862245322236,0.38436083633208445,False,0.0,1.3233
+250,slightly dense,some rouleaux,slightly dense,some rouleaux,0.5547190700876303,0.48621972880104525,False,0.0,1.4322
+251,slightly dense,slight rouleaux,slightly dense,slight rouleaux,0.51607410008296,0.4469085462349441,False,0.0,1.3303
+252,slightly dense,some rouleaux,slightly dense,slight rouleaux,0.5067798057640992,0.4394035230580083,False,0.0,1.4153
+253,monolayer,no rouleaux,monolayer,no rouleaux,0.40390383322253925,0.33688907978573085,False,0.0,1.3501
+254,monolayer,no rouleaux,monolayer,no rouleaux,0.42309688631676456,0.35491532669019393,False,0.0,1.5093
+255,monolayer,no rouleaux,monolayer,no rouleaux,0.41318713717612277,0.35013351556509553,False,0.0,1.5866
+256,monolayer,no rouleaux,monolayer,no rouleaux,0.3762662585910073,0.30867510340279436,False,0.0,1.2953
+257,monolayer,no rouleaux,monolayer,no rouleaux,0.3876584298902132,0.32255944953837246,False,0.0,1.4069
+258,monolayer,no rouleaux,monolayer,no rouleaux,0.4111450533343147,0.3386209358263968,False,0.0,1.4699
+259,monolayer,no rouleaux,monolayer,no rouleaux,0.3988140462804191,0.3213738701449028,False,0.0,1.3151
+260,monolayer,no rouleaux,monolayer,no rouleaux,0.39667789774676254,0.31879105729936585,False,0.0,1.5186
+261,monolayer,no rouleaux,monolayer,no rouleaux,0.4327469347507476,0.359476051464981,False,0.0,1.4211
+262,monolayer,no rouleaux,monolayer,no rouleaux,0.4394783959461752,0.3713188603600473,False,0.0,1.3292
+263,monolayer,no rouleaux,monolayer,no rouleaux,0.44065917069575744,0.3687778727590247,False,0.0,1.3087
+264,monolayer,no rouleaux,monolayer,no rouleaux,0.4043444517521732,0.32778834678251095,False,0.0,1.3227
+265,monolayer,no rouleaux,monolayer,no rouleaux,0.4337498967869152,0.36702734585872876,False,0.0,1.4445
+266,monolayer,no rouleaux,monolayer,no rouleaux,0.4084880176719166,0.33771279099969026,False,0.0,1.3717
+267,monolayer,no rouleaux,monolayer,no rouleaux,0.38883795956956985,0.316797838256315,False,0.0,1.5877
+268,monolayer,slight rouleaux,monolayer,no rouleaux,0.4420206358409124,0.36806147658699256,False,0.0,1.4088
+269,monolayer,slight rouleaux,slightly dense,slight rouleaux,0.46806446650163636,0.40381401401627154,False,0.0,1.2773
+270,monolayer,slight rouleaux,monolayer,no rouleaux,0.3817776171098054,0.3069233638573865,False,0.0,1.2598
+271,sparser,no rouleaux,monolayer,no rouleaux,0.34831543224095635,0.30939249045389045,False,0.0,1.3448
+272,monolayer,no rouleaux,monolayer,no rouleaux,0.3603108778998026,0.30254923855208177,False,0.0,1.3633
+273,monolayer,no rouleaux,monolayer,no rouleaux,0.36002235593151327,0.29637829944130234,False,0.0,1.387
+274,monolayer,no rouleaux,monolayer,no rouleaux,0.3504794178413526,0.28725026898848854,False,0.0,1.3629
+275,monolayer,no rouleaux,monolayer,no rouleaux,0.3758308442589069,0.31283863733411366,False,0.0,1.4425
+276,monolayer,no rouleaux,monolayer,no rouleaux,0.4126446587430376,0.343146676710568,False,0.0,1.3282
+277,monolayer,no rouleaux,monolayer,no rouleaux,0.4079139829849683,0.3374406819839113,False,0.0,1.8825
+278,monolayer,no rouleaux,monolayer,no rouleaux,0.40327712854411146,0.3376707384583407,False,0.0,1.3257
+279,monolayer,no rouleaux,monolayer,no rouleaux,0.42521151541472446,0.3527548549383303,False,0.0,1.2797
+280,monolayer,no rouleaux,slightly dense,slight rouleaux,0.4646831580764378,0.40788803878655944,False,0.0321,2.2251
+281,monolayer,no rouleaux,monolayer,no rouleaux,0.4267204292052828,0.3569234796519317,False,0.0,1.6862
+282,monolayer,no rouleaux,monolayer,no rouleaux,0.39692890733935077,0.3238061163716325,False,0.0,1.2688
+283,monolayer,no rouleaux,monolayer,no rouleaux,0.37680224757448516,0.3027590957641252,False,0.0,1.233
+284,monolayer,no rouleaux,monolayer,no rouleaux,0.3777028641926906,0.3073035374940209,False,0.0,1.3154
+285,monolayer,no rouleaux,monolayer,no rouleaux,0.36490080997862895,0.2964870746309833,False,0.0,1.2793
+286,monolayer,no rouleaux,monolayer,no rouleaux,0.3757104109652399,0.30226846395838486,False,0.0,1.1764
+287,monolayer,no rouleaux,monolayer,no rouleaux,0.3781873605535078,0.31053903815488154,False,0.0,1.2851
+288,monolayer,no rouleaux,monolayer,no rouleaux,0.34432675166659743,0.27158793598411085,False,0.0,1.3168
+289,sparser,no rouleaux,monolayer,no rouleaux,0.3308672861419416,0.3284051857081605,False,0.0,1.305
+290,monolayer,no rouleaux,monolayer,no rouleaux,0.32878810786268237,0.2874734834662015,False,0.0,1.2808
+291,monolayer,no rouleaux,monolayer,no rouleaux,0.35301867784457486,0.3138755926355283,False,0.0,1.3582
+292,monolayer,no rouleaux,monolayer,no rouleaux,0.35242984535436694,0.31237840067310774,False,0.0,1.2801
+293,monolayer,no rouleaux,monolayer,no rouleaux,0.37094614870834225,0.3178861862697878,False,0.0,1.3015
+294,monolayer,no rouleaux,monolayer,no rouleaux,0.3810229936501363,0.31247989085547084,False,0.0,1.3671
+295,monolayer,no rouleaux,monolayer,no rouleaux,0.37296217426872574,0.29812426998770564,False,0.0,1.4349
+296,monolayer,no rouleaux,monolayer,no rouleaux,0.38748723728121603,0.3282946429709901,False,0.0,1.5681
+297,monolayer,no rouleaux,monolayer,no rouleaux,0.40292623797549076,0.3325900626055941,False,0.0,1.3967
+298,monolayer,no rouleaux,monolayer,slight rouleaux,0.4347243944505249,0.3767561593428845,False,0.0,1.7908
+299,monolayer,no rouleaux,monolayer,no rouleaux,0.38508434678369746,0.31534467148486445,False,0.0,1.2808
+300,monolayer,no rouleaux,monolayer,no rouleaux,0.36224494499243187,0.2857528889914125,False,0.0,1.2867
+301,monolayer,no rouleaux,monolayer,no rouleaux,0.3685303541460722,0.30116500390821327,False,0.0,1.368
+302,monolayer,no rouleaux,monolayer,no rouleaux,0.3536859653912522,0.2842132377358215,False,0.0,2.0016
+303,monolayer,no rouleaux,monolayer,no rouleaux,0.3300654117889064,0.2561254609749431,False,0.0,1.2885
+304,monolayer,no rouleaux,monolayer,no rouleaux,0.3411821002497115,0.26862510814158,False,0.0,1.2205
+305,monolayer,no rouleaux,monolayer,no rouleaux,0.31401803181478394,0.2465324142043767,False,0.0,1.3182
+306,monolayer,no rouleaux,monolayer,no rouleaux,0.3334414240309347,0.2627123124369351,False,0.0,1.2804
+307,sparser,no rouleaux,sparser,no rouleaux,0.2341140054726296,0.2786699101089204,False,0.0,1.3128
+308,sparser,no rouleaux,sparser,no rouleaux,0.27911442783352397,0.253284293029788,False,0.0,1.7442
+309,sparser,no rouleaux,sparser,no rouleaux,0.2656641135772337,0.24424233744750828,False,0.0,1.3029
+310,sparser,no rouleaux,monolayer,no rouleaux,0.3111955624259041,0.2921140540651501,False,0.0,1.5088
+311,monolayer,no rouleaux,monolayer,no rouleaux,0.3293126362050897,0.2962884930712211,False,0.0,1.4845
+312,monolayer,no rouleaux,monolayer,no rouleaux,0.3671569746594176,0.3165334082279496,False,0.0,1.3782
+313,monolayer,no rouleaux,monolayer,no rouleaux,0.3674265271890021,0.3121321174000483,False,0.0,1.258
+314,monolayer,no rouleaux,monolayer,no rouleaux,0.3862734332059503,0.3382598513202807,False,0.0,1.2534
+315,monolayer,no rouleaux,monolayer,no rouleaux,0.39022914489753213,0.3261124796837408,False,0.0,1.354
+316,monolayer,no rouleaux,monolayer,no rouleaux,0.40719368903140973,0.35210127544979775,False,0.0,1.1992
+317,monolayer,no rouleaux,monolayer,no rouleaux,0.37321447419216225,0.29930680354774253,False,0.0,1.3003
+318,monolayer,no rouleaux,monolayer,no rouleaux,0.35332079316153664,0.2824744863044136,False,0.0,1.2955
+319,monolayer,no rouleaux,monolayer,no rouleaux,0.3547441082903354,0.28462340596093755,False,0.0,1.2911
+320,monolayer,no rouleaux,monolayer,no rouleaux,0.32892715403721,0.25168676818239144,False,0.0,1.3135
+321,monolayer,no rouleaux,monolayer,no rouleaux,0.341780888218435,0.271697175518964,False,0.0,1.2831
+322,monolayer,no rouleaux,monolayer,no rouleaux,0.33735295042197355,0.2703776926897706,False,0.0,1.2627
+323,monolayer,no rouleaux,monolayer,no rouleaux,0.3459656538662714,0.28055602186040063,False,0.0,1.3655
+324,monolayer,no rouleaux,monolayer,no rouleaux,0.3200996743736397,0.2526848932934785,False,0.0,1.5855

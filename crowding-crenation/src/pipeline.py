@@ -82,7 +82,14 @@ def to_dir(directory):
 
 def load_image(path):
     if isinstance(path, GCSPath):
-        blob = _gcs_client().bucket(path.bucket).blob(path.blob_name)
+        gcs_path = path
+    elif is_gcs_path(path):
+        gcs_path = to_dir(path)
+    else:
+        gcs_path = None
+
+    if gcs_path is not None:
+        blob = _gcs_client().bucket(gcs_path.bucket).blob(gcs_path.blob_name)
         data = blob.download_as_bytes()
         image = cv2.imdecode(np.frombuffer(data, np.uint8), cv2.IMREAD_COLOR)
     else:

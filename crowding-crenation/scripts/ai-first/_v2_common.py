@@ -24,7 +24,7 @@ from src.features.glcm_contrast import glcm_contrast  # noqa: E402
 from src.features.lbp_entropy import lbp_entropy  # noqa: E402
 from src.features.otsu_separability import otsu_separability  # noqa: E402
 from src.features.tile_heterogeneity import coefficient_of_variation, patchiness, tile_statistics  # noqa: E402
-from src.pipeline import list_image_paths, load_image  # noqa: E402,F401  (re-exported)
+from src.pipeline import GCSPath, list_image_paths, load_image  # noqa: E402,F401  (re-exported)
 from src.segmentation import cell_coverage, correct_illumination, otsu_segment, to_grayscale  # noqa: E402
 
 # --- paths ---
@@ -33,6 +33,13 @@ INITIAL_IMAGE_DIR = ROOT / "data" / "raw" / "initial-dataset-071626"
 TANZANIA_LABELS_CSV = ROOT / "data" / "labels" / "tanzania-073026" / "KTR-72502948-annotated.csv"
 TANZANIA_IMAGE_DIR = ROOT / "data" / "raw" / "new" / "KTR-72502948" / "dpc"
 TANZANIA_IMAGE_NAME = "dpc-{fov_id:03d}-KTR-72502948.png"
+
+# Tanzania-080526: KTR-72502946, streamed straight from GCS -- never downloaded locally
+# (see data/results/tanzania-080526/README.md for why).
+TANZANIA_080526_LABELS_CSV = ROOT / "data" / "labels" / "tanzania-080526" / "KTR-72502946-annotated.csv"
+TANZANIA_080526_BUCKET = "tanzania_02032026"
+TANZANIA_080526_BLOB_PREFIX = "TZ2025-Box5/KTR-72502946"
+TANZANIA_080526_IMAGE_NAME = "dpc-{fov_id:03d}-KTR-72502946.png"
 
 RESULTS_DIR = ROOT / "data" / "results" / "density-rouleaux-v2"
 MERGED_LABELS_CSV = RESULTS_DIR / "merged-labels.csv"

@@ -1,0 +1,325 @@
+sample_id,fov_id,annotator,country,tags
+KTR-72502946,1,E. Chu,Tanzania,Monolayer
+KTR-72502946,2,E. Chu,Tanzania,Monolayer
+KTR-72502946,3,E. Chu,Tanzania,Monolayer
+KTR-72502946,4,E. Chu,Tanzania,Monolayer
+KTR-72502946,5,E. Chu,Tanzania,Monolayer
+KTR-72502946,6,E. Chu,Tanzania,Monolayer
+KTR-72502946,7,E. Chu,Tanzania,Monolayer
+KTR-72502946,8,E. Chu,Tanzania,Monolayer
+KTR-72502946,9,E. Chu,Tanzania,Monolayer
+KTR-72502946,10,E. Chu,Tanzania,Monolayer
+KTR-72502946,11,E. Chu,Tanzania,Monolayer
+KTR-72502946,12,E. Chu,Tanzania,Monolayer
+KTR-72502946,13,E. Chu,Tanzania,Monolayer
+KTR-72502946,14,E. Chu,Tanzania,Monolayer
+KTR-72502946,15,E. Chu,Tanzania,Monolayer
+KTR-72502946,16,E. Chu,Tanzania,Slightly Dense
+KTR-72502946,17,E. Chu,Tanzania,Slightly Dense
+KTR-72502946,18,E. Chu,Tanzania,Slightly Dense
+KTR-72502946,19,E. Chu,Tanzania,Monolayer
+KTR-72502946,20,E. Chu,Tanzania,Monolayer
+KTR-72502946,21,E. Chu,Tanzania,Monolayer
+KTR-72502946,22,E. Chu,Tanzania,Monolayer
+KTR-72502946,23,E. Chu,Tanzania,Monolayer
+KTR-72502946,24,E. Chu,Tanzania,"Monolayer, Unfocused"
+KTR-72502946,25,E. Chu,Tanzania,"Monolayer, Slight Rouleaux"
+KTR-72502946,26,E. Chu,Tanzania,"Monolayer, Slight Rouleaux"
+KTR-72502946,27,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux"
+KTR-72502946,28,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux"
+KTR-72502946,29,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux"
+KTR-72502946,30,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux"
+KTR-72502946,31,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux"
+KTR-72502946,32,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux"
+KTR-72502946,33,E. Chu,Tanzania,"Slightly Dense, Some Rouleaux"
+KTR-72502946,34,E. Chu,Tanzania,"Slightly Dense, Some Rouleaux"
+KTR-72502946,35,E. Chu,Tanzania,"Slightly Dense, Some Rouleaux"
+KTR-72502946,36,E. Chu,Tanzania,"Slightly Dense, Some Rouleaux"
+KTR-72502946,37,E. Chu,Tanzania,Monolayer
+KTR-72502946,38,E. Chu,Tanzania,Monolayer
+KTR-72502946,39,E. Chu,Tanzania,Monolayer
+KTR-72502946,40,E. Chu,Tanzania,Monolayer
+KTR-72502946,41,E. Chu,Tanzania,Monolayer
+KTR-72502946,42,E. Chu,Tanzania,Monolayer
+KTR-72502946,43,E. Chu,Tanzania,Monolayer
+KTR-72502946,44,E. Chu,Tanzania,Monolayer
+KTR-72502946,45,E. Chu,Tanzania,Slightly Dense
+KTR-72502946,46,E. Chu,Tanzania,Slightly Dense
+KTR-72502946,47,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux"
+KTR-72502946,48,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux"
+KTR-72502946,49,E. Chu,Tanzania,"Slightly Dense, Some Rouleaux"
+KTR-72502946,50,E. Chu,Tanzania,"Slightly Dense, Some Rouleaux"
+KTR-72502946,51,E. Chu,Tanzania,"Slightly Dense, Some Rouleaux"
+KTR-72502946,52,E. Chu,Tanzania,"Slightly Dense, Some Rouleaux"
+KTR-72502946,53,E. Chu,Tanzania,"Dense, Some Rouleaux"
+KTR-72502946,54,E. Chu,Tanzania,"Slightly Dense, Some Rouleaux, Overexposed"
+KTR-72502946,55,E. Chu,Tanzania,Monolayer
+KTR-72502946,56,E. Chu,Tanzania,Slightly Dense
+KTR-72502946,57,E. Chu,Tanzania,Slightly Dense
+KTR-72502946,58,E. Chu,Tanzania,Slightly Dense
+KTR-72502946,59,E. Chu,Tanzania,"Dense, Rouleaux"
+KTR-72502946,60,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,61,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,62,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,63,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,64,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,65,E. Chu,Tanzania,"Dense, Rouleaux"
+KTR-72502946,66,E. Chu,Tanzania,"Dense, Rouleaux"
+KTR-72502946,67,E. Chu,Tanzania,"Slightly Dense, Some Rouleaux"
+KTR-72502946,68,E. Chu,Tanzania,"Slightly Dense, Some Rouleaux"
+KTR-72502946,69,E. Chu,Tanzania,"Slightly Dense, Some Rouleaux"
+KTR-72502946,70,E. Chu,Tanzania,"Slightly Dense, Some Rouleaux"
+KTR-72502946,71,E. Chu,Tanzania,"Slightly Dense, Some Rouleaux"
+KTR-72502946,72,E. Chu,Tanzania,"Slightly Dense, Some Rouleaux"
+KTR-72502946,73,E. Chu,Tanzania,Monolayer
+KTR-72502946,74,E. Chu,Tanzania,Monolayer
+KTR-72502946,75,E. Chu,Tanzania,Monolayer
+KTR-72502946,76,E. Chu,Tanzania,Monolayer
+KTR-72502946,77,E. Chu,Tanzania,Monolayer
+KTR-72502946,78,E. Chu,Tanzania,"Dense, Rouleaux"
+KTR-72502946,79,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,80,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,81,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,82,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,83,E. Chu,Tanzania,"Dense, Rouleaux"
+KTR-72502946,84,E. Chu,Tanzania,"Monolayer, Slight Rouleaux, Other Dimples"
+KTR-72502946,85,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux, Other Dimples"
+KTR-72502946,86,E. Chu,Tanzania,"Monolayer, Slight Rouleaux, Other Dimples"
+KTR-72502946,87,E. Chu,Tanzania,"Monolayer, Slight Rouleaux, Other Dimples"
+KTR-72502946,88,E. Chu,Tanzania,"Monolayer, Slight Rouleaux, Other Dimples"
+KTR-72502946,89,E. Chu,Tanzania,"Monolayer, Slight Rouleaux, Other Dimples"
+KTR-72502946,90,E. Chu,Tanzania,"Monolayer, Other Dimples"
+KTR-72502946,91,E. Chu,Tanzania,Monolayer
+KTR-72502946,92,E. Chu,Tanzania,Monolayer
+KTR-72502946,93,E. Chu,Tanzania,Monolayer
+KTR-72502946,94,E. Chu,Tanzania,Monolayer
+KTR-72502946,95,E. Chu,Tanzania,Monolayer
+KTR-72502946,96,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux"
+KTR-72502946,97,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux"
+KTR-72502946,98,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,99,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,100,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,101,E. Chu,Tanzania,"Dense, Rouleaux"
+KTR-72502946,102,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux"
+KTR-72502946,103,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux"
+KTR-72502946,104,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux"
+KTR-72502946,105,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux, Other Dimples"
+KTR-72502946,106,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux"
+KTR-72502946,107,E. Chu,Tanzania,Slightly Dense
+KTR-72502946,108,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux"
+KTR-72502946,109,E. Chu,Tanzania,Monolayer
+KTR-72502946,110,E. Chu,Tanzania,Monolayer
+KTR-72502946,111,E. Chu,Tanzania,Monolayer
+KTR-72502946,112,E. Chu,Tanzania,Monolayer
+KTR-72502946,113,E. Chu,Tanzania,Monolayer
+KTR-72502946,114,E. Chu,Tanzania,"Slightly Dense, Some Rouleaux"
+KTR-72502946,115,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux"
+KTR-72502946,116,E. Chu,Tanzania,"Dense, Rouleaux"
+KTR-72502946,117,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,118,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,119,E. Chu,Tanzania,"Dense, Heavy Rouleaux"
+KTR-72502946,120,E. Chu,Tanzania,"Dense, Some Rouleaux"
+KTR-72502946,121,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux"
+KTR-72502946,122,E. Chu,Tanzania,"Slightly Dense, Some Rouleaux"
+KTR-72502946,123,E. Chu,Tanzania,"Slightly Dense, Some Rouleaux"
+KTR-72502946,124,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux"
+KTR-72502946,125,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux"
+KTR-72502946,126,E. Chu,Tanzania,"Slightly Dense, Some Rouleaux"
+KTR-72502946,127,E. Chu,Tanzania,Monolayer
+KTR-72502946,128,E. Chu,Tanzania,Monolayer
+KTR-72502946,129,E. Chu,Tanzania,Monolayer
+KTR-72502946,130,E. Chu,Tanzania,Monolayer
+KTR-72502946,131,E. Chu,Tanzania,Monolayer
+KTR-72502946,132,E. Chu,Tanzania,Monolayer
+KTR-72502946,133,E. Chu,Tanzania,"Slightly Dense, Rouleaux"
+KTR-72502946,134,E. Chu,Tanzania,"Slightly Dense, Rouleaux"
+KTR-72502946,135,E. Chu,Tanzania,"Dense, Heavy Rouleaux"
+KTR-72502946,136,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,137,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,138,E. Chu,Tanzania,"Dense, Heavy Rouleaux"
+KTR-72502946,139,E. Chu,Tanzania,"Dense, Rouleaux"
+KTR-72502946,140,E. Chu,Tanzania,"Dense, Rouleaux"
+KTR-72502946,141,E. Chu,Tanzania,"Dense, Some Rouleaux"
+KTR-72502946,142,E. Chu,Tanzania,"Dense, Some Rouleaux"
+KTR-72502946,143,E. Chu,Tanzania,"Dense, Some Rouleaux"
+KTR-72502946,144,E. Chu,Tanzania,Slightly Dense
+KTR-72502946,145,E. Chu,Tanzania,Monolayer
+KTR-72502946,146,E. Chu,Tanzania,Monolayer
+KTR-72502946,147,E. Chu,Tanzania,Monolayer
+KTR-72502946,148,E. Chu,Tanzania,Monolayer
+KTR-72502946,149,E. Chu,Tanzania,Monolayer
+KTR-72502946,150,E. Chu,Tanzania,Slightly Dense
+KTR-72502946,151,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux"
+KTR-72502946,152,E. Chu,Tanzania,"Slightly Dense, Rouleaux, Other"
+KTR-72502946,153,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,154,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,155,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,156,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,157,E. Chu,Tanzania,"Dense, Heavy Rouleaux"
+KTR-72502946,158,E. Chu,Tanzania,"Dense, Rouleaux"
+KTR-72502946,159,E. Chu,Tanzania,"Dense, Rouleaux"
+KTR-72502946,160,E. Chu,Tanzania,"Dense, Rouleaux"
+KTR-72502946,161,E. Chu,Tanzania,"Dense, Some Rouleaux"
+KTR-72502946,162,E. Chu,Tanzania,"Slightly Dense, Some Rouleaux"
+KTR-72502946,163,E. Chu,Tanzania,Monolayer
+KTR-72502946,164,E. Chu,Tanzania,Monolayer
+KTR-72502946,165,E. Chu,Tanzania,Monolayer
+KTR-72502946,166,E. Chu,Tanzania,Monolayer
+KTR-72502946,167,E. Chu,Tanzania,Monolayer
+KTR-72502946,168,E. Chu,Tanzania,Monolayer
+KTR-72502946,169,E. Chu,Tanzania,Monolayer
+KTR-72502946,170,E. Chu,Tanzania,Slightly Dense
+KTR-72502946,171,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux"
+KTR-72502946,172,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,173,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,174,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,175,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,176,E. Chu,Tanzania,"Dense, Heavy Rouleaux"
+KTR-72502946,177,E. Chu,Tanzania,"Dense, Heavy Rouleaux"
+KTR-72502946,178,E. Chu,Tanzania,"Dense, Rouleaux"
+KTR-72502946,179,E. Chu,Tanzania,"Dense, Heavy Rouleaux"
+KTR-72502946,180,E. Chu,Tanzania,"Dense, Heavy Rouleaux"
+KTR-72502946,181,E. Chu,Tanzania,Monolayer
+KTR-72502946,182,E. Chu,Tanzania,Monolayer
+KTR-72502946,183,E. Chu,Tanzania,Monolayer
+KTR-72502946,184,E. Chu,Tanzania,Monolayer
+KTR-72502946,185,E. Chu,Tanzania,Monolayer
+KTR-72502946,186,E. Chu,Tanzania,Monolayer
+KTR-72502946,187,E. Chu,Tanzania,Monolayer
+KTR-72502946,188,E. Chu,Tanzania,Monolayer
+KTR-72502946,189,E. Chu,Tanzania,Slightly Dense
+KTR-72502946,190,E. Chu,Tanzania,"Dense, Heavy Rouleaux"
+KTR-72502946,191,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,192,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,193,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,194,E. Chu,Tanzania,"Dense, Heavy Rouleaux"
+KTR-72502946,195,E. Chu,Tanzania,"Dense, Heavy Rouleaux"
+KTR-72502946,196,E. Chu,Tanzania,"Dense, Rouleaux"
+KTR-72502946,197,E. Chu,Tanzania,"Dense, Rouleaux"
+KTR-72502946,198,E. Chu,Tanzania,"Dense, Some Rouleaux, Overexposed"
+KTR-72502946,199,E. Chu,Tanzania,"Monolayer, Large"
+KTR-72502946,200,E. Chu,Tanzania,Monolayer
+KTR-72502946,201,E. Chu,Tanzania,Monolayer
+KTR-72502946,202,E. Chu,Tanzania,Monolayer
+KTR-72502946,203,E. Chu,Tanzania,Monolayer
+KTR-72502946,204,E. Chu,Tanzania,Monolayer
+KTR-72502946,205,E. Chu,Tanzania,Monolayer
+KTR-72502946,206,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux"
+KTR-72502946,207,E. Chu,Tanzania,"Dense, Some Rouleaux"
+KTR-72502946,208,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,209,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,210,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,211,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,212,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,213,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,214,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,215,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,216,E. Chu,Tanzania,"Very Dense, Heavy Rouleaux"
+KTR-72502946,217,E. Chu,Tanzania,Monolayer
+KTR-72502946,218,E. Chu,Tanzania,Monolayer
+KTR-72502946,219,E. Chu,Tanzania,Monolayer
+KTR-72502946,220,E. Chu,Tanzania,Monolayer
+KTR-72502946,221,E. Chu,Tanzania,Monolayer
+KTR-72502946,222,E. Chu,Tanzania,Monolayer
+KTR-72502946,223,E. Chu,Tanzania,Monolayer
+KTR-72502946,224,E. Chu,Tanzania,"Monolayer, Slight Rouleaux"
+KTR-72502946,225,E. Chu,Tanzania,Monolayer
+KTR-72502946,226,E. Chu,Tanzania,"Slightly Dense, Rouleaux"
+KTR-72502946,227,E. Chu,Tanzania,"Dense, Heavy Rouleaux"
+KTR-72502946,228,E. Chu,Tanzania,"Dense, Heavy Rouleaux"
+KTR-72502946,229,E. Chu,Tanzania,"Dense, Heavy Rouleaux"
+KTR-72502946,230,E. Chu,Tanzania,"Dense, Rouleaux"
+KTR-72502946,231,E. Chu,Tanzania,"Dense, Heavy Rouleaux"
+KTR-72502946,232,E. Chu,Tanzania,"Dense, Rouleaux"
+KTR-72502946,233,E. Chu,Tanzania,"Dense, Rouleaux"
+KTR-72502946,234,E. Chu,Tanzania,"Dense, Rouleaux"
+KTR-72502946,235,E. Chu,Tanzania,Monolayer
+KTR-72502946,236,E. Chu,Tanzania,Monolayer
+KTR-72502946,237,E. Chu,Tanzania,Monolayer
+KTR-72502946,238,E. Chu,Tanzania,Monolayer
+KTR-72502946,239,E. Chu,Tanzania,Monolayer
+KTR-72502946,240,E. Chu,Tanzania,"Monolayer, Medium"
+KTR-72502946,241,E. Chu,Tanzania,Monolayer
+KTR-72502946,242,E. Chu,Tanzania,Monolayer
+KTR-72502946,243,E. Chu,Tanzania,Monolayer
+KTR-72502946,244,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux"
+KTR-72502946,245,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux"
+KTR-72502946,246,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux"
+KTR-72502946,247,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux"
+KTR-72502946,248,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux"
+KTR-72502946,249,E. Chu,Tanzania,"Slightly Dense, Some Rouleaux"
+KTR-72502946,250,E. Chu,Tanzania,"Slightly Dense, Some Rouleaux"
+KTR-72502946,251,E. Chu,Tanzania,"Slightly Dense, Slight Rouleaux"
+KTR-72502946,252,E. Chu,Tanzania,"Slightly Dense, Some Rouleaux"
+KTR-72502946,253,E. Chu,Tanzania,Monolayer
+KTR-72502946,254,E. Chu,Tanzania,Monolayer
+KTR-72502946,255,E. Chu,Tanzania,Monolayer
+KTR-72502946,256,E. Chu,Tanzania,Monolayer
+KTR-72502946,257,E. Chu,Tanzania,Monolayer
+KTR-72502946,258,E. Chu,Tanzania,Monolayer
+KTR-72502946,259,E. Chu,Tanzania,Monolayer
+KTR-72502946,260,E. Chu,Tanzania,Monolayer
+KTR-72502946,261,E. Chu,Tanzania,Monolayer
+KTR-72502946,262,E. Chu,Tanzania,Monolayer
+KTR-72502946,263,E. Chu,Tanzania,Monolayer
+KTR-72502946,264,E. Chu,Tanzania,Monolayer
+KTR-72502946,265,E. Chu,Tanzania,Monolayer
+KTR-72502946,266,E. Chu,Tanzania,Monolayer
+KTR-72502946,267,E. Chu,Tanzania,Monolayer
+KTR-72502946,268,E. Chu,Tanzania,"Monolayer, Slight Rouleaux"
+KTR-72502946,269,E. Chu,Tanzania,"Monolayer, Slight Rouleaux"
+KTR-72502946,270,E. Chu,Tanzania,"Monolayer, Slight Rouleaux"
+KTR-72502946,271,E. Chu,Tanzania,"Sparser, Other"
+KTR-72502946,272,E. Chu,Tanzania,"Monolayer, Other"
+KTR-72502946,273,E. Chu,Tanzania,"Monolayer, Other"
+KTR-72502946,274,E. Chu,Tanzania,"Monolayer, Other"
+KTR-72502946,275,E. Chu,Tanzania,"Monolayer, Other"
+KTR-72502946,276,E. Chu,Tanzania,Monolayer
+KTR-72502946,277,E. Chu,Tanzania,Monolayer
+KTR-72502946,278,E. Chu,Tanzania,Monolayer
+KTR-72502946,279,E. Chu,Tanzania,Monolayer
+KTR-72502946,280,E. Chu,Tanzania,Monolayer
+KTR-72502946,281,E. Chu,Tanzania,Monolayer
+KTR-72502946,282,E. Chu,Tanzania,Monolayer
+KTR-72502946,283,E. Chu,Tanzania,Monolayer
+KTR-72502946,284,E. Chu,Tanzania,Monolayer
+KTR-72502946,285,E. Chu,Tanzania,Monolayer
+KTR-72502946,286,E. Chu,Tanzania,Monolayer
+KTR-72502946,287,E. Chu,Tanzania,Monolayer
+KTR-72502946,288,E. Chu,Tanzania,Monolayer
+KTR-72502946,289,E. Chu,Tanzania,"Sparser, Other"
+KTR-72502946,290,E. Chu,Tanzania,"Monolayer, Other"
+KTR-72502946,291,E. Chu,Tanzania,"Monolayer, Other"
+KTR-72502946,292,E. Chu,Tanzania,"Monolayer, Other"
+KTR-72502946,293,E. Chu,Tanzania,Monolayer
+KTR-72502946,294,E. Chu,Tanzania,Monolayer
+KTR-72502946,295,E. Chu,Tanzania,Monolayer
+KTR-72502946,296,E. Chu,Tanzania,Monolayer
+KTR-72502946,297,E. Chu,Tanzania,Monolayer
+KTR-72502946,298,E. Chu,Tanzania,Monolayer
+KTR-72502946,299,E. Chu,Tanzania,Monolayer
+KTR-72502946,300,E. Chu,Tanzania,Monolayer
+KTR-72502946,301,E. Chu,Tanzania,Monolayer
+KTR-72502946,302,E. Chu,Tanzania,Monolayer
+KTR-72502946,303,E. Chu,Tanzania,Monolayer
+KTR-72502946,304,E. Chu,Tanzania,Monolayer
+KTR-72502946,305,E. Chu,Tanzania,Monolayer
+KTR-72502946,306,E. Chu,Tanzania,Monolayer
+KTR-72502946,307,E. Chu,Tanzania,Sparser
+KTR-72502946,308,E. Chu,Tanzania,Sparser
+KTR-72502946,309,E. Chu,Tanzania,Sparser
+KTR-72502946,310,E. Chu,Tanzania,Sparser
+KTR-72502946,311,E. Chu,Tanzania,Monolayer
+KTR-72502946,312,E. Chu,Tanzania,Monolayer
+KTR-72502946,313,E. Chu,Tanzania,Monolayer
+KTR-72502946,314,E. Chu,Tanzania,Monolayer
+KTR-72502946,315,E. Chu,Tanzania,Monolayer
+KTR-72502946,316,E. Chu,Tanzania,Monolayer
+KTR-72502946,317,E. Chu,Tanzania,Monolayer
+KTR-72502946,318,E. Chu,Tanzania,Monolayer
+KTR-72502946,319,E. Chu,Tanzania,Monolayer
+KTR-72502946,320,E. Chu,Tanzania,Monolayer
+KTR-72502946,321,E. Chu,Tanzania,Monolayer
+KTR-72502946,322,E. Chu,Tanzania,Monolayer
+KTR-72502946,323,E. Chu,Tanzania,Monolayer
+KTR-72502946,324,E. Chu,Tanzania,Monolayer
