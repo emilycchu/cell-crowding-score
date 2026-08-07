@@ -27,6 +27,9 @@ Two independent tools:
 - `offby-vs-severity-v2.2.png` — Rouleaux and Density side by side, x = v2.2's measured
   continuous severity score per FOV, y = signed off-by amount (model level minus manual
   level). Produced by `scripts/tanzania_080526_offby_plot.py`.
+- `density-v2.2.png`, `overlap-v2.2.png`, `density-vs-overlap-v2.2.png` — the v2.2
+  calibration-set (n=661) composite-score plots, same `scripts/ai-first/plot_results_v2.py`
+  used for the v2/v2.1 versions in `data/results/density-rouleaux-v2/plots/`.
 
 ## Result: v2.1 (held out)
 
