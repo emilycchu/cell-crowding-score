@@ -3,10 +3,12 @@ results.csv, for both the diffuse-fov-step-not-folded-in and folded-in variants,
 into the "all", "background", "diffuse", and "double" subsets (by the labels CSV's `notes`
 column).
 
-Ground truth: spot_truth (yes/no, from the annotator's "spot" column). Prediction:
-predicted_spot_base / predicted_spot_folded (see run_overexposed_diverse_test.py's docstring
-for why predicted_spot = not present). A false negative here means the pipeline wrongly
-treated a real fluorescent spot as overexposure-artifact-only and would have triaged it out.
+Ground truth: spot_truth (yes/no, from the annotator's "spot" column -- whether the
+overexposed-halo artifact itself is genuinely present). Prediction: predicted_spot_base /
+predicted_spot_folded, which are just `present`/`present_folded` directly (see
+run_overexposed_diverse_test.py's docstring). A false negative here means the pipeline missed
+a real halo (e.g. a faint/diffuse one below RATIO_THRESHOLD); a false positive means it fired
+on an ordinary FOV that only looked overexposed (elevated background, debris, etc.).
 
 Usage:
     python scripts/analyze_overexposed_diverse.py data/results/overexposed-diverse-080726/results.csv

@@ -104,27 +104,20 @@ advisory-only diffuse-fov step (`diffuse_candidate` -> neighbor-trend check ->
 `diffuse_halo_flag`, fetching the 2 preceding fov_ids for context, same as
 `scripts/scan_diffuse_candidates.py`).
 
-**Important framing note.** `detect_overexposure()`'s `present` flag means "the overexposed
-**artifact** is present" -- per `fluorescence/README.md`, it's designed as "a preprocessing/
-triage step **before** any downstream model (e.g. spot/RBC detection) sees the image", i.e.
-`present=True` is meant to gate a FOV *out* before a spot detector ever runs. This label set's
-ground truth is different: it's the `spot` column, i.e. whether a genuine fluorescent spot is
-present *despite* the FOV also looking overexposed (most rows here are both). There's no spot
-detector in this repo to compare against directly, so this analysis uses the natural proxy
-implied by that "triage" framing:
+**Important framing note (corrected 2026-08-07 -- an earlier draft of this doc had this
+backwards).** In this dataset, "the fluorescent spot" and "the overexposed halo artifact" are
+the same thing -- `spot` is ground truth on whether the overexposure artifact itself is
+genuinely present, not a separate real-signal-vs-artifact distinction. So the predicted label
+is `present` directly, with no inversion:
 
 ```
-predicted_spot_present = NOT present
+predicted_spot_present = present
 ```
 
-A false negative under this mapping is the costly error: the triage step wrongly discarding a
-real spot as artifact-only. A false positive is a milder error: letting an artifact-only FOV
-through to a downstream spot detector, which would presumably still have to reject it. Since
-every row in this dataset was deliberately picked for looking overexposed, `present=True` on
-its own turns out to fire on the large majority of rows regardless of whether a real spot is
-also there -- see Results below; this mapping is doing real, non-trivial work only where the
-ratio/anisotropy/diffuse signals actually disagree with "yes, overexposed" being the whole
-story.
+A false negative is a real halo the ratio/anisotropy gate missed entirely (most importantly, a
+faint/diffuse halo below `RATIO_THRESHOLD` -- exactly the case the diffuse-fov step was built
+to catch). A false positive is an ordinary FOV -- elevated background from many puncta,
+debris/hair, etc. -- that tripped the ratio gate without an actual halo present.
 
 **"Folded in" vs. not.** `present_base` is exactly what production code returns today (diffuse
 fields computed but never gating). `present_folded = present_base OR diffuse_halo_flag` --
@@ -257,8 +250,8 @@ network").
 
 ## Results: confusion matrices
 
-Ground truth = `spot` column. Predicted = `NOT present` (see "Method" above). All 4 matrices
-below are repeated for both variants.
+Ground truth = `spot` column (is the halo artifact genuinely present). Predicted = `present`
+directly (see "Method" above). All 4 matrices below are repeated for both variants.
 
 ### Diffuse-fov step NOT folded in (production behavior today)
 
@@ -266,19 +259,57 @@ below are repeated for both variants.
 
 | | Predicted: spot | Predicted: no spot |
 |---|---|---|
-| Truth: spot | TP=9 | FN=36 |
-| Truth: no spot | FP=26 | TN=5 |
+| Truth: spot | TP=36 | FN=9 |
+| Truth: no spot | FP=5 | TN=26 |
 
-FN rate: 36/45 (80.0%) -- FP rate: 26/31 (83.9%)
+FN rate: 9/45 (20.0%) -- FP rate: 5/31 (16.1%)
 
 **background** (n=28)
 
 | | Predicted: spot | Predicted: no spot |
 |---|---|---|
-| Truth: spot | TP=2 | FN=1 |
-| Truth: no spot | FP=22 | TN=3 |
+| Truth: spot | TP=1 | FN=2 |
+| Truth: no spot | FP=3 | TN=22 |
 
-FN rate: 1/3 (33.3%) -- FP rate: 22/25 (88.0%)
+FN rate: 2/3 (66.7%) -- FP rate: 3/25 (12.0%)
+
+**diffuse** (n=5)
+
+| | Predicted: spot | Predicted: no spot |
+|---|---|---|
+| Truth: spot | TP=1 | FN=4 |
+| Truth: no spot | FP=0 | TN=0 |
+
+FN rate: 4/5 (80.0%) -- FP rate: n/a (no spot-negative rows in this subset)
+
+**double** (n=5)
+
+| | Predicted: spot | Predicted: no spot |
+|---|---|---|
+| Truth: spot | TP=4 | FN=1 |
+| Truth: no spot | FP=0 | TN=0 |
+
+FN rate: 1/5 (20.0%) -- FP rate: n/a (no spot-negative rows in this subset)
+
+### Diffuse-fov step folded in (`present_folded = present_base OR diffuse_halo_flag`)
+
+**all** (n=76)
+
+| | Predicted: spot | Predicted: no spot |
+|---|---|---|
+| Truth: spot | TP=43 | FN=2 |
+| Truth: no spot | FP=12 | TN=19 |
+
+FN rate: 2/45 (4.4%) -- FP rate: 12/31 (38.7%)
+
+**background** (n=28)
+
+| | Predicted: spot | Predicted: no spot |
+|---|---|---|
+| Truth: spot | TP=3 | FN=0 |
+| Truth: no spot | FP=9 | TN=16 |
+
+FN rate: 0/3 (0.0%) -- FP rate: 9/25 (36.0%)
 
 **diffuse** (n=5)
 
@@ -293,58 +324,21 @@ FN rate: 1/5 (20.0%) -- FP rate: n/a (no spot-negative rows in this subset)
 
 | | Predicted: spot | Predicted: no spot |
 |---|---|---|
-| Truth: spot | TP=1 | FN=4 |
+| Truth: spot | TP=5 | FN=0 |
 | Truth: no spot | FP=0 | TN=0 |
 
-FN rate: 4/5 (80.0%) -- FP rate: n/a (no spot-negative rows in this subset)
-
-### Diffuse-fov step folded in (`present_folded = present_base OR diffuse_halo_flag`)
-
-**all** (n=76)
-
-| | Predicted: spot | Predicted: no spot |
-|---|---|---|
-| Truth: spot | TP=2 | FN=43 |
-| Truth: no spot | FP=19 | TN=12 |
-
-FN rate: 43/45 (95.6%) -- FP rate: 19/31 (61.3%)
-
-**background** (n=28)
-
-| | Predicted: spot | Predicted: no spot |
-|---|---|---|
-| Truth: spot | TP=0 | FN=3 |
-| Truth: no spot | FP=16 | TN=9 |
-
-FN rate: 3/3 (100.0%) -- FP rate: 16/25 (64.0%)
-
-**diffuse** (n=5)
-
-| | Predicted: spot | Predicted: no spot |
-|---|---|---|
-| Truth: spot | TP=1 | FN=4 |
-| Truth: no spot | FP=0 | TN=0 |
-
-FN rate: 4/5 (80.0%) -- FP rate: n/a (no spot-negative rows in this subset)
-
-**double** (n=5)
-
-| | Predicted: spot | Predicted: no spot |
-|---|---|---|
-| Truth: spot | TP=0 | FN=5 |
-| Truth: no spot | FP=0 | TN=0 |
-
-FN rate: 5/5 (100.0%) -- FP rate: n/a (no spot-negative rows in this subset)
+FN rate: 0/5 (0.0%) -- FP rate: n/a (no spot-negative rows in this subset)
 
 ## Discussion
 
-**Folding in the diffuse-fov step is a wash overall and actively harmful on exactly the
-subset it was built for.** 17 of 76 rows were ratio-failing candidates with a large enough
+**Folding in the diffuse-fov step is a real recall/specificity tradeoff: it rescues most of
+the faint halos the ratio gate misses, at the cost of new false positives on ordinary
+elevated-background FOVs.** 17 of 76 rows were ratio-failing candidates with a large enough
 diffuse footprint to trigger the neighbor-trend check; 14 were flagged as isolated diffuse
-halos (didn't match a neighbor's trend) and flipped from `present=False` to
-`present=True` under fold-in -- i.e. 14 more FOVs get predicted "no spot":
+halos (didn't match a neighbor's trend) and flipped from `present=False` to `present=True`
+under fold-in:
 
-| notes category | spot_truth=yes flips (hurts) | spot_truth=no flips (helps) |
+| notes category | spot_truth=yes flips (helps -- rescues a missed halo) | spot_truth=no flips (hurts -- new false positive) |
 |---|---|---|
 | background | 2 | 6 |
 | artifact | 0 | 1 |
@@ -353,51 +347,49 @@ halos (didn't match a neighbor's trend) and flipped from `present=False` to
 | (blank) | 1 | 0 |
 | **total** | **7** | **7** |
 
-Folding in helps and hurts in exactly equal counts overall (7 vs. 7), but the composition is
-the important part: it correctly catches 6/25 extra `background` true negatives (FP rate
-88.0% -> 64.0%) at the cost of wrongly suppressing **3 of 5 (all of the ratio-failing) real
-`diffuse`-tagged spots** and the 1 `double`-tagged spot in this candidate set (`diffuse` FN
-rate unchanged at 80% only because 1 of those flips landed on a row that was *already* an FN
-pre-fold-in -- overall spot recall still drops sharply: FN rate 80.0% -> 95.6%). This is
-exactly the failure mode the diffuse-halo investigation flagged as a risk before implementing
-this step ([[project-fluorescence-diffuse-halo-investigation]]): a genuinely faint/diffuse
-real spot and an isolated (non-vignetting) diffuse artifact currently look the same to
-`diffuse_halo_flag`, because it was calibrated against exactly one confirmed example of each.
-**This result is a direct, labeled confirmation that keeping the diffuse-fov step
-advisory-only (not gating `present`) was the right call** -- folding it in trades a modest
-specificity gain on `background` for a severe recall loss concentrated on the very
-diffuse/faint spots the step was originally meant to help rescue.
+Overall: FN rate drops from 20.0% to 4.4% (missing 9 real halos -> missing 2), while FP rate
+more than doubles, 16.1% to 38.7% (5 false positives -> 12). The gains land almost entirely on
+the cases the step was built for -- **all 3 ratio-failing `diffuse`-tagged real halos and the
+1 `double`-tagged one get correctly rescued** (`diffuse` subset recall 1/5 -> 4/5, `double`
+5/5 -> 5/5 with the pre-existing FN also caught). The cost lands almost entirely on
+`background`-tagged FOVs: 6 of the 7 new false positives are rows annotated `background`
+(ordinary elevated illumination from puncta/staining, not a real halo), pushing that subset's
+FP rate from 12.0% to 36.0%. This lines up with a risk `src/overexposure.py`'s own module
+docstring already calls out for the *ratio* gate's design ("a plain brightness-delta threshold
+produced false positives on FOVs that were simply uniformly brighter overall... without an
+actual halo") -- `DIFFUSE_ABS_DELTA` is exactly that kind of absolute-delta threshold, applied
+without the ratio gate's normalization, so it's plausible this is the same failure mode
+resurfacing in the diffuse-fov step specifically.
 
 Two rows also relied on Tanzania/Uganda cross-country data for the diffuse check for the first
 time (`KIT-62501087` fov=271, `PBC-800-1` fov=732) -- the diffuse-fov constants
 (`DIFFUSE_RADIUS_MIN`, `NEIGHBOR_CENTROID_MATCH_DIST`, `NEIGHBOR_RADIUS_MATCH_FACTOR`) were
 calibrated only on Liberia FOVs, so these two flips are a first (informal) look at whether
-that calibration transfers, not a validation of it.
+that calibration transfers, not a validation of it. (`KIT-62501087` was a `spot_truth=yes`
+rescue; `PBC-800-1` fov=732 was a `background`-tagged false positive.)
 
-**Overall FN/FP rates are high in both variants** (80-96% FN, 61-84% FP) -- expected, since
-`present` (overexposure-artifact-present) is not designed to answer "is a real spot present
-despite overexposure," and this whole dataset was picked to be uniformly overexposed-looking
-(every row is tagged `Overexposed`), so the ratio gate fires on the large majority of rows
-regardless of the `spot` label. Read these numbers as "how well does the existing
-artifact-only gate perform if used as a naive spot-presence proxy," not as a verdict on
-detection accuracy in general -- there's no real fluorescent-spot classifier being tested here
-because none exists in this repo.
+**Baseline performance is already reasonably good** (FN 20.0%, FP 16.1% overall) for a
+detector whose ratio/anisotropy design predates this specific labeled test set. `diffuse` is
+the weakest baseline subset (FN 80.0%) precisely because it's defined as the faint/sub-ratio
+population the diffuse-fov step targets -- which is exactly why folding it in helps there so
+much.
 
 ## Caveats
 
-- **Subset sizes are small.** `diffuse` and `double` are 5 rows each; single-row flips shift
-  their FN rate by 20 points. Treat the subset numbers as directional, not statistically
+- **Subset sizes are small.** `diffuse` and `double` are 5 rows each; a single-row flip shifts
+  their FN/FP rate by 20 points. Treat the subset numbers as directional, not statistically
   robust, until `notes` is filled in further ([[project-fluorescence-diffuse-halo-investigation]]
   already flags the underlying diffuse-halo signal as calibrated on n=1 per class).
-- **`notes` is incomplete.** Many rows (mostly straightforward `spot=yes`, no special
-  characteristics) have no `notes` value and are excluded from every subset but `all`.
+- **`notes` is incomplete.** Many rows (mostly straightforward, unambiguous cases) have no
+  `notes` value and are excluded from every subset but `all`.
 - **GCS per-FOV timings include repeated, uncached slide/box lookups** (see "Per-FOV runtime"
   above) -- don't use these numbers directly to estimate full-slide batch throughput.
-- **Predicted-spot polarity is a modeling choice, not something the codebase states
-  explicitly** (see "Method" above) -- it follows directly from `fluorescence/README.md`'s own
-  description of `present` as a pre-spot-detection triage gate, but there's no existing
-  `score_labels.py`-style precedent scoring against a `spot` ground truth column to confirm
-  against.
+- **This doc originally had the predicted/ground-truth polarity inverted** (comparing `NOT
+  present` against `spot`, on the mistaken assumption that `spot` meant "genuine parasite
+  signal independent of the overexposure artifact"). Corrected 2026-08-07 after Emily clarified
+  that `spot` ground truth *is* ground truth on the halo artifact's presence. `results.csv`'s
+  `predicted_spot_base`/`predicted_spot_folded` columns were patched in place to match
+  (they're now identical to `present_base`/`present_folded`); no GCS data was re-fetched.
 
 ## Files
 
@@ -417,8 +409,9 @@ because none exists in this repo.
    slide (hundreds of FOVs, often the same handful of samples repeated).
 2. **Finish categorizing `notes`** so the background/diffuse/double (and any new categories)
    breakdowns cover the full dataset, not just the ~35 rows currently tagged.
-3. **Do not fold the diffuse-fov step into `present` without recalibrating** on more than one
-   labeled example per class, and specifically re-check it against faint real spots (not just
-   artifacts) -- this test is the first labeled evidence that it currently trades spot recall
-   for artifact specificity in a way that nets out roughly even, concentrated on exactly the
-   diffuse/faint-spot cases it can't yet tell apart from an isolated diffuse halo.
+3. **Consider folding the diffuse-fov step into `present`, but recalibrate `DIFFUSE_ABS_DELTA`
+   first specifically against `background`-tagged (elevated-illumination, no-halo) FOVs** --
+   this test is the first labeled evidence that it substantially improves recall on faint/
+   diffuse real halos (the case it was built for), but more than doubles the false-positive
+   rate, concentrated on exactly the ordinary-background-elevation failure mode the ratio gate
+   was originally designed to avoid.

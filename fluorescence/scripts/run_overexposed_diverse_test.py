@@ -2,15 +2,14 @@
 diffuse-fov sustained-footprint check) against data/labels/overexposure-diverse-080726.csv,
 streaming every FOV directly from GCS (no local disk cache).
 
-Ground truth in this label set is the annotator's "spot" column: whether a genuine
-fluorescent spot (real parasite signal) is present, independent of whether the FOV also
-looks overexposed. `detect_overexposure()`'s `present` flag means "the overexposed-halo
-ARTIFACT is present" -- per fluorescence/README.md this is "a preprocessing/triage step
-before any downstream model (e.g. spot/RBC detection) sees the image", i.e. present=True is
-meant to gate a FOV OUT before a spot detector ever runs. So the natural predicted label for
-this dataset's ground truth is the complement: predicted_spot_present = not present. Under
-that mapping, a false negative (spot_truth=yes, predicted=no) is the costly error: the
-triage step wrongly discarding a real spot as an artifact.
+Ground truth in this label set is the annotator's "spot" column: whether the overexposed-halo
+artifact itself is genuinely present (the "fluorescent spot" and the halo artifact are the
+same thing in this dataset -- not a separate real-signal-vs-artifact distinction). So the
+predicted label is just `present` directly: predicted_spot_present = present. A false
+negative (spot_truth=yes, predicted=no) is a real halo the ratio/anisotropy gate missed
+(e.g. a faint/diffuse halo below RATIO_THRESHOLD); a false positive (spot_truth=no,
+predicted=yes) is an ordinary FOV (elevated background, debris, etc.) that triggered the gate
+without an actual halo present.
 
 The diffuse-fov step (diffuse_candidate/diffuse_halo_flag) is advisory-only in
 src/overexposure.py -- never changes `present`. This script computes it for every row either
@@ -143,8 +142,8 @@ def process_row(row):
         "present_base": result.present,
         "present_folded": present_folded,
         "diffuse_halo_flag": diffuse_flagged,
-        "predicted_spot_base": not result.present,
-        "predicted_spot_folded": not present_folded,
+        "predicted_spot_base": result.present,
+        "predicted_spot_folded": present_folded,
         "confidence": result.confidence,
         "contrast_ratio": result.contrast_ratio,
         "baseline": result.baseline,
