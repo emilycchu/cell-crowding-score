@@ -9,7 +9,7 @@ missing a density tag and was hand-labeled "Dense" per that call). Produced by
 
 Two independent tools:
 
-- **Density/Rouleaux**: `scripts/ai-first/score_fov_v2.py`.
+- **Density/Rouleaux**: `scripts/combined/score_fov_v2.py`.
 - **Fluorescent spot**: the `fluorescence/` project's overexposure/halo detector
   (`fluorescence/src/overexposure.py`, imported directly rather than duplicated) run on the
   fluorescent images, `present=True` marks a FOV "fluorescent-spot positive." Unaffected by
@@ -28,7 +28,7 @@ Two independent tools:
   continuous severity score per FOV, y = signed off-by amount (model level minus manual
   level). Produced by `scripts/tanzania_080526_offby_plot.py`.
 - `density-v2.2.png`, `overlap-v2.2.png`, `density-vs-overlap-v2.2.png` — the v2.2
-  calibration-set (n=661) composite-score plots, same `scripts/ai-first/plot_results_v2.py`
+  calibration-set (n=661) composite-score plots, same `scripts/combined/plot_results_v2.py`
   used for the v2/v2.1 versions in `data/results/density-rouleaux-v2/plots/`.
 
 ## Result: v2.1 (held out)
@@ -47,7 +47,7 @@ was fit on.
 
 ## Recalibration: v2.2 (KTR-72502946 pooled in)
 
-`scripts/ai-first/calibrate_v2.2.py` reruns the same full-feature-pool fitting v2.1 used
+`scripts/combined/calibrate_v2.2.py` reruns the same full-feature-pool fitting v2.1 used
 (ridge regression per axis over all 8 candidate features, PAVA-monotonic bucket
 thresholds, 5-fold CV), but on a calibration set grown from 337 to **661 FOVs** by pooling
 in this slide's own 324 labeled FOVs rather than holding them out. Motivation: this is a

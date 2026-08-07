@@ -4,7 +4,7 @@ controlling for the other), ridge-regression weight fitting, stratified cross-va
 PAVA-monotonic bucket-threshold derivation, and a full calibration report.
 
 Usage:
-    python scripts/ai-first/calibrate_v2.py [--features-csv PATH] [--params-out PATH]
+    python scripts/combined/calibrate_v2.py [--features-csv PATH] [--params-out PATH]
         [--report-out PATH]
 """
 import argparse

@@ -1,17 +1,21 @@
-# AI-first v2 density/Rouleaux pipeline
+# Combined v2 density/Rouleaux pipeline
 
-Two independent tools live in this directory:
+This directory holds the v2 calibrated pipeline (`merge_labels_v2.py` ->
+`extract_features_v2.py` -> `calibrate_v2.py`/`calibrate_v2.1.py`/`calibrate_v2.2.py` ->
+`score_fov_v2.py`) — fits density and Rouleaux composite scores against a growing pool of
+manually-labeled FOVs, with fixed thresholds that generalize to new slides without
+recalibration. This is the main subject of this README.
 
-1. **The v2 calibrated pipeline** (`merge_labels_v2.py` -> `extract_features_v2.py` ->
-   `calibrate_v2.py`/`calibrate_v2.1.py`/`calibrate_v2.2.py` -> `score_fov_v2.py`) — fits
-   density and Rouleaux composite scores against a growing pool of manually-labeled FOVs,
-   with fixed thresholds that generalize to new slides without recalibration. This is the
-   main subject of this README.
-2. **`score_new_slide.py` + `label_new_slide.py`** — an earlier, from-scratch classical-CV
-   (watershed) pipeline that never touches a manual label; it derives density/crowding
-   labels from *that slide's own* quintiles. Superseded by the v2 pipeline for anything
-   that needs to generalize across slides, but kept because it needs no calibration set at
-   all. See its own docstrings for how it works — not covered further here.
+It's named "combined" because both the density and Rouleaux axes are fit from one shared
+feature vector (`_v2_common.compute_features`) rather than separate pipelines — see
+"Feature vector" below.
+
+A sibling tool, `scripts/ai-first/score_new_slide.py` + `scripts/ai-first/label_new_slide.py`,
+is an earlier, from-scratch classical-CV (watershed) pipeline that never touches a manual
+label; it derives density/crowding labels from *that slide's own* quintiles. Superseded by
+the v2 pipeline here for anything that needs to generalize across slides, but kept because
+it needs no calibration set at all. See its own docstrings for how it works — not covered
+further here.
 
 ## Overview: what v2 does
 
@@ -32,7 +36,7 @@ pipeline in the repo root README: there, weights are hand-adjusted from correlat
 here, they're fit.
 
 ```bash
-python scripts/ai-first/score_fov_v2.py data/raw/some-dataset --params data/results/density-rouleaux-v2/density_overlap_v2.2_params.json --out-csv out.csv
+python scripts/combined/score_fov_v2.py data/raw/some-dataset --params data/results/density-rouleaux-v2/density_overlap_v2.2_params.json --out-csv out.csv
 ```
 
 ## Feature vector (`_v2_common.compute_features`)
@@ -229,8 +233,13 @@ calibrate_v2.2.py          v2.2: full-feature-pool refit, pooled to 661 FOVs
 score_fov_v2.py            inference: score a new image/directory with a params JSON
 plot_results_v2.py         density/Rouleaux/density-vs-Rouleaux scatter plots
 plot_bucket_comparison_v2.py  manual-vs-model bucket-grid comparison plot
-score_new_slide.py         from-scratch watershed pipeline (see "Overview" above)
-label_new_slide.py         slide-relative quintile labels for score_new_slide.py's output
+```
+
+The sibling from-scratch watershed pipeline lives in `scripts/ai-first/` instead:
+
+```
+scripts/ai-first/score_new_slide.py   from-scratch watershed pipeline (see "Overview" above)
+scripts/ai-first/label_new_slide.py   slide-relative quintile labels for score_new_slide.py's output
 ```
 
 <details>

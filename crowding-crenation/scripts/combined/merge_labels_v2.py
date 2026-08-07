@@ -12,7 +12,7 @@ fold_density(), since pooling all three datasets gives enough sparser examples (
 the two Tanzania slides) to no longer need that fold.
 
 Usage:
-    python scripts/ai-first/merge_labels_v2.py [--out PATH]
+    python scripts/combined/merge_labels_v2.py [--out PATH]
 """
 import argparse
 

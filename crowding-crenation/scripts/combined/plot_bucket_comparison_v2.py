@@ -10,7 +10,7 @@ image processing on all 337 images -- compute_features() is shared by extract_fe
 and score_fov_v2.py, so this produces identical predictions to actually running the tool.
 
 Usage:
-    python scripts/ai-first/plot_bucket_comparison_v2.py [--features-csv PATH] [--params PATH]
+    python scripts/combined/plot_bucket_comparison_v2.py [--features-csv PATH] [--params PATH]
         [--out PATH]
 """
 import argparse

@@ -3,8 +3,8 @@
 Unlike src/composite.py's FeatureWeights (a dataclass hardcoded to the four "four-step"
 feature names), this is plain dict-based: the density and Rouleaux/overlap composites use
 different, independently-fit feature sets, so a fixed set of dataclass fields doesn't fit
-either one cleanly. Both scripts/ai-first/calibrate_v2.py (to score the calibration set)
-and scripts/ai-first/score_fov_v2.py (to score new images) import this module so the exact
+either one cleanly. Both scripts/combined/calibrate_v2.py (to score the calibration set)
+and scripts/combined/score_fov_v2.py (to score new images) import this module so the exact
 same scoring logic is used in both places.
 """
 

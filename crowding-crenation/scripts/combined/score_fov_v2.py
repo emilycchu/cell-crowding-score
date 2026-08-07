@@ -5,7 +5,7 @@ scripts/ai-first/label_new_slide.py's slide-relative quintiles, these thresholds
 ahead of time, so this generalizes to a new slide without re-deriving anything per slide.
 
 Usage:
-    python scripts/ai-first/score_fov_v2.py <input> [--params PATH] [--out-csv PATH] [--workers N]
+    python scripts/combined/score_fov_v2.py <input> [--params PATH] [--out-csv PATH] [--workers N]
 
 <input> is a single image file or a directory of images (local path or gs:// URI).
 Without --out-csv, results are printed as JSON to stdout (matching src/pipeline.py's CLI).

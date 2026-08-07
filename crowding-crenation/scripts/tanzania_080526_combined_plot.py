@@ -20,7 +20,7 @@ from matplotlib.lines import Line2D
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
-sys.path.insert(0, str(ROOT / "scripts" / "ai-first"))
+sys.path.insert(0, str(ROOT / "scripts" / "combined"))
 
 from _v2_common import (  # noqa: E402
     COLOR_AXIS,

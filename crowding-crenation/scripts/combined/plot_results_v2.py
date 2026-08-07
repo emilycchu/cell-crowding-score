@@ -4,7 +4,7 @@ applicable. Reuses the jittered-scatter-plus-box helpers and dataviz palette alr
 established in scripts/tanzania_comparison.py rather than reinventing them.
 
 Usage:
-    python scripts/ai-first/plot_results_v2.py [--features-csv PATH] [--params-json PATH]
+    python scripts/combined/plot_results_v2.py [--features-csv PATH] [--params-json PATH]
         [--out-dir DIR]
 """
 import argparse

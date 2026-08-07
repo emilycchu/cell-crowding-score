@@ -12,7 +12,7 @@ particularly at the Sparser/Monolayer boundary where the original set had compar
 few examples relative to Monolayer's dominance (241/337).
 
 Usage:
-    python scripts/ai-first/calibrate_v2.2.py [--features-csv PATH] [--params-out PATH]
+    python scripts/combined/calibrate_v2.2.py [--features-csv PATH] [--params-out PATH]
         [--report-out PATH] [--prev-params PATH]
 """
 import argparse

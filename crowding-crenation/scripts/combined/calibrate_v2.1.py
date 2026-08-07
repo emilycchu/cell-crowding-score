@@ -19,7 +19,7 @@ in a new "v2.1 recalibration" section appended to the same calibration-report.md
 separate report file.
 
 Usage:
-    python scripts/ai-first/calibrate_v2.1.py [--features-csv PATH] [--params-out PATH]
+    python scripts/combined/calibrate_v2.1.py [--features-csv PATH] [--params-out PATH]
         [--report-out PATH]
 """
 import argparse

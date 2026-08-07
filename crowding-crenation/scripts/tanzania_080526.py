@@ -34,7 +34,7 @@ from matplotlib.lines import Line2D
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
-sys.path.insert(0, str(ROOT / "scripts" / "ai-first"))
+sys.path.insert(0, str(ROOT / "scripts" / "combined"))
 
 from _v2_common import (  # noqa: E402
     COLOR_AXIS,
@@ -165,7 +165,7 @@ def write_merged_csv(results, manual, out_path):
 
 def plot_jitter_grid(records, out_path, model_label="score_fov_v2 (model)"):
     """Density x Rouleaux grid, jittered scatter per cell, mine vs. model, fluorescent-positive
-    FOVs starred instead of circled. Mirrors scripts/ai-first/plot_bucket_comparison_v2.py.
+    FOVs starred instead of circled. Mirrors scripts/combined/plot_bucket_comparison_v2.py.
     """
     rng = random.Random(JITTER_SEED)
     fig, ax = plt.subplots(figsize=(10, 6.5), dpi=150)

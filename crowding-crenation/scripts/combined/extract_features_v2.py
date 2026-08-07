@@ -2,7 +2,7 @@
 set (see merge_labels_v2.py), joined against its manual labels.
 
 Usage:
-    python scripts/ai-first/extract_features_v2.py [--labels-csv PATH] [--out PATH]
+    python scripts/combined/extract_features_v2.py [--labels-csv PATH] [--out PATH]
         [--workers N] [--limit N]
 """
 import argparse

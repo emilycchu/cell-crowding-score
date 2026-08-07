@@ -19,7 +19,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "scripts"))
-sys.path.insert(0, str(ROOT / "scripts" / "ai-first"))
+sys.path.insert(0, str(ROOT / "scripts" / "combined"))
 
 from _v2_common import apply_saturation_override  # noqa: E402
 from src.composite_v2 import bucket, weighted_composite  # noqa: E402
