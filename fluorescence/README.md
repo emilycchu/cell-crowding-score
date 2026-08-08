@@ -78,6 +78,40 @@ Since the negative controls are informal (not part of the labeled reference set,
 sanity check), and 8+8 examples is still a small calibration set, treat `RATIO_THRESHOLD`
 as a reasonable starting point, not a rigorously fit cutoff -- see Future directions.
 
+## Anisotropy fiber-debris filter, and its corner-clipping rescue
+
+A thin bright hair or fiber on the slide/optics can also survive the blur and pull
+`contrast_ratio` above `RATIO_THRESHOLD`, because a line's peak falls off much more slowly
+under 2D blur than a point punctum's does. `_region_anisotropy`/`_fft_anisotropy` in
+`src/overexposure.py` catch this via the 2D FFT power spectrum of the candidate region: a
+halo's brightness falls off isotropically (low anisotropy), while a fiber concentrates energy
+along one orientation (high anisotropy) no matter how it curves. `ANISOTROPY_THRESHOLD=0.35`
+demotes any ratio-gate-passing candidate whose anisotropy exceeds it, calibrated against 9 real
+halos (0.072-0.315) vs. 3 hair-debris candidates (0.421-0.765) from one Liberia slide -- see
+`src/overexposure.py`'s module docstring for the full writeup, including why shape metrics
+(solidity, bounding-box aspect ratio) don't separate the two cases.
+
+**Corner-clipping rescue (2026-08-07).** A halo clipped into roughly a quarter-circle by the
+frame corner can score anisotropy above threshold purely from the clip geometry -- a narrower
+angular range concentrates more FFT energy along the cut edges' normal axes, mimicking a
+fiber's signature even though the underlying field is still isotropic. Confirmed on labeled
+data (`data/results/overexposed-diverse-080726/`, `KIT-62501087`, a real halo,
+`contrast_ratio=14.27`, wrongly demoted at `anisotropy=0.4602`) that detecting corner-clipping
+directly can't fix this: that candidate is statistically indistinguishable from three labeled
+fiber/debris cases on every corner-contact metric tried. What works instead: a rescue-only
+second opinion, `_looks_like_corner_clipped_halo` in `src/overexposure.py`, checked only when
+anisotropy has already triggered a demotion, requiring both `radial_rho > RADIAL_RHO_MIN`
+(Spearman correlation between the frame's illumination and negative distance from the
+candidate's centroid -- high for a halo's global radial field, low for a fiber's local one) and
+`r2_over_r1 < R2_OVER_R1_MAX` (the FFT's second axial moment relative to the first -- low for a
+clipped arc's broad angular plateau, high for a fiber's narrow spike). Measured 0 wrong rescues
+across all labeled fiber/debris cases and their synthetic corner-clipped crops -- see
+`src/overexposure.py`'s "Corner-clipping rescue" docstring section and
+`scripts/validate_corner_clip_fix.py` for the full validation, including a known miss on a
+synthetic (not real) corner-clip case. Rescue-only by construction, so it cannot introduce a
+new false positive among already-passing halos; both thresholds are provisional, calibrated on
+a small population (6 labeled fiber/artifact cases, 1 confirmed real corner-clipped halo).
+
 ## Diffuse-halo signal (reported only, not a decision gate)
 
 `RATIO_THRESHOLD=3.0` misses genuinely faint/diffuse halos -- e.g. one known false negative

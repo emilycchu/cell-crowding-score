@@ -51,6 +51,47 @@ contrast_ratio gate (anisotropy 0.421-0.765) from slide LB-D3-2025-10-22-131729-
 (fovs 32/34/35 vs. 62/70 plus the original 7 calibration positives); ANISOTROPY_THRESHOLD sits
 in the gap between those groups.
 
+Corner-clipping rescue: a halo clipped into roughly a quarter-circle by the frame corner (e.g.
+KIT-62501087, contrast_ratio=14.27, a confirmed real halo) can score anisotropy above
+ANISOTROPY_THRESHOLD (0.4602) purely from the clip geometry -- an arc spanning a narrower angular
+range concentrates more FFT energy along the two axes normal to its cut edges, the same
+resultant-magnitude signature a fiber produces, even though the underlying brightness field is
+still isotropic. Checked directly (a labeled brainstorm, see
+data/results/overexposed-diverse-080726/README.md and scripts/validate_corner_clip_fix.py) that
+this can't be fixed by detecting corner-clipping itself and skipping/relaxing the anisotropy
+check there: KIT-62501087 is statistically indistinguishable from three labeled fiber/debris
+cases (fov32, fov34, fov126) on every corner-contact metric tried (bbox corner touch, corner
+pixel occupancy, border-perimeter fraction). Mirror-padding the clipped patch before the FFT
+looks perfect on KIT-62501087 alone but destroys fiber detection (a fiber crossing a corner
+mirrors into two perpendicular copies whose axial signal cancels). Shape metrics (solidity,
+PCA elongation, circle-fit residual, disc-fill fraction) all overlap completely between real
+halos and fibers, corner-clipped or not.
+
+What does work, checked against the same labeled set plus synthetic corner-clipped crops of
+each (see scripts/validate_corner_clip_fix.py -- crop to a quadrant with the candidate's
+centroid at the new corner, then resize back up to the FOV's own original resolution before
+re-detecting, so the crop isn't analyzed at an artificially different pixel scale than a real
+FOV): a rescue-only second opinion, applied only when anisotropy has already triggered a
+demotion, requiring BOTH (1) radial_rho -- Spearman correlation between the whole frame's
+illumination and negative distance from the candidate's centroid, high when illumination
+decays smoothly outward from a center (a halo, corner-clipped or not, is still a global radial
+field) and low for a spatially local object like a fiber -- above RADIAL_RHO_MIN, AND (2) the
+FFT power spectrum's second axial moment relative to the first (r2_over_r1 -- a quarter-arc's
+angular energy is a broad ~90-degree plateau, so r2 stays low relative to r1; a fiber's is a
+narrow spike, so r2 approx r1) below R2_OVER_R1_MAX. Measured 0 wrong rescues across all 6
+labeled fiber/artifact cases and their synthetic corner-clipped crops (11 evaluable anisotropy-
+triggering rows total); rescues KIT-62501087. This is rescue-only -- it can only turn an
+anisotropy-triggered `present=False` back to `present=True`, never demote a candidate the ratio
+gate + anisotropy check would otherwise pass -- so it cannot introduce a new false positive
+among already-passing halos by construction. It also isn't complete: a synthetic corner-clip
+of an unrelated real halo (fov210, cropped toward its own top-right corner) triggers anisotropy
+demotion and narrowly fails the rescue (radial_rho=0.852, just under the 0.90 cutoff) -- no
+worse than today (that exact FOV is not corner-clipped in the real labeled set, so this is a
+missed opportunity on a hypothetical, not a regression), but a reminder this is calibrated on
+a small population (6 labeled fibers/artifacts, 1 confirmed real corner-clipped halo) and both
+thresholds should be treated as provisional pending more labeled corner-clipped examples across
+countries.
+
 Diffuse/dim halo candidates below the ratio gate: a faint halo (e.g. fov62 on the same slide as
 above, contrast_ratio=2.41) can fall under RATIO_THRESHOLD entirely, and none of anisotropy,
 area_fraction, solidity, or interior texture (checked directly against fov62 and the 8 informal
@@ -145,6 +186,19 @@ ANISOTROPY_PAD_FRAC = 0.15   # padding added around the candidate region's bbox 
 ANISOTROPY_R_MIN = 3         # excludes the DC/near-DC bins (bulk brightness, not orientation)
 ANISOTROPY_THRESHOLD = 0.35
 
+# See module docstring, "Corner-clipping rescue". Only checked when anisotropy has already
+# triggered a demotion. radial_rho: Spearman correlation between the frame's illumination and
+# negative distance from the candidate's centroid -- high for a global radial field (a halo,
+# corner-clipped or not), low for a local linear object (a fiber). r2_over_r1: the FFT power
+# spectrum's second axial moment relative to the first -- low for a broad angular plateau (a
+# clipped arc), high for a narrow spike (a fiber). Calibrated against 6 labeled fiber/artifact
+# cases (fov32/34/35/310/126/57) and their synthetic corner-clipped crops (0 wrong rescues) vs.
+# one confirmed real corner-clipped halo, KIT-62501087 (radial_rho=0.960, r2_over_r1=0.413).
+# Both thresholds are provisional -- see scripts/validate_corner_clip_fix.py and the module
+# docstring for the full writeup, including a known miss on a synthetic (not real) case.
+RADIAL_RHO_MIN = 0.90
+R2_OVER_R1_MAX = 0.44
+
 # See module docstring, "Diffuse/dim halo candidates below the ratio gate". Reported only --
 # not used as a decision threshold, since it's calibrated against a single confirmed example.
 DIFFUSE_ABS_DELTA = 40
@@ -182,6 +236,8 @@ class OverexposureResult:
     area_fraction: float
     solidity: float
     anisotropy: float
+    radial_rho: float
+    r2_over_r1: float
     diffuse_radius: float
     diffuse_circularity: float
     diffuse_centroid_x: float
@@ -232,13 +288,16 @@ def _solidity(contour):
 
 
 def _fft_anisotropy(patch):
-    """Orientation coherence of patch's 2D FFT power spectrum, in [0, 1]: ~0 for a halo's
-    isotropic falloff, -> 1 for a thin fiber/hair whose energy concentrates along one
-    orientation (see module docstring, "Distinguishing halos from linear debris").
+    """Orientation coherence of patch's 2D FFT power spectrum: (r1, r2) in [0, 1]^2. r1 ~0 for
+    a halo's isotropic falloff, -> 1 for a thin fiber/hair whose energy concentrates along one
+    orientation (see module docstring, "Distinguishing halos from linear debris"). r2 is the
+    second axial moment (double the angle again) -- low relative to r1 for a broad angular
+    plateau (a corner-clipped arc's energy spread over ~90 degrees), close to r1 for a narrow
+    spike (a fiber, corner-clipped or not) -- see "Corner-clipping rescue".
     """
     h, w = patch.shape
     if h < 8 or w < 8:
-        return 0.0
+        return 0.0, 0.0
 
     patch = patch.astype(np.float32)
     patch -= patch.mean()
@@ -253,15 +312,45 @@ def _fft_anisotropy(patch):
     radius = np.sqrt(xx ** 2 + yy ** 2)
     ring = (radius >= ANISOTROPY_R_MIN) & (radius <= max(min(cy, cx) - 2, ANISOTROPY_R_MIN + 1))
     if ring.sum() < 10:
-        return 0.0
+        return 0.0, 0.0
 
     angle = np.arctan2(yy, xx)
     power_ring = power[ring]
+    angle_ring = angle[ring]
+    total = np.sum(power_ring)
     # Doubled angle because orientation (a line and its 180-degree rotation) is the same
     # feature, not opposite ones -- this is the standard circular-statistics trick for
     # measuring concentration of an axial (mod pi) rather than directional (mod 2pi) quantity.
-    resultant = np.sum(power_ring * np.exp(2j * angle[ring]))
-    return float(np.abs(resultant) / np.sum(power_ring))
+    r1 = float(np.abs(np.sum(power_ring * np.exp(2j * angle_ring))) / total)
+    r2 = float(np.abs(np.sum(power_ring * np.exp(4j * angle_ring))) / total)
+    return r1, r2
+
+
+def _spearman_rho(x, y):
+    """Rank correlation via Pearson-on-ranks -- avoids adding scipy as a dependency for one
+    statistic. See module docstring, "Corner-clipping rescue".
+    """
+    rx = np.argsort(np.argsort(x))
+    ry = np.argsort(np.argsort(y))
+    if np.std(rx) == 0 or np.std(ry) == 0:
+        return 0.0
+    return float(np.corrcoef(rx, ry)[0, 1])
+
+
+def _radial_monotonicity(illumination, contour):
+    """Spearman correlation between the whole frame's illumination and negative distance from
+    the candidate contour's centroid -- high when illumination decays smoothly outward from a
+    center (a halo, corner-clipped or not, is still a global radial field), low for a
+    spatially local object like a fiber. See module docstring, "Corner-clipping rescue".
+    """
+    moments = cv2.moments(contour)
+    if moments["m00"] == 0:
+        return 0.0
+    cx, cy = moments["m10"] / moments["m00"], moments["m01"] / moments["m00"]
+    h, w = illumination.shape
+    yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+    dist = np.sqrt((xx - cx) ** 2 + (yy - cy) ** 2)
+    return _spearman_rho(illumination.ravel(), -dist.ravel())
 
 
 def _sustained_footprint(illumination, baseline):
@@ -295,6 +384,15 @@ def _region_anisotropy(small, bbox):
     return _fft_anisotropy(small[y0:y1, x0:x1])
 
 
+def _looks_like_corner_clipped_halo(radial_rho, r2_over_r1):
+    """Rescue-only second opinion for an anisotropy-triggered demotion -- see module docstring,
+    "Corner-clipping rescue". Only ever un-demotes; never gates a candidate that the ratio gate
+    and anisotropy check would otherwise pass, so it cannot introduce a new false positive
+    among already-passing halos by construction.
+    """
+    return radial_rho > RADIAL_RHO_MIN and r2_over_r1 < R2_OVER_R1_MAX
+
+
 def detect_overexposure(image_bgr):
     """Detect the overexposed-halo artifact in one raw fluorescence FOV (BGR image)."""
     small, illumination = _small_and_illumination(image_bgr)
@@ -313,11 +411,16 @@ def detect_overexposure(image_bgr):
     present = contrast_ratio >= RATIO_THRESHOLD
 
     anisotropy = 0.0
+    radial_rho = 0.0
+    r2_over_r1 = 0.0
     if present and contour is not None:
-        anisotropy = _region_anisotropy(small, bbox)
+        anisotropy, r2 = _region_anisotropy(small, bbox)
+        r2_over_r1 = r2 / anisotropy if anisotropy > 1e-6 else 0.0
         if anisotropy > ANISOTROPY_THRESHOLD:
-            present = False
-            confidence = 0.0
+            radial_rho = _radial_monotonicity(illumination, contour)
+            if not _looks_like_corner_clipped_halo(radial_rho, r2_over_r1):
+                present = False
+                confidence = 0.0
 
     diffuse_radius, diffuse_circularity, diffuse_cx, diffuse_cy = _sustained_footprint(illumination, baseline)
 
@@ -330,6 +433,8 @@ def detect_overexposure(image_bgr):
         area_fraction=round(area_fraction, 4),
         solidity=round(solidity, 4),
         anisotropy=round(anisotropy, 4),
+        radial_rho=round(radial_rho, 4),
+        r2_over_r1=round(r2_over_r1, 4),
         diffuse_radius=round(diffuse_radius, 2),
         diffuse_circularity=round(diffuse_circularity, 4),
         diffuse_centroid_x=round(diffuse_cx, 4),

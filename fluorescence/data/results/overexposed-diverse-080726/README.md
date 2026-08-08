@@ -119,6 +119,19 @@ the original numbers). It now requires `DIFFUSE_RATIO_MIN <= contrast_ratio < RA
 fixed version; the "Which FOVs flip" and "Discussion" sections below narrate both the original
 finding and the fix.
 
+**Second update (2026-08-07, later the same day): the anisotropy fiber-debris filter itself was
+fixed.** `KIT-62501087` (a real halo wrongly demoted by the anisotropy check because it's
+clipped into a quarter-circle by the frame corner) was previously being rescued only by
+accident, through the diffuse-fov fold-in -- and the `DIFFUSE_RATIO_MIN` fix above deliberately
+excluded that accidental rescue. Emily asked for the underlying anisotropy misfire to be fixed
+directly. A brainstorm (run through the Opus model, validated against real GCS-streamed images
+rather than left as theory) found that naive corner-clip detection can't work -- `KIT-62501087`
+is statistically indistinguishable from labeled fiber/debris cases on every corner-contact
+metric -- but a rescue-only second opinion using two new signals (`radial_rho`, `r2_over_r1`)
+does. See `src/overexposure.py`'s module docstring, "Corner-clipping rescue," and
+`scripts/validate_corner_clip_fix.py` for the full validation. `KIT-62501087` is now a direct
+`present_base=True` -- it no longer needs (or gets) any diffuse-fov involvement at all.
+
 **Important framing note (corrected 2026-08-07 -- an earlier draft of this doc had this
 backwards).** In this dataset, "the fluorescent spot" and "the overexposed halo artifact" are
 the same thing -- `spot` is ground truth on whether the overexposure artifact itself is
@@ -143,124 +156,124 @@ flag *were* wired into the decision, which it currently is not (see
 ## Per-FOV runtime
 
 Streamed live from GCS, one FOV at a time, no disk cache. `neighbor_fetch_s` is only nonzero
-for the 7 rows that pass `diffuse_candidate()` (`DIFFUSE_RATIO_MIN <= contrast_ratio <
-RATIO_THRESHOLD` and `diffuse_radius >= DIFFUSE_RADIUS_MIN` -- see "Method" above); it
-covers fetching + detecting on up to 2 preceding fov_ids for the neighbor-trend check alone.
-This is fewer than the pre-fix run (17 rows) since the ratio floor now skips the neighbor
-fetch entirely for FOVs it can already tell aren't real diffuse-halo candidates.
+for rows that pass `diffuse_candidate()` (`DIFFUSE_RATIO_MIN <= contrast_ratio <
+RATIO_THRESHOLD` and `diffuse_radius >= DIFFUSE_RADIUS_MIN`); it covers fetching + detecting
+on up to 2 preceding fov_ids for the neighbor-trend check alone. `KIT-62501087` no longer
+appears here at all -- with the corner-clipping rescue in place it's a direct present_base=True
+and never reaches `diffuse_candidate()`.
 
 | sample_id | fov_id | country | gcs_fetch_s | initial_test_s | anisotropy_s | diffuse_fov_s | neighbor_fetch_s |
 |---|---|---|---|---|---|---|---|
-| LB-D10-2025-12-29-150312-0171084-VFPCHC-2-4 | 153 | Liberia | 17.4788 | 0.0733 | 0.0291 | 0.0028 | 0.0 |
-| LB-D10-2025-12-29-150312-0171084-VFPCHC-2-4 | 154 | Liberia | 1.0663 | 0.0686 | 0.0368 | 0.0034 | 0.0 |
-| LB-D10-2025-12-30-083614-0250901VFPCHC-2-1 | 210 | Liberia | 1.072 | 0.0739 | 0.0226 | 0.003 | 0.0 |
-| LB-D10-2025-12-30-083614-0250901VFPCHC-2-1 | 227 | Liberia | 1.1105 | 0.0714 | 0.0266 | 0.0036 | 0.0 |
-| LB-D10-2025-12-30-084453-0250071VFPCHC-2-2 | 200 | Liberia | 1.3207 | 0.0661 | 0.0416 | 0.0031 | 0.0 |
-| LB-D11-2025-12-17-115859-0250319D-thin-4-1 | 29 | Liberia | 1.2788 | 0.0581 | 0.0 | 0.002 | 0.0 |
-| LB-D11-2025-12-19-111309-0211715-VFPCHC-3-1 | 277 | Liberia | 1.1218 | 0.0556 | 0.0 | 0.0023 | 2.3871 |
-| LB-D11-2025-12-19-131014-0241591-VFPCHC-3-2 | 278 | Liberia | 1.0517 | 0.0553 | 0.0 | 0.002 | 2.4076 |
-| LB-D11-2025-12-19-134126-025073-VFPCHC-3-1 | 1 | Liberia | 1.0636 | 0.0607 | 0.0 | 0.0037 | 0.0 |
-| LB-D3-2025-08-30-103102-250876706-D-thin-4 | 257 | Liberia | 0.9205 | 0.059 | 0.0157 | 0.0023 | 0.0 |
-| LB-D3-2025-08-30-103102-250876706-D-thin-4 | 269 | Liberia | 0.8491 | 0.0501 | 0.0 | 0.0022 | 0.0 |
-| LB-D3-2025-08-30-103102-250876706-D-thin-4 | 274 | Liberia | 1.0574 | 0.0538 | 0.0073 | 0.0021 | 0.0 |
-| LB-D3-2025-08-30-103102-250876706-D-thin-4 | 279 | Liberia | 0.8023 | 0.0594 | 0.0 | 0.0024 | 1.7621 |
-| LB-D3-2025-08-30-103102-250876706-D-thin-4 | 289 | Liberia | 1.0149 | 0.0564 | 0.0469 | 0.0028 | 0.0 |
-| LB-D3-2025-09-02-141940-25087110-D-Only-1-2 | 42 | Liberia | 1.2058 | 0.0627 | 0.0187 | 0.0022 | 0.0 |
-| LB-D3-2025-09-09-093425-250917463-D-Only-1-1 | 166 | Liberia | 1.118 | 0.0677 | 0.0276 | 0.0029 | 0.0 |
-| LB-D3-2025-09-27-121918-17217958-D-thin-4-4 | 262 | Liberia | 0.9895 | 0.0659 | 0.0295 | 0.0031 | 0.0 |
-| LB-D3-2025-10-03-104211-250917371-D-thin-2-3 | 4 | Liberia | 1.3722 | 0.0617 | 0.0303 | 0.0029 | 0.0 |
-| LB-D3-2025-10-03-104643-250917465-D-thin-3-4 | 185 | Liberia | 1.1886 | 0.0632 | 0.0171 | 0.0014 | 0.0 |
-| LB-D3-2025-10-03-124025-2404175445D-thin-2-3 | 1 | Liberia | 1.0482 | 0.0817 | 0.0 | 0.0018 | 0.0 |
-| LB-D3-2025-10-03-124025-2404175445D-thin-2-3 | 16 | Liberia | 1.2068 | 0.0579 | 0.0 | 0.0021 | 0.0 |
-| LB-D3-2025-10-03-124025-2404175445D-thin-2-3 | 17 | Liberia | 1.352 | 0.0561 | 0.0 | 0.0017 | 0.0 |
-| LB-D3-2025-10-03-124025-2404175445D-thin-2-3 | 18 | Liberia | 1.2378 | 0.0558 | 0.0 | 0.002 | 0.0 |
-| LB-D3-2025-10-03-124025-2404175445D-thin-2-3 | 19 | Liberia | 1.3267 | 0.0613 | 0.0 | 0.002 | 0.0 |
-| LB-D3-2025-10-03-124025-2404175445D-thin-2-3 | 53 | Liberia | 1.126 | 0.0601 | 0.0 | 0.002 | 0.0 |
-| LB-D3-2025-10-03-124025-2404175445D-thin-2-3 | 114 | Liberia | 1.0449 | 0.0556 | 0.0444 | 0.003 | 0.0 |
-| LB-D3-2025-10-03-124025-2404175445D-thin-2-3 | 125 | Liberia | 1.2023 | 0.0489 | 0.0063 | 0.0017 | 0.0 |
-| LB-D3-2025-10-03-124025-2404175445D-thin-2-3 | 126 | Liberia | 1.0397 | 0.0508 | 0.0076 | 0.0021 | 0.0 |
-| LB-D3-2025-10-03-125352-2402169466D-thin-2-1 | 3 | Liberia | 1.1602 | 0.0509 | 0.0117 | 0.003 | 0.0 |
-| LB-D3-2025-10-03-130859-250916865-D-thin-1-4 | 236 | Liberia | 1.203 | 0.0473 | 0.0197 | 0.0028 | 0.0 |
-| LB-D3-2025-10-22-131729-250917745-D-thin-2-3 | 134 | Liberia | 1.4271 | 0.0469 | 0.037 | 0.0032 | 0.0 |
-| LB-D3-2025-10-22-132316-2411189646-D-thin-1-4 | 135 | Liberia | 1.187 | 0.0464 | 0.0 | 0.0024 | 2.2427 |
-| LB-D3-2025-10-22-140622-250917738-D-thin-1-1 | 122 | Liberia | 1.3452 | 0.063 | 0.0 | 0.0028 | 2.4223 |
-| LB-D3-2025-10-22-140622-250917738-D-thin-1-1 | 238 | Liberia | 1.0558 | 0.0478 | 0.0144 | 0.0023 | 0.0 |
-| LB-D3-2025-10-24-113736-250918214-D-thin-2-3 | 96 | Liberia | 1.2039 | 0.0487 | 0.0 | 0.001 | 0.0 |
-| LB-D3-2025-10-24-132012-25046898-D-thin-1-4 | 3 | Liberia | 1.2381 | 0.0478 | 0.0 | 0.002 | 2.338 |
-| LB-D3-2025-10-24-132012-25046898-D-thin-1-4 | 305 | Liberia | 1.0568 | 0.0492 | 0.0137 | 0.0021 | 0.0 |
-| LB-D3-2025-10-24-162727-230918080-D-thin-1-4 | 8 | Liberia | 1.1203 | 0.045 | 0.0 | 0.0019 | 0.0 |
-| LB-D3-2025-10-25-105806-180951467-D-thin-1-1 | 270 | Liberia | 1.7886 | 0.0455 | 0.0107 | 0.0022 | 0.0 |
-| LB-D3-2025-10-25-150947-250917467-D-thin-3-2 | 235 | Liberia | 1.3948 | 0.0495 | 0.0207 | 0.0028 | 0.0 |
-| LB-D3-2025-10-27-123159-251123404-D-thin-4-1 | 48 | Liberia | 1.3002 | 0.0537 | 0.0186 | 0.0023 | 0.0 |
-| LB-D3-2025-10-27-123159-251123404-D-thin-4-1 | 49 | Liberia | 1.2636 | 0.0483 | 0.0064 | 0.0019 | 0.0 |
-| LB-D3-2025-10-27-124239-250916732-D-thin-1-3 | 301 | Liberia | 1.3511 | 0.0561 | 0.0411 | 0.0025 | 0.0 |
-| LB-D3-2025-10-27-134711-250917368-D-thin-1-3 | 52 | Liberia | 1.3876 | 0.0536 | 0.03 | 0.0027 | 0.0 |
-| LB-D3-2025-10-27-144635-250918691-D-thin-2-2 | 57 | Liberia | 1.3869 | 0.0469 | 0.0062 | 0.0021 | 0.0 |
-| LB-D3-2025-10-27-144635-250918691-D-thin-2-2 | 243 | Liberia | 1.1609 | 0.0454 | 0.0 | 0.0014 | 0.0 |
-| LB-D3-2025-10-27-145205-250917002-D-thin-3-3 | 310 | Liberia | 1.2626 | 0.0532 | 0.0031 | 0.0016 | 0.0 |
-| LB-D3-2025-10-27-154305-250917412-D-thin-1-4 | 119 | Liberia | 1.2712 | 0.0486 | 0.0 | 0.0019 | 2.4503 |
-| LB-D3-2025-10-27-155920-250713919-D-thin-3-3 | 169 | Liberia | 1.2504 | 0.0641 | 0.0 | 0.001 | 0.0 |
-| LB-D3-2025-10-27-173317-250917493-D-thin-2-4 | 82 | Liberia | 1.3111 | 0.0482 | 0.0123 | 0.002 | 0.0 |
-| LB-D5-2026-01-27-112616-0240052-VFPCHC-2-2 | 40 | Liberia | 1.2928 | 0.0483 | 0.0 | 0.0016 | 0.0 |
-| KIT-62500763 | 200 | Tanzania | 24.9753 | 0.0445 | 0.0226 | 0.0021 | 0.0 |
-| KIT-62501035 | 67 | Tanzania | 0.9237 | 0.0446 | 0.0361 | 0.0027 | 0.0 |
-| KIT-62501062 | 83 | Tanzania | 0.6798 | 0.047 | 0.0 | 0.0015 | 0.0 |
-| KIT-62501081 | 141 | Tanzania | 0.7498 | 0.0418 | 0.0155 | 0.0026 | 0.0 |
-| KIT-62501087 | 271 | Tanzania | 0.6752 | 0.0416 | 0.0191 | 0.0026 | 0.0 |
-| KTR-72502946 | 54 | Tanzania | 0.8919 | 0.0419 | 0.0284 | 0.0024 | 0.0 |
-| KTR-72502946 | 198 | Tanzania | 0.9965 | 0.0414 | 0.0338 | 0.003 | 0.0 |
-| NKR-72502319 | 119 | Tanzania | 0.9144 | 0.0447 | 0.0 | 0.0011 | 0.0 |
-| NKR-72502319 | 293 | Tanzania | 1.0146 | 0.0422 | 0.0157 | 0.0024 | 0.0 |
-| NKR-72502319 | 311 | Tanzania | 0.9176 | 0.038 | 0.0133 | 0.0023 | 0.0 |
-| RUB-62501332 | 133 | Tanzania | 0.9019 | 0.039 | 0.028 | 0.0026 | 0.0 |
-| RUB-62501389 | 284 | Tanzania | 0.864 | 0.0446 | 0.0309 | 0.0029 | 0.0 |
-| RUB-62501518 | 315 | Tanzania | 1.0008 | 0.0508 | 0.0 | 0.0013 | 0.0 |
-| RUB-62501529 | 87 | Tanzania | 0.8352 | 0.0462 | 0.0 | 0.001 | 0.0 |
-| RUB-72501756 | 315 | Tanzania | 0.9415 | 0.0379 | 0.0177 | 0.0022 | 0.0 |
-| PAT-070-3 | 34 | Uganda | 0.8981 | 0.0404 | 0.0293 | 0.0025 | 0.0 |
-| PAT-072-1 | 14 | Uganda | 0.8635 | 0.0373 | 0.0053 | 0.0024 | 0.0 |
-| PAT-072-1 | 94 | Uganda | 0.7299 | 0.0618 | 0.0396 | 0.0024 | 0.0 |
-| PAT-154-1 | 478 | Uganda | 0.881 | 0.0408 | 0.0 | 0.0011 | 0.0 |
-| PBC-225_AM-1 | 30 | Uganda | 0.8947 | 0.0433 | 0.0 | 0.001 | 0.0 |
-| PBC-608-KH-1 | 171 | Uganda | 0.6961 | 0.0466 | 0.0304 | 0.003 | 0.0 |
-| PBC-800-1 | 128 | Uganda | 0.604 | 0.0409 | 0.0 | 0.0019 | 0.0 |
-| PBC-800-1 | 732 | Uganda | 0.6729 | 0.0441 | 0.0 | 0.0022 | 0.0 |
-| PAT-103-2 | 441 | Uganda | 0.7748 | 0.0466 | 0.0 | 0.0013 | 0.0 |
-| PAT-112-2 | 124 | Uganda | 0.673 | 0.0492 | 0.0 | 0.001 | 0.0 |
+| LB-D10-2025-12-29-150312-0171084-VFPCHC-2-4 | 153 | Liberia | 13.1255 | 0.065 | 0.0239 | 0.0029 | 0.0 |
+| LB-D10-2025-12-29-150312-0171084-VFPCHC-2-4 | 154 | Liberia | 0.8479 | 0.0581 | 0.0268 | 0.0023 | 0.0 |
+| LB-D10-2025-12-30-083614-0250901VFPCHC-2-1 | 210 | Liberia | 0.973 | 0.0618 | 0.0256 | 0.0029 | 0.0 |
+| LB-D10-2025-12-30-083614-0250901VFPCHC-2-1 | 227 | Liberia | 1.049 | 0.0662 | 0.028 | 0.0024 | 0.0 |
+| LB-D10-2025-12-30-084453-0250071VFPCHC-2-2 | 200 | Liberia | 1.113 | 0.0546 | 0.036 | 0.0025 | 0.0 |
+| LB-D11-2025-12-17-115859-0250319D-thin-4-1 | 29 | Liberia | 1.3171 | 0.0501 | 0.0 | 0.0023 | 0.0 |
+| LB-D11-2025-12-19-111309-0211715-VFPCHC-3-1 | 277 | Liberia | 1.356 | 0.0474 | 0.0 | 0.0021 | 2.3441 |
+| LB-D11-2025-12-19-131014-0241591-VFPCHC-3-2 | 278 | Liberia | 1.0767 | 0.0577 | 0.0 | 0.002 | 2.1173 |
+| LB-D11-2025-12-19-134126-025073-VFPCHC-3-1 | 1 | Liberia | 1.1154 | 0.0539 | 0.0 | 0.0024 | 0.0 |
+| LB-D3-2025-08-30-103102-250876706-D-thin-4 | 257 | Liberia | 0.8706 | 0.0589 | 0.0213 | 0.0024 | 0.0 |
+| LB-D3-2025-08-30-103102-250876706-D-thin-4 | 269 | Liberia | 0.9642 | 0.0532 | 0.0 | 0.0019 | 0.0 |
+| LB-D3-2025-08-30-103102-250876706-D-thin-4 | 274 | Liberia | 0.7573 | 0.0633 | 0.0086 | 0.0022 | 0.0 |
+| LB-D3-2025-08-30-103102-250876706-D-thin-4 | 279 | Liberia | 0.8522 | 0.0559 | 0.0 | 0.0017 | 2.3384 |
+| LB-D3-2025-08-30-103102-250876706-D-thin-4 | 289 | Liberia | 0.9469 | 0.0568 | 0.0503 | 0.0027 | 0.0 |
+| LB-D3-2025-09-02-141940-25087110-D-Only-1-2 | 42 | Liberia | 1.2035 | 0.0688 | 0.0252 | 0.0027 | 0.0 |
+| LB-D3-2025-09-09-093425-250917463-D-Only-1-1 | 166 | Liberia | 0.9554 | 0.0751 | 0.0356 | 0.0033 | 0.0 |
+| LB-D3-2025-09-27-121918-17217958-D-thin-4-4 | 262 | Liberia | 1.1603 | 0.0684 | 0.0445 | 0.0033 | 0.0 |
+| LB-D3-2025-10-03-104211-250917371-D-thin-2-3 | 4 | Liberia | 1.1348 | 0.0645 | 0.0429 | 0.0032 | 0.0 |
+| LB-D3-2025-10-03-104643-250917465-D-thin-3-4 | 185 | Liberia | 0.9834 | 0.0602 | 0.0175 | 0.0018 | 0.0 |
+| LB-D3-2025-10-03-124025-2404175445D-thin-2-3 | 1 | Liberia | 0.9949 | 0.058 | 0.0 | 0.0018 | 0.0 |
+| LB-D3-2025-10-03-124025-2404175445D-thin-2-3 | 16 | Liberia | 0.9921 | 0.0701 | 0.0 | 0.0025 | 0.0 |
+| LB-D3-2025-10-03-124025-2404175445D-thin-2-3 | 17 | Liberia | 1.0786 | 0.0562 | 0.0 | 0.0018 | 0.0 |
+| LB-D3-2025-10-03-124025-2404175445D-thin-2-3 | 18 | Liberia | 0.938 | 0.0569 | 0.0 | 0.0017 | 0.0 |
+| LB-D3-2025-10-03-124025-2404175445D-thin-2-3 | 19 | Liberia | 0.9886 | 0.0499 | 0.0 | 0.0018 | 0.0 |
+| LB-D3-2025-10-03-124025-2404175445D-thin-2-3 | 53 | Liberia | 1.0883 | 0.0612 | 0.0 | 0.0019 | 0.0 |
+| LB-D3-2025-10-03-124025-2404175445D-thin-2-3 | 114 | Liberia | 1.0496 | 0.0722 | 0.0586 | 0.0043 | 0.0 |
+| LB-D3-2025-10-03-124025-2404175445D-thin-2-3 | 125 | Liberia | 4.6512 | 0.0607 | 0.0083 | 0.002 | 0.0 |
+| LB-D3-2025-10-03-124025-2404175445D-thin-2-3 | 126 | Liberia | 1.205 | 0.0626 | 0.0123 | 0.0028 | 0.0 |
+| LB-D3-2025-10-03-125352-2402169466D-thin-2-1 | 3 | Liberia | 1.2026 | 0.0664 | 0.0181 | 0.0022 | 0.0 |
+| LB-D3-2025-10-03-130859-250916865-D-thin-1-4 | 236 | Liberia | 1.207 | 0.0665 | 0.0339 | 0.003 | 0.0 |
+| LB-D3-2025-10-22-131729-250917745-D-thin-2-3 | 134 | Liberia | 1.2211 | 0.0767 | 0.0748 | 0.0033 | 0.0 |
+| LB-D3-2025-10-22-132316-2411189646-D-thin-1-4 | 135 | Liberia | 1.2628 | 0.0706 | 0.0 | 0.0024 | 2.2786 |
+| LB-D3-2025-10-22-140622-250917738-D-thin-1-1 | 122 | Liberia | 0.9773 | 0.0583 | 0.0 | 0.0023 | 2.5157 |
+| LB-D3-2025-10-22-140622-250917738-D-thin-1-1 | 238 | Liberia | 1.0603 | 0.0587 | 0.0225 | 0.0022 | 0.0 |
+| LB-D3-2025-10-24-113736-250918214-D-thin-2-3 | 96 | Liberia | 1.392 | 0.0499 | 0.0 | 0.0011 | 0.0 |
+| LB-D3-2025-10-24-132012-25046898-D-thin-1-4 | 3 | Liberia | 1.2375 | 0.0556 | 0.0 | 0.002 | 2.2518 |
+| LB-D3-2025-10-24-132012-25046898-D-thin-1-4 | 305 | Liberia | 1.215 | 0.0511 | 0.0205 | 0.0023 | 0.0 |
+| LB-D3-2025-10-24-162727-230918080-D-thin-1-4 | 8 | Liberia | 1.1332 | 0.134 | 0.0 | 0.0018 | 0.0 |
+| LB-D3-2025-10-25-105806-180951467-D-thin-1-1 | 270 | Liberia | 1.3857 | 0.0551 | 0.0166 | 0.0032 | 0.0 |
+| LB-D3-2025-10-25-150947-250917467-D-thin-3-2 | 235 | Liberia | 1.291 | 0.0584 | 0.0277 | 0.0027 | 0.0 |
+| LB-D3-2025-10-27-123159-251123404-D-thin-4-1 | 48 | Liberia | 1.2194 | 0.0535 | 0.0203 | 0.0024 | 0.0 |
+| LB-D3-2025-10-27-123159-251123404-D-thin-4-1 | 49 | Liberia | 1.2125 | 0.0547 | 0.0099 | 0.0022 | 0.0 |
+| LB-D3-2025-10-27-124239-250916732-D-thin-1-3 | 301 | Liberia | 1.3246 | 0.0513 | 0.0426 | 0.0025 | 0.0 |
+| LB-D3-2025-10-27-134711-250917368-D-thin-1-3 | 52 | Liberia | 1.1712 | 0.058 | 0.0341 | 0.0026 | 0.0 |
+| LB-D3-2025-10-27-144635-250918691-D-thin-2-2 | 57 | Liberia | 1.0856 | 0.0523 | 0.0074 | 0.002 | 0.0 |
+| LB-D3-2025-10-27-144635-250918691-D-thin-2-2 | 243 | Liberia | 1.2289 | 0.057 | 0.0 | 0.0012 | 0.0 |
+| LB-D3-2025-10-27-145205-250917002-D-thin-3-3 | 310 | Liberia | 1.1561 | 0.0538 | 0.0033 | 0.0016 | 0.0 |
+| LB-D3-2025-10-27-154305-250917412-D-thin-1-4 | 119 | Liberia | 1.1436 | 0.0537 | 0.0 | 0.0018 | 2.3977 |
+| LB-D3-2025-10-27-155920-250713919-D-thin-3-3 | 169 | Liberia | 1.0672 | 0.0539 | 0.0 | 0.0013 | 0.0 |
+| LB-D3-2025-10-27-173317-250917493-D-thin-2-4 | 82 | Liberia | 1.1778 | 0.0572 | 0.0134 | 0.0025 | 0.0 |
+| LB-D5-2026-01-27-112616-0240052-VFPCHC-2-2 | 40 | Liberia | 1.3291 | 0.0536 | 0.0 | 0.002 | 0.0 |
+| KIT-62500763 | 200 | Tanzania | 25.9773 | 0.0528 | 0.0349 | 0.0029 | 0.0 |
+| KIT-62501035 | 67 | Tanzania | 0.8394 | 0.0519 | 0.0556 | 0.0033 | 0.0 |
+| KIT-62501062 | 83 | Tanzania | 0.7877 | 0.0574 | 0.0 | 0.0018 | 0.0 |
+| KIT-62501081 | 141 | Tanzania | 0.7537 | 0.0519 | 0.0225 | 0.003 | 0.0 |
+| KIT-62501087 | 271 | Tanzania | 0.7146 | 0.0462 | 0.0304 | 0.0027 | 0.0 |
+| KTR-72502946 | 54 | Tanzania | 0.9242 | 0.0339 | 0.0412 | 0.0028 | 0.0 |
+| KTR-72502946 | 198 | Tanzania | 1.0375 | 0.0423 | 0.0552 | 0.0039 | 0.0 |
+| NKR-72502319 | 119 | Tanzania | 0.8494 | 0.0323 | 0.0 | 0.0011 | 0.0 |
+| NKR-72502319 | 293 | Tanzania | 0.9312 | 0.0413 | 0.0241 | 0.0042 | 0.0 |
+| NKR-72502319 | 311 | Tanzania | 0.9676 | 0.0439 | 0.0184 | 0.0027 | 0.0 |
+| RUB-62501332 | 133 | Tanzania | 0.8842 | 0.0423 | 0.0276 | 0.0022 | 0.0 |
+| RUB-62501389 | 284 | Tanzania | 1.0072 | 0.0377 | 0.0262 | 0.0025 | 0.0 |
+| RUB-62501518 | 315 | Tanzania | 0.9176 | 0.0343 | 0.0 | 0.0009 | 0.0 |
+| RUB-62501529 | 87 | Tanzania | 0.861 | 0.043 | 0.0 | 0.0032 | 0.0 |
+| RUB-72501756 | 315 | Tanzania | 0.8095 | 0.0423 | 0.0213 | 0.0021 | 0.0 |
+| PAT-070-3 | 34 | Uganda | 0.9823 | 0.0388 | 0.0498 | 0.0027 | 0.0 |
+| PAT-072-1 | 14 | Uganda | 0.8232 | 0.0411 | 0.0095 | 0.0022 | 0.0 |
+| PAT-072-1 | 94 | Uganda | 0.8968 | 0.0363 | 0.0357 | 0.0028 | 0.0 |
+| PAT-154-1 | 478 | Uganda | 1.0209 | 0.0415 | 0.0 | 0.001 | 0.0 |
+| PBC-225_AM-1 | 30 | Uganda | 0.9194 | 0.0431 | 0.0 | 0.0009 | 0.0 |
+| PBC-608-KH-1 | 171 | Uganda | 0.8432 | 0.0402 | 0.0363 | 0.0027 | 0.0 |
+| PBC-800-1 | 128 | Uganda | 0.8606 | 0.0385 | 0.0 | 0.002 | 0.0 |
+| PBC-800-1 | 732 | Uganda | 0.9539 | 0.0564 | 0.0 | 0.0054 | 0.0 |
+| PAT-103-2 | 441 | Uganda | 1.0324 | 0.046 | 0.0 | 0.0012 | 0.0 |
+| PAT-112-2 | 124 | Uganda | 0.8994 | 0.0414 | 0.0 | 0.0015 | 0.0 |
 
 **Summary:**
 
 | stage | min (s) | median (s) | max (s) | total (s) |
 |---|---|---|---|---|
-| gcs_fetch_s | 0.6040 | 1.0692 | 24.9753 | 122.0563 |
-| time_initial_test_s | 0.0373 | 0.0492 | 0.0817 | 3.9627 |
-| time_anisotropy_s | 0.0000 | 0.0092 | 0.0469 | 1.0194 |
-| time_diffuse_fov_s | 0.0010 | 0.0022 | 0.0037 | 0.1696 |
-| neighbor_fetch_s | 0.0000 | 0.0000 | 2.4503 | 16.0101 |
+| gcs_fetch_s | 0.7146 | 1.0433 | 25.9773 | 119.9842 |
+| time_initial_test_s | 0.0323 | 0.0547 | 0.1340 | 4.1648 |
+| time_anisotropy_s | 0.0000 | 0.0129 | 0.0748 | 1.2992 |
+| time_diffuse_fov_s | 0.0009 | 0.0023 | 0.0054 | 0.1799 |
+| neighbor_fetch_s | 0.0000 | 0.0000 | 2.5157 | 16.2436 |
 
 | country | n | median gcs_fetch_s | mean gcs_fetch_s |
 |---|---|---|---|
-| Liberia | 51 | 1.2030 | 1.5115 |
-| Tanzania | 15 | 0.9144 | 2.4855 |
-| Uganda | 10 | 0.7524 | 0.7688 |
+| Liberia | 51 | 1.1348 | 1.4214 |
+| Tanzania | 15 | 0.8842 | 2.5508 |
+| Uganda | 10 | 0.9094 | 0.9232 |
 
-Excluding the very first row of the run (a one-time GCS client cold-start cost), `gcs_fetch_s` ranges 0.60-24.98s with a median of 1.07s; the Tanzania outlier (row 54, `KIT-62500763`, this run's first Tanzania row) looks like a second, box-listing-specific cold-start rather than typical per-FOV cost (every subsequent Tanzania row is under 1s). **Neither `gcs_fov.py` (Liberia) nor `gcs_fov_multi.py` (Tanzania/Uganda) caches slide/box lookups across calls** -- every single fetch re-lists the Liberia `_Blue` folder and re-reads its `Scan.txt`, or (for Tanzania) re-checks up to 5 `TZ2025-Box<N>` prefixes, even for FOVs from the same scan/sample already resolved earlier in this same run. Uganda has no such lookup (direct path), which is consistent with it having the lowest mean fetch time despite no within-sample caching either. This isn't specific to this test -- it's how `scripts/score_labels.py` and `scripts/fetch_reference_images.py` already behave -- but it means per-FOV GCS time here is *not* representative of what a full-scan batch run would cost per FOV if slide/box resolution were cached once per sample_id; that's a real optimization opportunity if this pipeline is ever run at full-slide scale (see Recommendations). `time_initial_test_s`/`time_anisotropy_s`/`time_diffuse_fov_s` are all local CPU work (downsample/blur/threshold/FFT) and dominated entirely by network time -- consistent with the prior diffuse-fov timing note ([[project-fluorescence-diffuse-halo-investigation]]: ~22ms/image for the diffuse-fov step alone, matching `time_diffuse_fov_s`'s ~2-3ms here -- treat both as "a few ms, negligible next to network").
+Excluding the very first row of the run (a one-time GCS client cold-start cost), `gcs_fetch_s` ranges 0.71-25.98s with a median of 1.04s. **Neither `gcs_fov.py` (Liberia) nor `gcs_fov_multi.py` (Tanzania/Uganda) caches slide/box lookups across calls** -- every single fetch re-lists the Liberia `_Blue` folder and re-reads its `Scan.txt`, or (for Tanzania) re-checks up to 5 `TZ2025-Box<N>` prefixes, even for FOVs from the same scan/sample already resolved earlier in this same run. This isn't specific to this test -- it's how `scripts/score_labels.py` and `scripts/fetch_reference_images.py` already behave -- but it means per-FOV GCS time here is *not* representative of what a full-scan batch run would cost per FOV if slide/box resolution were cached once per sample_id; that's a real optimization opportunity if this pipeline is ever run at full-slide scale (see Recommendations). `time_initial_test_s`/`time_anisotropy_s`/`time_diffuse_fov_s` are all local CPU work (downsample/blur/threshold/FFT, now including the radial_rho/r2_over_r1 rescue check when anisotropy triggers) and dominated entirely by network time.
 
 ## Results: confusion matrices
 
 Ground truth = `spot` column (is the halo artifact genuinely present). Predicted = `present`
 directly (see "Method" above). All 4 matrices below are repeated for both variants.
 
-### Diffuse-fov step NOT folded in (production behavior today)
+### Diffuse-fov step NOT folded in (production behavior today, with the corner-clipping rescue fix)
 
 **all** (n=76)
 
 | | Predicted: spot | Predicted: no spot |
 |---|---|---|
-| Truth: spot | TP=36 | FN=8 |
+| Truth: spot | TP=37 | FN=7 |
 | Truth: no spot | FP=5 | TN=27 |
 
-FN rate: 8/44 (18.2%) -- FP rate: 5/32 (15.6%)
+FN rate: 7/44 (15.9%) -- FP rate: 5/32 (15.6%) -- **`KIT-62501087` moved from FN to TP here, directly, with no diffuse-fov involvement**
 
 **background** (n=28)
 
@@ -351,25 +364,47 @@ with `contrast_ratio` -- a noisier restatement of an existing field, not a new s
 ratio floor without the ratio-gate-miss requirement (keeps the `KIT-62501087` rescue below, but
 leaves `fov126` unfixed). Emily chose the stricter version.
 
-**Result with the fix: zero net new false positives, most of the recall gain kept.** FP stays
-at 5/32 (15.6%) -- byte-identical to baseline, because the two anisotropy-mechanism rows
-(`fov126`, `KIT-62501087`) and all 6 fake-`background` rows are now excluded from
-`diffuse_candidate()` entirely (ratios 1.36-2.21, all below `DIFFUSE_RATIO_MIN`, or 13-14, both
-above `RATIO_THRESHOLD` and reached `present=False` only via anisotropy). FN improves from
-18.2% to 4.5% (8 missed real halos -> 2) -- slightly less improvement than the original,
-unfixed fold-in's 2.3%, because the fix also excludes `KIT-62501087`'s rescue (an accident of
-the anisotropy filter misfiring on a real halo, not the diffuse-fov step catching a faint one
--- see "Which FOVs flip" below). All 5 non-`KIT-62501087` real-halo rescues survive: the
-`diffuse` subset's recall still improves 1/5 -> 4/5 and `double`'s 4/5 -> 5/5, unchanged from
-the original fold-in.
+**Result with the `DIFFUSE_RATIO_MIN` fix alone (superseded below): zero net new false
+positives, most of the recall gain kept.** FP stayed at 5/32 (15.6%) -- byte-identical to
+baseline, because the two anisotropy-mechanism rows (`fov126`, `KIT-62501087`) and all 6
+fake-`background` rows were excluded from `diffuse_candidate()` entirely (ratios 1.36-2.21, all
+below `DIFFUSE_RATIO_MIN`, or 13-14, both above `RATIO_THRESHOLD` and reached `present=False`
+only via anisotropy). FN improved from 18.2% to 4.5% (8 missed real halos -> 2) -- slightly
+less improvement than the original, unfixed fold-in's 2.3%, because this fix also excluded
+`KIT-62501087`'s rescue (an accident of the anisotropy filter misfiring on a real halo, not the
+diffuse-fov step catching a faint one). All 5 non-`KIT-62501087` real-halo rescues survived:
+`diffuse` subset recall 1/5 -> 4/5, `double` 4/5 -> 5/5.
 
-**`fov279` is the one residual risk the fix doesn't structurally close.** It's `background`-
-tagged, no real halo, `contrast_ratio=2.632` -- inside the new `[2.30, 3.0)` candidate band --
-and is only excluded because `matches_neighbor_trend` happens to catch it (see
+**`fov279` is the one residual risk this fix doesn't structurally close.** It's `background`-
+tagged, no real halo, `contrast_ratio=2.632` -- inside the `[2.30, 3.0)` candidate band -- and
+is only excluded because `matches_neighbor_trend` happens to catch it (see
 `src/overexposure.py`'s docstring). The ratio floor narrows how often that check has to do the
 work; it doesn't replace it. Worth watching if `notes` labeling surfaces more cases like it.
 
-**Baseline performance is already reasonably good** (FN 18.2%, FP 15.6% overall) for a
+**Third pass: the anisotropy filter's corner-clipping misfire was fixed directly, and
+`KIT-62501087` no longer needs the diffuse-fov step at all.** Emily asked for the underlying
+mechanism to be fixed rather than left as an accepted tradeoff. A brainstorm run through the
+Opus model, validated against real GCS-streamed images (see
+`scripts/validate_corner_clip_fix.py` and `src/overexposure.py`'s "Corner-clipping rescue"
+docstring section), found that detecting corner-clipping directly can't work --
+`KIT-62501087` is statistically indistinguishable from labeled fiber/debris cases on every
+corner-contact metric tried -- but a rescue-only second opinion does: when anisotropy triggers
+a demotion, check whether the whole frame's illumination correlates with distance from the
+candidate's centroid (`radial_rho`, high for a halo's global radial field, low for a fiber's
+local one) *and* whether the FFT's angular energy is a broad plateau rather than a narrow spike
+(`r2_over_r1`, low for a clipped arc, high for a fiber). Measured 0 wrong rescues across all 6
+labeled fiber/artifact cases plus their synthetic corner-clipped crops; rescues
+`KIT-62501087` directly. `present_base` is now `True` for it -- it doesn't touch
+`diffuse_candidate()` at all anymore.
+
+**Current numbers, with both fixes in place:** baseline FN 18.2% -> **15.9%** (8 -> 7 missed
+real halos; `KIT-62501087` moved to a direct true positive), FP unchanged at 15.6%. Folded-in
+FN drops further to **2.3%** (1 missed -- `fov8`, still below any workable ratio floor at
+1.98), FP still 15.6%, identical to baseline. Every other subset (`background`/`diffuse`/
+`double`) is unchanged from the `DIFFUSE_RATIO_MIN`-only numbers above, since `KIT-62501087`
+carries no `notes` tag.
+
+**Baseline performance is already reasonably good** (FN 15.9%, FP 15.6% overall) for a
 detector whose ratio/anisotropy design predates this specific labeled test set. `diffuse` is
 the weakest baseline subset (FN 80.0%) precisely because it's defined as the faint/sub-ratio
 population the diffuse-fov step targets -- which is exactly why folding it in (with the fix)
@@ -412,28 +447,27 @@ structurally, since it's mechanically impossible to reach `present=False` via an
 also having `contrast_ratio < RATIO_THRESHOLD` (anisotropy is only evaluated when the ratio
 gate already said yes).
 
-**`KIT-62501087` fov=271, excluded the same way -- the accepted tradeoff.** This is the mirror
-case: a real halo (`spot_truth=yes`) mis-demoted by the anisotropy filter
-(`contrast_ratio=14.27`, `anisotropy=0.4602`), not a faint halo the ratio gate missed. Looking
-at its preview, it's a clean, sharply-defined, corner-clipped circular halo -- plausibly the
-corner-clipping itself biased the FFT-based anisotropy measurement toward the two frame-edge
-axes, mimicking the directional-energy signature the check is designed to catch in actual
-fibers. It's also the first Tanzania FOV in this test where the anisotropy value crossed
-`ANISOTROPY_THRESHOLD` at all, and that threshold was calibrated exclusively on one Liberia
-slide's real-halo-vs-hair examples -- so this could equally be a genuine cross-country
-calibration gap. Either way, the diffuse-fov step's old fold-in flip here was never really
-catching a faint halo (its intended job) -- it was incidentally undoing an unrelated anisotropy
-misfire, and Emily chose to exclude it along with `fov126` rather than special-case it back in
-(see Discussion). This FOV goes back to being a false negative under the fix.
+**`KIT-62501087` fov=271 -- initially excluded the same way, now fixed directly (see
+Discussion's "Third pass").** This was the mirror case: a real halo (`spot_truth=yes`)
+mis-demoted by the anisotropy filter (`contrast_ratio=14.27`, `anisotropy=0.4602`), not a faint
+halo the ratio gate missed. Its preview is a clean, sharply-defined, corner-clipped circular
+halo -- the corner-clipping was confirmed (not just plausible) to bias the FFT-based anisotropy
+measurement, via the validation in `scripts/validate_corner_clip_fix.py`. Rather than leave
+this as an accepted tradeoff, the anisotropy filter itself now carries a rescue-only second
+opinion (`radial_rho`/`r2_over_r1`, see `src/overexposure.py`'s "Corner-clipping rescue"
+docstring section) that catches this exact case without re-admitting any labeled fiber/debris
+example. `KIT-62501087` is now `present_base=True` directly -- it no longer reaches
+`diffuse_candidate()` at all, so it's no longer part of "which FOVs flip" in any sense.
 
 ## FN/FP examples
 
-Annotated previews for all 13 rows that are a false negative or false positive in either
-variant, with the fix applied, grouped into the same 4 buckets used throughout this doc. Red
+Annotated previews for all 12 rows that are a false negative or false positive in either
+variant, with both fixes applied, grouped into the same 4 buckets used throughout this doc. Red
 outline = `present` (this variant's detector call fired); green = did not fire. Caption lines
 show truth/notes, both variants' `present`, contrast ratio, and diffuse radius. (Down from 20
-before the fix -- bucket D, "new false positive introduced by folding in," is now empty; see
-"Which FOVs flip" above for the 8 rows that used to populate buckets A/D and are now excluded.)
+before the `DIFFUSE_RATIO_MIN` fix -- bucket D, "new false positive introduced by folding in,"
+is now empty; `KIT-62501087` no longer appears anywhere in this section at all, since it's now
+a direct true positive. See "Which FOVs flip" above for the full history.)
 
 ### A -- rescued by folding in (spot_truth=yes, missed at baseline, caught after fold-in) (n=6)
 
@@ -455,18 +489,18 @@ before the fix -- bucket D, "new false positive introduced by folding in," is no
 ![LB-D3-2025-10-27-154305-250917412-D-thin-1-4 fov=119 (Liberia) -- truth=yes, notes=diffuse, ratio=2.91](previews/LB-D3-2025-10-27-154305-250917412-D-thin-1-4__fov119__preview.png)
 *LB-D3-2025-10-27-154305-250917412-D-thin-1-4 fov=119 (Liberia) -- truth=yes, notes=diffuse, ratio=2.91*
 
-### B -- still missed after folding in (spot_truth=yes, missed by both variants) (n=2)
+### B -- still missed after folding in (spot_truth=yes, missed by both variants) (n=1)
 
 ![LB-D3-2025-10-24-162727-230918080-D-thin-1-4 fov=8 (Liberia) -- truth=yes, notes=diffuse, ratio=1.98](previews/LB-D3-2025-10-24-162727-230918080-D-thin-1-4__fov8__preview.png)
 *LB-D3-2025-10-24-162727-230918080-D-thin-1-4 fov=8 (Liberia) -- truth=yes, notes=diffuse, ratio=1.98*
 
-![KIT-62501087 fov=271 (Tanzania) -- truth=yes, notes=(none), ratio=14.27](previews/KIT-62501087__fov271__preview.png)
-*KIT-62501087 fov=271 (Tanzania) -- truth=yes, notes=(none), ratio=14.27 -- moved here from bucket A after the fix; see "Which FOVs flip" above for why this rescue was traded away.*
-
-(fov=96, `LB-D3-2025-10-24-113736-250918214-D-thin-2-3`, was originally in this bucket but has
-been removed after Emily flagged its `spot=yes` label as incorrect on 2026-08-07 -- see the
-`*` footnote under "Input labels". With the corrected `spot=no` label it's a true negative in
-both variants, not an error case.)
+(`KIT-62501087` fov=271 briefly sat in this bucket after the `DIFFUSE_RATIO_MIN` fix, then moved
+back out entirely once the anisotropy corner-clipping rescue was implemented -- it's now a
+direct `present_base=True` true positive, not an error case in either variant. fov=96,
+`LB-D3-2025-10-24-113736-250918214-D-thin-2-3`, was also originally in this bucket but has been
+removed after Emily flagged its `spot=yes` label as incorrect on 2026-08-07 -- see the `*`
+footnote under "Input labels". With the corrected `spot=no` label it's a true negative in both
+variants.)
 
 ### C -- false positive already at baseline (spot_truth=no, present_base=True; folding in can't fix these, since it only ever turns present False->True) (n=5)
 
@@ -511,9 +545,22 @@ why each is now excluded.
   metric that was tried and rejected, using a field (`contrast_ratio`) the file already trusts
   -- but it's still calibrated on a small population. `fov279` (see "Discussion") is a known,
   unresolved near-miss inside the new candidate band.
-- **`KIT-62501087`'s rescue was deliberately traded away** to fix `fov126`'s false positive
-  (Variant D, chosen by Emily over Variant C -- see "Which FOVs flip"). It's a real halo and is
-  now a false negative again under both variants.
+- **`KIT-62501087`'s rescue was initially deliberately traded away** to fix `fov126`'s false
+  positive (Variant D, chosen by Emily over Variant C -- see "Which FOVs flip"), then recovered
+  by fixing the anisotropy filter's corner-clipping misfire directly (see Discussion's "Third
+  pass"). Net result: both `fov126` (fixed) and `KIT-62501087` (rescued) are resolved, without
+  the tradeoff.
+- **The corner-clipping rescue (`radial_rho`/`r2_over_r1`) is calibrated on 6 labeled fiber/
+  artifact cases plus their synthetic corner-clipped crops, and exactly 1 confirmed real
+  corner-clipped halo** (`KIT-62501087`). Both thresholds (`RADIAL_RHO_MIN=0.90`,
+  `R2_OVER_R1_MAX=0.44`) are provisional. It's rescue-only by construction (can only turn an
+  anisotropy-triggered demotion back to `present=True`, never demote an already-passing halo),
+  so it can't introduce a new false positive among currently-passing halos -- but it also isn't
+  complete: a synthetic corner-clip of an unrelated real halo (`fov210`, cropped toward its own
+  corner) narrowly fails the rescue (`radial_rho=0.852`, just under the 0.90 cutoff). That's not
+  a regression (that FOV isn't actually corner-clipped in the real labeled set), but a reminder
+  this doesn't generalize to every possible corner-clip geometry yet. See
+  `scripts/validate_corner_clip_fix.py` for the full validation.
 
 ## Files
 
@@ -521,12 +568,14 @@ why each is now excluded.
 - `results.csv` -- full per-row output: detection fields (`present_base`/`present_folded`/
   `diffuse_halo_flag`/`contrast_ratio`/`anisotropy`/`diffuse_radius`/etc.), both predicted-spot
   variants, and all runtime columns
-- `previews/` -- annotated preview thumbnails for all 13 FN/FP rows (see "FN/FP examples"),
+- `previews/` -- annotated preview thumbnails for all 12 FN/FP rows (see "FN/FP examples"),
   plus `previews/manifest.csv` mapping each file back to its full result row and bucket
 - `../../src/gcs_fov_multi.py` -- new LB/TZ/UG FOV resolver (streams, no disk cache)
 - `../../scripts/run_overexposed_diverse_test.py` -- pipeline runner used for this test
 - `../../scripts/analyze_overexposed_diverse.py` -- confusion-matrix/FN-FP tally generator
 - `../../scripts/render_fn_fp_previews.py` -- renders the `previews/` thumbnails
+- `../../scripts/validate_corner_clip_fix.py` -- validation harness for the anisotropy
+  corner-clipping rescue (`radial_rho`/`r2_over_r1`), incl. synthetic corner-clipped crops
 
 ## Recommendations
 
@@ -542,10 +591,20 @@ why each is now excluded.
    with a field already computed (`contrast_ratio`), not a new threshold on the absolute-delta
    footprint. Folding the diffuse-fov step into `present` is now net-positive on this labeled
    set: zero new false positives, FN rate 18.2% -> 4.5%.
-4. **Recalibrate `DIFFUSE_RATIO_MIN` (and re-check `fov279`) once more `background`-tagged
+4. **Done, 2026-08-07: the anisotropy filter's corner-clipping misfire is fixed directly.**
+   `_region_anisotropy`/`detect_overexposure` now carry a rescue-only second opinion
+   (`radial_rho`/`r2_over_r1`, see `src/overexposure.py`'s "Corner-clipping rescue" docstring
+   section and `scripts/validate_corner_clip_fix.py`) that catches `KIT-62501087` without
+   re-admitting any labeled fiber/debris case. Baseline FN improves further, 18.2% -> 15.9%,
+   with `KIT-62501087` now a direct true positive rather than a diffuse-fov-dependent one.
+5. **Recalibrate `DIFFUSE_RATIO_MIN` (and re-check `fov279`) once more `background`-tagged
    labels exist**, particularly outside Liberia -- the current calibration set is 12 rows, 11
    of them Liberia.
-5. **If `KIT-62501087`'s rescue matters enough to want back, investigate the anisotropy
-   check's corner-clipping/cross-country behavior directly** rather than re-widening
-   `diffuse_candidate()` to cover it -- see "Which FOVs flip" for why that would also let
-   `fov126` back in.
+6. **Recalibrate `RADIAL_RHO_MIN`/`R2_OVER_R1_MAX` once more corner-clipped examples exist**
+   (both real halos and fibers/debris, across all 3 countries) -- currently 1 confirmed real
+   corner-clipped halo and 6 labeled fiber/artifact cases plus synthetic crops. The brainstorm
+   that produced this fix suggested deliberately sampling ~15-20 more corner-clipped real halos
+   and ~10 corner-clipped fibers by walking FOVs adjacent to known positives/fibers (a halo big
+   enough to be corner-clipped in one tile is visible in its neighbors) -- a labeling task, not
+   a code change, and a good candidate for the next round of `notes` categorization work
+   (Recommendation 2).
